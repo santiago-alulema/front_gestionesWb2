@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "lib": ["es2017", "dom"],
+    "outDir": "./dist/",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "es2015",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "types": [
+      "react",
+      "react-dom"
+    ],
+   "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
+  },
+  "include": [
+    "./src/**/**/*"
+  ]
+}

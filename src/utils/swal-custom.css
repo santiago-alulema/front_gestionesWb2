@@ -1,0 +1,44 @@
+/* swal-custom.css */
+.swal2-container {
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.625em !important;
+}
+
+.swal2-popup {
+  margin-top: 190px !important;
+  position: relative !important;
+  width: 32em !important;
+  max-width: 100% !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Animación de aparición */
+.swal2-show {
+  animation: swal2-show 0.3s !important;
+}
+
+@keyframes swal2-show {
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 576px) {
+  .swal2-popup {
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+  
+  .swal2-container {
+    padding: 0 !important;
+  }
+}
