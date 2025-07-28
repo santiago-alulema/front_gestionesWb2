@@ -15,7 +15,7 @@ import {
     Paper
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DebstByClientInfoInDTO from "@/model/Dtos/In/DebstByClientInfoInDTO";
+import DebstByClientInfoInDTO from "@/model/Dtos/In/DeudasInDTO";
 import { format } from "date-fns";
 import { es, mt } from "date-fns/locale";
 import PhoneNumbersInput from "@/components/PhoneNumbersInput";
@@ -25,7 +25,7 @@ import { useEffect, useState } from 'react';
 import CustomDatePicker from "@/components/DataGridCommon/CustomDatePicker";
 import TipoGestioneOutDTO from "@/model/Dtos/In/TipoGestioneOutDTO";
 import { ICompromisoPagoOutDTO } from "@/model/Dtos/Out/ICompromisoPagoOutDTO";
-import { actualizarCompromisoServicioWeb, grabarCompromisoPago, grabarGestion } from "@/services/Service";
+import { actualizarCompromisoServicioWeb, grabarCompromisoPago, grabarGestionServicioWeb } from "@/services/Service";
 import { IGestionInDTO } from "@/model/Dtos/Out/IGestionOutDTO";
 import { showAlert } from "@/utils/modalAlerts";
 
@@ -81,9 +81,10 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
             const gestion: IGestionInDTO = {
                 idDeuda: debt.deudaId,
                 descripcion: observaciones,
-                idTipoGestion: gestionSeleccionada.idTipoGestion
+                idTipoGestion: gestionSeleccionada.idTipoGestion,
+                idTipoContactoDeudor: ""
             }
-            await grabarGestion(gestion)
+            await grabarGestionServicioWeb(gestion)
         }
 
 
@@ -93,9 +94,9 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
         })
 
         const configAlert = {
-            title: "Informacion",
-            message: "TIENE COMPROMISOS DE PAGO PARA HOY",
-            type: 'info',
+            title: "Correcto",
+            message: "Se grabo correctamente.",
+            type: 'success',
             callBackFunction: false
         };
         showAlert(configAlert);
@@ -221,9 +222,6 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
                                         }}
                                     >
                                         {formatDate(debt.fechaVencimiento)}{" "}
-                                        {/* {isOverdue
-                                            ? "(Vencido)"
-                                            : `(${daysRemaining()} días restantes)`} */}
                                     </Typography>
                                 </Grid>
                             </Grid>

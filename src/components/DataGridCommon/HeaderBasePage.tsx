@@ -11,7 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import { useTheme } from '@emotion/react';
-
+import { useNavigate } from "react-router-dom";
 
 interface RouteItem {
     id: number;
@@ -44,6 +44,7 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
 }) => {
     const [routes, setRoutes] = useState<RouteItem[]>([]);
     const theme = useTheme();
+    const navigate = useNavigate();
 
 
     const handleClickLinkItem = (
@@ -62,7 +63,7 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
         }
         const minLength = 1;
         if (routes.length === minLength) {
-            // goToHome();
+            navigate("/dashboard");
         } else {
             const disabledStep = routes.find(route => route.disabled);
             if (disabledStep?.function) {
@@ -86,7 +87,7 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
                                 sx={{ display: 'flex', alignItems: 'center' }}
                                 color="primary"
                                 variant="subtitle2"
-                            // onClick={() => goToHome()}
+                                onClick={() => navigate("/dashboard")}
                             >
                                 <HomeIcon sx={{ mr: 0.5, mt: '-2px' }} fontSize="inherit" />
                                 HOME

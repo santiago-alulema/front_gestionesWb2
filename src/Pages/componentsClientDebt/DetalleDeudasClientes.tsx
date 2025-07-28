@@ -6,7 +6,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useEffect, useState } from 'react';
 import { deudasPorClienteServiceWeb } from '@/services/Service';
-import DebstByClientInfoInDTO from '@/model/Dtos/In/DebstByClientInfoInDTO';
+import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import { useConfigDebtsByClient } from '@/Pages/ConfigColums/useConfigDebtsByClient';

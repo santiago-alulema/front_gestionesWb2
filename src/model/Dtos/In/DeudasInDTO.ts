@@ -1,4 +1,4 @@
-export interface DebstByClientInfoInDTO {
+export interface DeudasInDTO {
   montoOriginal: number;
   saldoActual: number;
   fechaVencimiento: string; // o Date si vas a parsearlo
@@ -16,4 +16,4 @@ export interface DebstByClientInfoInDTO {
 
 }
 
-export default DebstByClientInfoInDTO;
+export default DeudasInDTO;

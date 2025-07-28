@@ -12,12 +12,17 @@ const END_POINT = {
     GRABAR_TELEFONO_CLIENTE: 'Cliente/grabar-telefono-nuevo-cliente',
     DESACTIVAR_TELEFONO: 'cliente/desactivar-telefono',
     GRABAR_COMPROMISO_PAGO: 'Gestiones/grabar-compromiso-pago',
+    GRABAR_PAGO: 'Gestiones/grabar-pago',
     GRABAR_GESTION: 'Gestiones/grabar-gestion',
     GESTIONES_REPORTE: 'Gestiones/gestiones-reporte',
     COMPROMISOS_REPORTE: 'Gestiones/compromiso-reporte',
     COMPROMISO_PAGO: 'Cliente/listar-compromisos-pago',
-    ACTUALIZAR_COMPROMISO_PAGO: 'Cliente/actualizar-estado-compromiso'
-
+    ACTUALIZAR_COMPROMISO_PAGO: 'Cliente/actualizar-estado-compromiso',
+    OBTENER_FORMAS_PAGO_ACTIVOS: 'FormaPago',
+    OBTENER_TODOS_TIPOS_ACERCAMIENTO_DEUDORES: "TipoContactoGestion",
+    GESTIONES_POR_USUARIO: "ReporteGeneralGestiones/gestiones-por-usuario",
+    COMPROMISOS_DE_PAGO_POR_USUARIO: "ReporteGeneralGestiones/compromisos-pago-por-usuario",
+    PAGOS_POR_USUARIO: "ReporteGeneralGestiones/gestiones-pago-por-usuario",
 
 }
 

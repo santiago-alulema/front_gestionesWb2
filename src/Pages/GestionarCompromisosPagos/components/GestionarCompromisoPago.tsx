@@ -15,7 +15,7 @@ import {
     Paper
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DebstByClientInfoInDTO from "@/model/Dtos/In/DebstByClientInfoInDTO";
+import DebstByClientInfoInDTO from "@/model/Dtos/In/DeudasInDTO";
 import { format } from "date-fns";
 import { es, mt } from "date-fns/locale";
 import PhoneNumbersInput from "@/components/PhoneNumbersInput";

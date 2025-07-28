@@ -38,7 +38,7 @@ const BasePage: React.FC<BasePageProps> = ({
     };
 
     useEffect(() => {
-        // Lógica si se desea reaccionar al cambio de routers
+        console.log("baseeeee")
     }, [routers]);
 
     return (

@@ -1,15 +1,16 @@
-import Index from '@/components/Index'
-import Login from '@/components/Login.tsx'
-import { useLogin } from '@/context/LoginContext';
-function App() {
+// App.tsx
+import Login from "@/components/Login";
+import { useLogin } from "@/context/LoginContext";
+import MainLayout from "@/routers/MainLayout";
 
+function App() {
   const { isAuthenticated } = useLogin();
 
   return (
     <>
-      {!isAuthenticated ? <Login /> : <Index />}
+      {!isAuthenticated ? <Login /> : <MainLayout />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

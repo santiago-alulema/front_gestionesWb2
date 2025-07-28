@@ -6,15 +6,18 @@ import App from './App.tsx'
 import theme from '../theme/theme';
 import { BrowserRouter } from 'react-router';
 import { LoginProvider } from '@/context/LoginContext.tsx';
+import { GestionarDeudasProvider } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <LoginProvider>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </LoginProvider>
-    </BrowserRouter>
+    <GestionarDeudasProvider>
+      <BrowserRouter>
+        <LoginProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </LoginProvider>
+      </BrowserRouter>
+    </GestionarDeudasProvider>
   </StrictMode>,
 )

@@ -21,8 +21,6 @@ import { desactivarTelefonoCliente, grabarTelefonoCliente, telefonosActivosClien
 import CustomModalTs from '@/components/CustomModalTs';
 import PhonesClientsOutDTO from '@/model/Dtos/Out/PhonesClientsOutDTO';
 import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
-import GestionDeudasHook from '@/Pages/componentsClientDebt/hook/GestionDeudasHook';
-import Index from './Index';
 
 interface phoneNumbersProps {
     phones: TelefonosClientesActivos[],
@@ -30,7 +28,7 @@ interface phoneNumbersProps {
     setPhones: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>
 }
 
-const MAX_ITEMS_PER_PAGE = 5;
+const MAX_ITEMS_PER_PAGE = 3;
 
 const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => {
     const [phone, setPhone] = useState<string>('');
@@ -151,12 +149,12 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     );
 
     return (
-        <Paper elevation={3} sx={{ p: 3, maxWidth: 500, mx: 'auto', mt: 4, mr: 3 }}>
+        <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
             <Typography variant="h6" gutterBottom textAlign="center">
                 Números de Teléfono
             </Typography>
 
-            <Stack direction={isMobile ? 'column' : 'row'} spacing={1} alignItems="center" sx={{ mb: 2 }}>
+            <Stack direction={isMobile ? 'column' : 'row'} spacing={1} alignItems="center" >
                 <TextField
                     label="Número de teléfono"
                     variant="outlined"
@@ -175,12 +173,12 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                         maxLength: 15
                     }}
                 />
-                <IconButton onClick={handleAddPhone} color="primary" sx={{ height: 56 }}>
+                <IconButton onClick={handleAddPhone} color="primary" sx={{ height: 40 }}>
                     <AddIcon />
                 </IconButton>
             </Stack>
 
-            <Divider sx={{ mb: 2 }} />
+            <Divider />
 
             {phones.length > 0 ? (
                 <>
@@ -199,7 +197,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                         ))}
                     </List>
 
-                    <Stack direction="row" justifyContent="space-between" mt={2}>
+                    <Stack direction="row" justifyContent="space-between" mt={1}>
                         <Button
                             size="small"
                             onClick={() => setPage(p => Math.max(p - 1, 0))}

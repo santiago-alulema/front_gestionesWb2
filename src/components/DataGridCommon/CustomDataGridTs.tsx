@@ -47,6 +47,7 @@ interface Props<T = any> {
   addNumeration?: Boolean;
   hasFilters?: Boolean;
   searchLabel?: String;
+  widthNumeration?: string;
 }
 
 const StyledTableHeaderCell = styled(
@@ -102,7 +103,8 @@ const CustomDataGridTs = <T,>({
   hasPagination = true,
   addNumeration = false,
   hasFilters = true,
-  searchLabel = ''
+  searchLabel = '',
+  widthNumeration = '65px'
 }: Props<T>) => {
   const [pageSizes] = useState([5, 10, 15]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -119,7 +121,7 @@ const CustomDataGridTs = <T,>({
       {
         name: 'rowNumber',
         title: 'Nro.',
-        width: '65px',
+        width: widthNumeration,
         hiddenFilterColumn: true,
         align: 'right'
       },

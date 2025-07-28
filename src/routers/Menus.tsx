@@ -13,6 +13,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import GestionCompromisoPagosDeudores from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
 import PrincipalCompromisosPagos from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
 import PrincipalReportes from "@/Pages/Reportes/PrincipalReportes";
+import Deudores from "@/Pages/DeudoresGestionPage/Index";
+import Deudas from "@/Pages/DeudoresGestionPage/components/Deudas";
+import InformacionGeneralGestionesIndex from "@/Pages/InformacionGeneralGestiones/InformacionGeneralGestionesIndex";
+import SummarizeIcon from '@mui/icons-material/Summarize';
+
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
 };
@@ -33,19 +38,19 @@ const Menus: MenuItem[] = [
       {
         name: "Deudas",
         roles: ["admin"],
-        route: "/gestion/usuarios",
+        route: "/gestion/subir-Deudas",
         component: <UploadDeudasPage />
       },
       {
         name: "Deudores",
         roles: ["admin"],
-        route: "/gestion/roles",
+        route: "/gestion/subir-deudores",
         component: <UploadDeudores />
       },
       {
         name: "Telefonos",
         roles: ["admin"],
-        route: "/gestion/roles",
+        route: "/gestion/subir-telefonos",
         component: <UploadPhonesPage />
       },
     ],
@@ -58,26 +63,39 @@ const Menus: MenuItem[] = [
       {
         name: "Ver Clientes",
         roles: ["admin"],
-        route: "/gestion/usuarios",
-        component: <ClientDebtPage />
+        route: "/gestion/ver-deudores",
+        component: <Deudores />
+      },
+      {
+        name: "Ver Deudas por clientes",
+        roles: ["admin"],
+        route: "/gestion/dudas-por-clientes",
+        component: <Deudas />
+      },
+      {
+        name: "Gestionar Compromisos",
+        roles: ["admin"],
+        route: "/gestion/compromisos-pagos",
+        component: <PrincipalCompromisosPagos />
+      }
+    ]
+  },
+  {
+    name: "Reportes",
+    roles: ["admin"],
+    icon: WhiteIcon(SummarizeIcon),
+    children: [
+      {
+        name: "Reporte General",
+        roles: ["admin"],
+        route: "/gestion/reporte-general",
+        component: <InformacionGeneralGestionesIndex />
       },
       {
         name: "Ver Reportes",
         roles: ["admin"],
-        route: "/gestion/usuarios",
+        route: "/gestion/reporteria-deudas",
         component: <PrincipalReportes />
-      },
-      // {
-      //   name: "Dashboard",
-      //   roles: ["admin"],
-      //   route: "/gestion/usuarios",
-      //   component: <Dashboard />
-      // },
-      {
-        name: "Gestionar Compromisos",
-        roles: ["admin"],
-        route: "/gestion/Gestionar Compromisos",
-        component: <PrincipalCompromisosPagos />
       }
     ]
   }

@@ -20,12 +20,13 @@ const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop =
         width: width,
         bgcolor: 'background.paper',
         boxShadow: 24,
-        p: 3
+        p: 3,
+        borderRadius: '12px',
     };
     return (
         <>
             <Modal open={open} onClose={handleClose}>
-                <Box sx={style}>
+                <Box sx={style} >
                     <Stack spacing={2} direction="row" justifyContent="flex-end">
                         <IconButton onClick={handleClose}>
                             <DisabledByDefaultIcon color="error" />

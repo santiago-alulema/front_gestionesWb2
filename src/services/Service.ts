@@ -1,11 +1,17 @@
 import ClientInfo from "@/model/Dtos/In/ClientInfo";
-import DebstByClientInfoInDTO from "@/model/Dtos/In/DebstByClientInfoInDTO";
+import { CompromisosPagoPorUsuarioInDTO } from "@/model/Dtos/In/CompromisosPagoPorUsuarioInDTO";
+import DebstByClientInfoInDTO from "@/model/Dtos/In/DeudasInDTO";
+import { FormaPagoInDTO } from "@/model/Dtos/In/FormaPagoInDTO";
+import { GestionesPagoPorUsuarioInDTO } from "@/model/Dtos/In/GestionesPagoPorUsuarioInDTO";
+import { GestionesPorUsuarioInDTO } from "@/model/Dtos/In/GestionesPorUsuarioInDTO";
 import LoginIn from "@/model/Dtos/In/LoginIn";
 import TelefonosClientesActivos from "@/model/Dtos/In/TelefonosClientesActivos";
+import { TipoContactoGestionInDTO } from "@/model/Dtos/In/TipoContactoGestionInDTO";
 import TipoGestioneOutDTO from "@/model/Dtos/In/TipoGestioneOutDTO";
 import VerificarEstadoTelefonoCliente from "@/model/Dtos/In/VerificarEstadoTelefonoCliente";
 import { ICompromisoPagoOutDTO } from "@/model/Dtos/Out/ICompromisoPagoOutDTO";
 import { IGestionInDTO } from "@/model/Dtos/Out/IGestionOutDTO";
+import { PagoGrabarOutDTO } from "@/model/Dtos/Out/PagoGrabarOutDTO";
 import PhonesClientsOutDTO from "@/model/Dtos/Out/PhonesClientsOutDTO";
 import UserLogin from "@/model/Dtos/Out/UserLogin";
 import { ActualizarEstadoCompromisoDTO } from "@/Pages/GestionarCompromisosPagos/models/ActualizarEstadoCompromisoDTO";
@@ -50,6 +56,36 @@ export const tipoGestionPadre = () =>
   request<TipoGestioneOutDTO[]>(
     'get',
     END_POINT.TIPO_GESTIONES_PADRE,
+  );
+
+export const formaPagosServicioWeb = () =>
+  request<FormaPagoInDTO[]>(
+    'get',
+    END_POINT.OBTENER_FORMAS_PAGO_ACTIVOS,
+  );
+
+export const gestionesXUsuarioServicioWeb = () =>
+  request<GestionesPorUsuarioInDTO[]>(
+    'get',
+    END_POINT.GESTIONES_POR_USUARIO,
+  );
+
+export const compromisosPagosXUsuarioServicioWeb = () =>
+  request<CompromisosPagoPorUsuarioInDTO[]>(
+    'get',
+    END_POINT.COMPROMISOS_DE_PAGO_POR_USUARIO,
+  );
+
+export const PagosXUsuarioServicioWeb = () =>
+  request<GestionesPagoPorUsuarioInDTO[]>(
+    'get',
+    END_POINT.PAGOS_POR_USUARIO,
+  );
+
+export const acercamientoDeudorServicioWeb = () =>
+  request<TipoContactoGestionInDTO[]>(
+    'get',
+    END_POINT.OBTENER_TODOS_TIPOS_ACERCAMIENTO_DEUDORES,
   );
 
 export const tipoGestionHijosPorPadreId = (padreId: string) =>
@@ -113,8 +149,15 @@ export const grabarCompromisoPago = (compromisoPago: ICompromisoPagoOutDTO) =>
     compromisoPago
   );
 
+export const grabarPagosServicioWeb = (compromisoPago: PagoGrabarOutDTO) =>
+  request<string>(
+    'post',
+    `${END_POINT.GRABAR_PAGO}`,
+    compromisoPago
+  );
 
-export const grabarGestion = (gestion: IGestionInDTO) =>
+
+export const grabarGestionServicioWeb = (gestion: IGestionInDTO) =>
   request<string>(
     'post',
     `${END_POINT.GRABAR_GESTION}`,

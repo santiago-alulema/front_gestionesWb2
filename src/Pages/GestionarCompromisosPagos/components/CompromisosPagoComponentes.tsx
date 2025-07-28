@@ -1,7 +1,7 @@
 import CustomModalTs from '@/components/CustomModalTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
-import DebstByClientInfoInDTO from '@/model/Dtos/In/DebstByClientInfoInDTO';
+import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import GestionarDeuda from '@/Pages/componentsClientDebt/GestionarDeuda';
 import { ConfiguracionColumnasCompromisosPago } from '@/Pages/GestionarCompromisosPagos/config/ConfiguracionColumnasCompromisosPago'
 import { compromisoPagoServiceWeb } from '@/services/Service';

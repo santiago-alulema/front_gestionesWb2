@@ -10,13 +10,15 @@ import {
     Box,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavbarProps {
     userName: string;
     onLogout: () => void;
+    onToggleSidebar: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ userName, onLogout }) => {
+const Navbar: React.FC<NavbarProps> = ({ userName, onLogout, onToggleSidebar }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -36,9 +38,19 @@ const Navbar: React.FC<NavbarProps> = ({ userName, onLogout }) => {
     return (
         <AppBar elevation={0} position="fixed" color="primary" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6" noWrap component="div">
-                    Gestiones Web
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton
+                        color="inherit"
+                        edge="start"
+                        onClick={onToggleSidebar}
+                        sx={{ mr: 2, display: { xs: "block", sm: "none" } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap component="div">
+                        Gestiones Web
+                    </Typography>
+                </Box>
 
                 <Box>
                     <IconButton
@@ -63,7 +75,7 @@ const Navbar: React.FC<NavbarProps> = ({ userName, onLogout }) => {
                     </Menu>
                 </Box>
             </Toolbar>
-        </AppBar >
+        </AppBar>
     );
 };
 
