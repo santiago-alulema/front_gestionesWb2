@@ -28,7 +28,7 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: '"Roboto", "Open Sans", sans-serif',
-    h1: { 
+    h1: {
       color: '#4A6FA5',     // Títulos en azul bajo
       fontWeight: 500,      // Menos intenso
     },

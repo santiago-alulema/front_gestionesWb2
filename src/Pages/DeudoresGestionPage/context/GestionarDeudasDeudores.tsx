@@ -8,7 +8,6 @@ import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
-
 interface IGestionarDeudasContext {
     // Estados existentes
     gestionesPadre: TipoGestioneOutDTO[];
@@ -20,24 +19,25 @@ interface IGestionarDeudasContext {
     // Estados de grabación
     grabarGestion: IGestionInDTO | null;
     grabarCompromiso: ICompromisoPagoOutDTO | null;
-    grabarPago: PagoGrabarOutDTO | null;
+    grabarPago: PagoGrabarOutDTO;
 
-    // Setters existentes
-    setDeudaSeleccionada: (cliente: DebstByClientInfoInDTO | null) => void;
-    setDeudorSeleccionado: (cliente: ClientInfo | null) => void;
-    setGestionHijo: (cliente: TipoGestioneOutDTO[] | []) => void;
+    // Estados UI
+    abrirModalGestionarDeuda: boolean;
 
-    // Setters para estados de grabación
-    setGrabarGestion: (gestion: IGestionInDTO | null) => void;
-    setGrabarCompromiso: (compromiso: ICompromisoPagoOutDTO | null) => void;
-    setGrabarPago: (pago: PagoGrabarOutDTO | null) => void;
+    // Setters tipados correctamente
+    setDeudaSeleccionada: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO | null>>;
+    setDeudorSeleccionado: React.Dispatch<React.SetStateAction<ClientInfo | null>>;
+    setGestionHijo: React.Dispatch<React.SetStateAction<TipoGestioneOutDTO[]>>;
+    setGrabarGestion: React.Dispatch<React.SetStateAction<IGestionInDTO | null>>;
+    setGrabarCompromiso: React.Dispatch<React.SetStateAction<ICompromisoPagoOutDTO | null>>;
+    setGrabarPago: React.Dispatch<React.SetStateAction<PagoGrabarOutDTO>>;
+    setAbrirModalGestionarDeuda: React.Dispatch<React.SetStateAction<boolean>>;
+    setTelefonosActivos: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>;
 
     // Métodos
     obtenerTelefonosCliente: (cedulaCliente: string) => Promise<void>;
     LlenarGestionesHijo: (gestionPadreId: string) => Promise<void>;
-    setTelefonosActivos: (telefonos: TelefonosClientesActivos[]) => void;
 }
-
 const GestionarDeudasDeudoresContext = createContext<IGestionarDeudasContext | null>(null);
 
 export const useGestionarDeudas = () => {
@@ -55,6 +55,7 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
     const [telefonosActivos, setTelefonosActivos] = useState<TelefonosClientesActivos[]>([]);
     const [deudorSeleccionado, setDeudorSeleccionado] = useState<ClientInfo | null>(null);
     const [deudaSeleccionada, setDeudaSeleccionada] = useState<DebstByClientInfoInDTO | null>(null);
+    const [abrirModalGestionarDeuda, setAbrirModalGestionarDeuda] = useState<boolean>(false);
 
     // Estados de grabación
     const [grabarGestion, setGrabarGestion] = useState<IGestionInDTO>({
@@ -64,7 +65,18 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
         idTipoContactoDeudor: ''
     });
     const [grabarCompromiso, setGrabarCompromiso] = useState<ICompromisoPagoOutDTO | null>(null);
-    const [grabarPago, setGrabarPago] = useState<PagoGrabarOutDTO | null>(null);
+    const [grabarPago, setGrabarPago] = useState<PagoGrabarOutDTO>({
+        idDeuda: '',
+        fechaPago: '',
+        montoPagado: 0,
+        medioPago: '',
+        observaciones: '',
+        numeroDocumento: '',
+        bancoId: '',
+        cuentaId: '',
+        tipoTransaccionId: '',
+        abonoLiquidacionId: ''
+    });
 
     const obtenerTelefonosCliente = async (cedulaCliente: string) => {
         const telefonosRespuesta = await telefonosActivosClientes(cedulaCliente);
@@ -98,6 +110,7 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
                 grabarGestion,
                 grabarCompromiso,
                 grabarPago,
+                abrirModalGestionarDeuda,
 
                 // Setters
                 setDeudaSeleccionada,
@@ -107,6 +120,7 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
                 setGrabarCompromiso,
                 setGrabarPago,
                 setTelefonosActivos,
+                setAbrirModalGestionarDeuda,
 
                 // Métodos
                 obtenerTelefonosCliente,

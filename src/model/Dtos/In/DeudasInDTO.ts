@@ -10,10 +10,7 @@ export interface DeudasInDTO {
   numeroCouta: number;
   totalCuotas: number;
   valorCuotas: number;
-
   compromisoPagoId: string;
-
-
 }
 
 export default DeudasInDTO;

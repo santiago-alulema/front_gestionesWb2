@@ -5,6 +5,8 @@ import { FormaPagoInDTO } from "@/model/Dtos/In/FormaPagoInDTO";
 import { GestionesPagoPorUsuarioInDTO } from "@/model/Dtos/In/GestionesPagoPorUsuarioInDTO";
 import { GestionesPorUsuarioInDTO } from "@/model/Dtos/In/GestionesPorUsuarioInDTO";
 import LoginIn from "@/model/Dtos/In/LoginIn";
+import { ReporteEmpresaDto } from "@/model/Dtos/In/ReporteEmpresaDto";
+import { SeleccionGeneral } from "@/model/Dtos/In/SeleccionGeneral";
 import TelefonosClientesActivos from "@/model/Dtos/In/TelefonosClientesActivos";
 import { TipoContactoGestionInDTO } from "@/model/Dtos/In/TipoContactoGestionInDTO";
 import TipoGestioneOutDTO from "@/model/Dtos/In/TipoGestioneOutDTO";
@@ -80,6 +82,56 @@ export const PagosXUsuarioServicioWeb = () =>
   request<GestionesPagoPorUsuarioInDTO[]>(
     'get',
     END_POINT.PAGOS_POR_USUARIO,
+  );
+
+export const gestionesPorEmperesaServicioWeb = () =>
+  request<ReporteEmpresaDto[]>(
+    'get',
+    END_POINT.PAGOS_COMPROMISOS_GESTION_POR_USUARIO,
+  );
+
+
+export const bancosServicioWeb = () =>
+  request<SeleccionGeneral[]>(
+    'get',
+    END_POINT.BANCOS_ACTIVOS,
+  );
+
+export const cuentasServicioWeb = () =>
+  request<SeleccionGeneral[]>(
+    'get',
+    END_POINT.CUENTAS_ACTIVAS,
+  );
+
+export const tipoTransaccionesServicioWeb = () =>
+  request<SeleccionGeneral[]>(
+    'get',
+    END_POINT.TRANSACCIONES_ACTIVAS,
+  );
+
+export const abonoLiquidacionesServicioWeb = () =>
+  request<SeleccionGeneral[]>(
+    'get',
+    END_POINT.ABONO_LIQUIDACIONES_ACTIVAS,
+  );
+
+
+export const resultadosServicioWeb = () =>
+  request<SeleccionGeneral[]>(
+    'get',
+    END_POINT.OBTENER_RESULTADOS,
+  );
+
+export const tipoContactoServicioWeb = (idRespuesta: string) =>
+  request<SeleccionGeneral[]>(
+    'get',
+    `${END_POINT.OBTENER_TIPO_CONTACTO}/${idRespuesta}`,
+  );
+
+export const respuestasServicioWeb = (idTipoContacto: string) =>
+  request<SeleccionGeneral[]>(
+    'get',
+    `${END_POINT.OBTENER_RESPUESTA}/${idTipoContacto}`,
   );
 
 export const acercamientoDeudorServicioWeb = () =>

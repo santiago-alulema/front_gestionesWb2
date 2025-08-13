@@ -1,11 +1,16 @@
+import CustomDatePickerForm from '@/components/CustomDatePickerForm'
 import CustomTextFieldMoney from '@/components/CustomTextFieldMoney'
+import CustomTextFieldMoneyForm from '@/components/CustomTextFieldMoneyForm'
+import CustomAutocompleteFormTs from '@/components/DataGridCommon/CustomAutocompleteFormTs'
 import CustomAutocompleteTs from '@/components/DataGridCommon/CustomAutocompleteTs'
 import CustomDatePicker from '@/components/DataGridCommon/CustomDatePicker'
+import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFormTs'
 import { TipoContactoGestionInDTO } from '@/model/Dtos/In/TipoContactoGestionInDTO'
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO'
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores'
+import { useFormCompromisoPago } from '@/Pages/DeudoresGestionPage/useForms/useFormCompromisoPago'
 import { acercamientoDeudorServicioWeb } from '@/services/Service'
-import { Grid } from '@mui/material'
+import { Box, Button, Grid } from '@mui/material'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -13,54 +18,73 @@ const CompromisosPagosComponents = () => {
     const [valorPago, setValorPago] = useState<string>("0.0")
     const fechaActual = dayjs().format('YYYY-MM-DD')
     const [formasContactoCliente, setFormasContactoCliente] = useState<TipoContactoGestionInDTO[]>([])
-    const {
-        grabarCompromiso,
-        setGrabarCompromiso } = useGestionarDeudas();
+
     const onInit = async () => {
         const respuesta = await acercamientoDeudorServicioWeb();
         setFormasContactoCliente(respuesta);
     }
 
+    const { control, errors, rules, onSubmit } = useFormCompromisoPago();
+    const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
+
     useEffect(() => {
         onInit()
     }, [])
-
-    const actualizarCampoCompromisoPago = (campo: keyof ICompromisoPagoOutDTO, valor: string | number) => {
-        setGrabarCompromiso({
-            ...grabarCompromiso,
-            [campo]: valor
-        });
-    };
-
 
     return (
         <>
             <Grid container spacing={2}>
                 <Grid size={{ lg: 6 }}>
-                    <CustomDatePicker
+                    <CustomDatePickerForm
+                        name='fechaCompromiso'
                         label="Fecha de pago"
                         requiredField
                         defaultValue={fechaActual}
-                        onChangeValue={(value) => actualizarCampoCompromisoPago('fechaCompromiso', value)}
+                        control={control}
+                        errors={errors}
+                        rules={rules.fechaCompromiso}
                     />
                 </Grid>
                 <Grid size={{ lg: 6 }}>
-                    <CustomTextFieldMoney
+                    <CustomTextFieldMoneyForm
+                        name='valorCompromiso'
                         label="Valor en dólares"
                         fullWidth
-                        value={grabarCompromiso.montoComprometido.toString()}
-                        onChange={(value) => actualizarCampoCompromisoPago("montoComprometido", value)}
+                        control={control}
+                        errors={errors}
+                        rules={rules.valorCompromiso}
                     />
                 </Grid>
                 <Grid size={{ lg: 12 }}>
-                    <CustomAutocompleteTs
+                    <CustomAutocompleteFormTs
+                        name='tipoContactoCliente'
                         options={formasContactoCliente}
                         label="Tipo de contacto Cliente"
                         labelFullField="Contacto Cliente"
                         optionLabel='nombre'
-                        optionValue='tipoContactoGestionId'
-                        handleChange={(e, value: ICompromisoPagoOutDTO) => actualizarCampoCompromisoPago("formaPagoId", value.formaPagoId.toString())}
+                        control={control}
+                        errors={errors}
+                        rules={rules.tipoContactoCliente}
                     />
+                </Grid>
+                <Grid size={{ lg: 12 }} >
+                    <CustomTextFieldFormTs
+                        name="observaciones"
+                        control={control}
+                        errors={errors}
+                        rules={rules.observaciones}
+                        label="Observaciones"
+                        labelFullField="Observaciones"
+                        requiredField={true}
+                        multiline
+                        rows={3}
+                    />
+                </Grid>
+                <Grid size={{ lg: 12 }} >
+                    <Box display="flex" justifyContent="flex-end" gap={2}>
+                        <Button onClick={onSubmit} variant='contained'>Grabar</Button>
+                        <Button color='inherit' onClick={() => setAbrirModalGestionarDeuda(false)} variant='contained'>Cancelar</Button>
+                    </Box>
                 </Grid>
             </Grid>
         </>

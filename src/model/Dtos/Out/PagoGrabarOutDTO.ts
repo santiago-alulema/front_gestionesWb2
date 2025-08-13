@@ -4,5 +4,11 @@ export interface PagoGrabarOutDTO {
     montoPagado: number;
     medioPago?: string;
     observaciones?: string;
-    formaPagoId: string;
+
+    numeroDocumento?: string;
+    bancoId?: string;
+    cuentaId?: string;
+    tipoTransaccionId?: string;
+    abonoLiquidacionId?: string;
+
 }

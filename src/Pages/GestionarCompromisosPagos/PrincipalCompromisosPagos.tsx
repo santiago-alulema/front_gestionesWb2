@@ -1,5 +1,6 @@
 import BasePage from '@/components/BasePage'
 import CompromisosPagoComponentes from '@/Pages/GestionarCompromisosPagos/components/CompromisosPagoComponentes'
+import { GestionarCompromisoPagoProvider } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext'
 import React from 'react'
 
 const PrincipalCompromisosPagos = () => {
@@ -14,7 +15,9 @@ const PrincipalCompromisosPagos = () => {
             routers={routes}
             title="Gestionar Compromisos de Pago"
         >
-            <CompromisosPagoComponentes />
+            <GestionarCompromisoPagoProvider>
+                <CompromisosPagoComponentes />
+            </GestionarCompromisoPagoProvider>
         </BasePage>
     )
 }

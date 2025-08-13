@@ -2,7 +2,7 @@ export interface ICompromisoPagoOutDTO {
     idDeuda?: string;
     fechaCompromiso: string;
     montoComprometido: number;
-    estado?: string;
+    estado?: boolean;
     observaciones?: string;
     formaPagoId: string;
 }

@@ -66,16 +66,16 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
     }
 
     const grabarGestionOPagos = async () => {
-        if (gestionSeleccionada?.tipoGestion === 'CP') {
-            const compromisoPago: ICompromisoPagoOutDTO = {
-                fechaCompromiso: fechaSeleccionada,
-                montoComprometido: Number.parseFloat(monto),
-                estado: 'C',
-                idDeuda: debt.deudaId,
-                observaciones: observaciones
-            }
-            await grabarCompromisoPago(compromisoPago)
-        }
+        // if (gestionSeleccionada?.tipoGestion === 'CP') {
+        //     const compromisoPago: ICompromisoPagoOutDTO = {
+        //         fechaCompromiso: fechaSeleccionada,
+        //         montoComprometido: Number.parseFloat(monto),
+        //         estado: 'C',
+        //         idDeuda: debt.deudaId,
+        //         observaciones: observaciones
+        //     }
+        //     await grabarCompromisoPago(compromisoPago)
+        // }
 
         if (gestionSeleccionada?.tipoGestion === 'G') {
             const gestion: IGestionInDTO = {

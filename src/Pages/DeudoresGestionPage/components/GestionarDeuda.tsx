@@ -12,6 +12,7 @@ import { grabarCompromisoPago, grabarGestionServicioWeb, grabarPagosServicioWeb 
 import { showAlert } from "@/utils/modalAlerts";
 import { ICompromisoPagoOutDTO } from "@/model/Dtos/Out/ICompromisoPagoOutDTO";
 import { PagoGrabarOutDTO } from "@/model/Dtos/Out/PagoGrabarOutDTO";
+import TabsGestionarDeudas from "@/Pages/DeudoresGestionPage/components/TabsGestionarDeudas";
 
 const GestionarDeuda = () => {
     const { gestionesPadre,
@@ -23,10 +24,26 @@ const GestionarDeuda = () => {
         grabarGestion,
         setGrabarGestion,
         grabarCompromiso,
-        grabarPago } = useGestionarDeudas();
+        setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [selectedPadre, setSelectedPadre] = useState<any>(null);
     const [selectedHijo, setSelectedHijo] = useState<any>(null);
     const [observaciones, setObservaciones] = useState<string>("");
+    const [numeroDocumentoPago, setNumeroDocumentoPago] = useState<string>("");
+
+
+    const [pagosGrabar, setPagosGrabar] = useState<PagoGrabarOutDTO>({
+        idDeuda: '',
+        fechaPago: '',
+        montoPagado: 0,
+        medioPago: '',
+        observaciones: '',
+        numeroDocumento: '',
+        bancoId: 'sa',
+        cuentaId: '',
+        tipoTransaccionId: '',
+        abonoLiquidacionId: ''
+    });
+
 
 
     const seleccionarPadre = (value: TipoGestioneOutDTO) => {
@@ -66,12 +83,13 @@ const GestionarDeuda = () => {
         if (selectedHijo?.tipoGestion === 'G') {
             grabarTipoGestionApi();
         }
-        if (selectedHijo?.tipoGestion === 'CP') {
+        if (selectedHijo?.tipoGestion === 'C') {
             grabarCompromisosPagosApi();
         }
         if (selectedHijo?.tipoGestion === 'P') {
             grabarPagosApi();
         }
+        setAbrirModalGestionarDeuda(false)
     }
 
     const grabarTipoGestionApi = async () => {
@@ -79,7 +97,9 @@ const GestionarDeuda = () => {
             idDeuda: grabarGestion.idDeuda,
             idTipoGestion: selectedHijo.idTipoGestion,
             descripcion: observaciones,
-            idTipoContactoDeudor: grabarGestion.idTipoContactoDeudor
+            idTipoContactoDeudor: grabarGestion.idTipoContactoDeudor,
+            idRespuesta: grabarGestion.idRespuesta,
+            email: grabarGestion.email
         }
         await grabarGestionServicioWeb(enviagrabar);
         const configAlert = {
@@ -98,7 +118,7 @@ const GestionarDeuda = () => {
             idDeuda: grabarGestion.idDeuda,
             fechaCompromiso: grabarCompromiso.fechaCompromiso,
             montoComprometido: grabarCompromiso.montoComprometido,
-            estado: "C",
+            estado: true,
             observaciones: observaciones,
             formaPagoId: grabarCompromiso.formaPagoId
         }
@@ -114,12 +134,10 @@ const GestionarDeuda = () => {
 
     const grabarPagosApi = async () => {
         const enviagrabar: PagoGrabarOutDTO = {
-            idDeuda: grabarGestion.idDeuda,
-            fechaPago: grabarPago.fechaPago,
-            montoPagado: grabarPago.montoPagado,
-            medioPago: '0.0',
-            observaciones: observaciones,
-            formaPagoId: grabarPago.formaPagoId
+            ...pagosGrabar,
+            numeroDocumento: numeroDocumentoPago,
+            idDeuda: deudaSeleccionada.deudaId,
+            observaciones: observaciones
         }
         await grabarPagosServicioWeb(enviagrabar);
         const configAlert = {
@@ -131,9 +149,10 @@ const GestionarDeuda = () => {
         showAlert(configAlert);
     }
 
+
     return (
         <>
-            <Stack mb={2}>
+            {/* <Stack mb={2}>
                 <Typography variant="h5" fontWeight='bold' textAlign='center' mb={2}>GESTIONAR DEUDA</Typography>
                 <Typography textAlign='left'><strong>Nombre Cliente: </strong> {deudorSeleccionado.nombre}</Typography>
                 <Typography textAlign='left'><strong>Factura: </strong>{deudaSeleccionada.numeroFactura}</Typography>
@@ -163,9 +182,12 @@ const GestionarDeuda = () => {
                     />
                 </Grid>
                 <Grid size={{ lg: 12 }}>
-                    {selectedHijo?.tipoGestion === 'P' && (<PagosComponents />)}
+                    {selectedHijo?.tipoGestion === 'P' && (<PagosComponents pagosGrabar={pagosGrabar}
+                        setPagosGrabar={setPagosGrabar}
+                        numeroDocumentoPago={numeroDocumentoPago}
+                        setNumeroDocumentoPago={setNumeroDocumentoPago} />)}
                     {selectedHijo?.tipoGestion === 'G' && (<GestionarDeudaComponents />)}
-                    {selectedHijo?.tipoGestion === 'CP' && (<CompromisosPagosComponents />)}
+                    {selectedHijo?.tipoGestion === 'C' && (<CompromisosPagosComponents />)}
                 </Grid>
                 <Grid size={{ lg: 12 }}>
                     <TextField variant="outlined"
@@ -173,6 +195,7 @@ const GestionarDeuda = () => {
                         fullWidth
                         multiline
                         rows={5}
+                        value={observaciones}
                         onChange={(e) => setObservaciones(e.target.value)} />
                 </Grid>
             </Grid>
@@ -183,10 +206,13 @@ const GestionarDeuda = () => {
                     onClick={grabarGestionesApi}>
                     Grabar
                 </Button>
-                <Button variant="contained" style={{ width: 120, borderRadius: 15 }}>
+                <Button variant="contained"
+                    style={{ width: 120, borderRadius: 15 }}
+                    onClick={() => setAbrirModalGestionarDeuda(false)}>
                     Cancelar
                 </Button>
-            </Stack>
+            </Stack> */}
+            <TabsGestionarDeudas></TabsGestionarDeudas>
         </>
     )
 }

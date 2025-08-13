@@ -3,26 +3,24 @@ import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import GestionarDeuda from '@/Pages/componentsClientDebt/GestionarDeuda';
+import GestionarCompromisoPago from '@/Pages/GestionarCompromisosPagos/components/GestionarCompromisoPago';
 import { ConfiguracionColumnasCompromisosPago } from '@/Pages/GestionarCompromisosPagos/config/ConfiguracionColumnasCompromisosPago'
-import { compromisoPagoServiceWeb } from '@/services/Service';
-import React, { useEffect, useState } from 'react'
+import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
+import { useEffect } from 'react'
 
 const CompromisosPagoComponentes = () => {
 
-    const [compromisosPago, setCompromisosPago] = useState<DebstByClientInfoInDTO[]>([]);
 
-    const [debts, setDebts] = useState<DebstByClientInfoInDTO[]>([])
-    const [debt, setDebt] = useState<DebstByClientInfoInDTO>()
-    const [isVisible, setIsVisible] = useState<boolean>(false)
-    const [open, setOpen] = useState(false)
+    const { setCompromisoPagoSeleccionado,
+        cargarCompromisos,
+        compromisosPago,
+        setAbrirModalGestionarCompromiso,
+        abrirModalGestionarCompromiso } = useGestionarCompromisoPago();
 
     const selectDebt = (row: DebstByClientInfoInDTO) => {
-
-        setDebt(row)
-        setIsVisible(true)
-        setOpen(true)
+        setCompromisoPagoSeleccionado(row)
+        setAbrirModalGestionarCompromiso(true)
     }
-
 
     const actionsConfig: IActionConfig[] = [
         {
@@ -36,15 +34,6 @@ const CompromisosPagoComponentes = () => {
         }
     ];
 
-    const cargarCompromisos = async () => {
-        const respuesta = await compromisoPagoServiceWeb();
-        setCompromisosPago(respuesta);
-    }
-
-    useEffect(() => {
-        cargarCompromisos()
-        setOpen(false)
-    }, [isVisible])
 
     useEffect(() => {
         cargarCompromisos()
@@ -62,8 +51,11 @@ const CompromisosPagoComponentes = () => {
                 iconDirectionFilter="end"
                 searchLabel={"Buscar"}
             />
-            <CustomModalTs open={open} positionLeft="23%" width={1060} handleClose={() => setOpen(false)}>
-                <GestionarDeuda debt={debt} setIsVisible={setIsVisible} />
+            <CustomModalTs open={abrirModalGestionarCompromiso}
+                positionLeft="23%"
+                width={1060}
+                handleClose={() => setAbrirModalGestionarCompromiso(false)}>
+                <GestionarCompromisoPago />
             </CustomModalTs>
         </>
     )

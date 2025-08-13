@@ -33,6 +33,7 @@ const Sidebar = ({ userRole }: SidebarProps) => {
 
   const renderMenuItems = (items: MenuItem[], depth: number = 0) =>
     items
+      .filter(item => !item.hidden)
       .filter((item) =>
         item.roles
           .map((r) => r.toLowerCase())
@@ -59,7 +60,7 @@ const Sidebar = ({ userRole }: SidebarProps) => {
               </ListItemButton>
               {hovered && (
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
+                  <List component="div" disablePadding >
                     {renderMenuItems(item.children, depth + 1)}
                   </List>
                 </Collapse>

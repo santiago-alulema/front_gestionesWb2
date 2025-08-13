@@ -170,7 +170,10 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                     }
                     inputProps={{
                         inputMode: 'numeric',
-                        maxLength: 15
+                        maxLength: 10,
+                        sx: {
+                            height: '43px',
+                        },
                     }}
                 />
                 <IconButton onClick={handleAddPhone} color="primary" sx={{ height: 40 }}>

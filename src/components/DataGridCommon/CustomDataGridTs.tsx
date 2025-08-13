@@ -1,6 +1,7 @@
 import { ActionColumn } from '@/components/DataGridCommon/ActionConfig';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import TextFieldCustomDataGrid from '@/components/DataGridCommon/TextFieldCustomDataGrid';
+import '@/css/DataGrid.css'
 import {
   Column,
   FilteringState,
@@ -90,6 +91,48 @@ const FilterCell = (props: any) => {
     </TableFilterRow.Cell>
   );
 };
+
+const LoadingContainer = styled('div')({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'rgba(255, 255, 255, 0.75)',
+  zIndex: 10,
+});
+
+const StyledHeaderCell = styled(TableHeaderRow.Cell)(({ theme, align }) => ({
+  fontWeight: 'bold',
+  backgroundColor: theme.palette.grey[200], // Color de fondo sutil y profesional
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  padding: '12px 8px',
+  textAlign: align,
+}));
+
+const StyledTableCell = styled(Table.Cell)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`, // Borde sutil entre filas
+  padding: '12px 8px', // Espaciado consistente
+  whiteSpace: 'normal',
+  wordWrap: 'break-word',
+  fontSize: '0.875rem',
+}));
+
+const StyledTableRow = styled(Table.Row)(({ theme }) => ({
+  // Efecto Zebra para mejor legibilidad
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // Efecto Hover para interactividad
+  '&:hover': {
+    backgroundColor: theme.palette.action.selected,
+    cursor: 'pointer',
+  },
+}));
+
 
 const CustomDataGridTs = <T,>({
   rows,
@@ -299,6 +342,9 @@ const CustomDataGridTs = <T,>({
       );
     };
   }, [searchLabel]);
+
+
+
 
   return (
     <ThemeProvider theme={theme}>

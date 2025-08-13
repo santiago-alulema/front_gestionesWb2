@@ -17,14 +17,13 @@ import GestionarDeuda from "@/Pages/DeudoresGestionPage/components/GestionarDeud
 
 const Deudas = () => {
     const navigate = useNavigate();
-    const { deudorSeleccionado, setDeudaSeleccionada } = useGestionarDeudas();
+    const { deudorSeleccionado, setDeudaSeleccionada, abrirModalGestionarDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [deudasDeudor, setDeudasDeudor] = useState<DebstByClientInfoInDTO[]>([]);
-    const [open, setOpen] = useState<boolean>(false);
 
 
     const seleccionarDeudaFuncion = (item: DebstByClientInfoInDTO) => {
         setDeudaSeleccionada(item)
-        setOpen(true)
+        setAbrirModalGestionarDeuda(true)
     }
 
     const actionsConfig: IActionConfig[] = [
@@ -114,7 +113,8 @@ const Deudas = () => {
                     </div>
                 </Box >
             </BasePage>
-            <CustomModalTs open={open} handleClose={() => setOpen(prev => !prev)} width={800}>
+            <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda}
+                handleClose={() => setAbrirModalGestionarDeuda(!abrirModalGestionarDeuda)} width={800}>
                 <GestionarDeuda />
             </CustomModalTs>
         </>

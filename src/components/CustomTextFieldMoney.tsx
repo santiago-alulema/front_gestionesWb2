@@ -67,9 +67,14 @@ const CustomTextFieldMoney = ({
             onChange={handleValueChange}
             onBlur={handleBlur}
             onFocus={handleFocus}
+
             InputProps={{
                 startAdornment: <InputAdornment position="start">{currencySymbol}</InputAdornment>,
-                ...props.InputProps
+                ...props.InputProps,
+                sx: {
+                    height: '56px',
+                    padding: '16px 14px' // Ajusta el padding si es necesario
+                },
             }}
         />
     )

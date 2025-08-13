@@ -70,7 +70,8 @@ const Menus: MenuItem[] = [
         name: "Ver Deudas por clientes",
         roles: ["admin"],
         route: "/gestion/dudas-por-clientes",
-        component: <Deudas />
+        component: <Deudas />,
+        hidden: true
       },
       {
         name: "Gestionar Compromisos",

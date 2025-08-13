@@ -23,6 +23,17 @@ const END_POINT = {
     GESTIONES_POR_USUARIO: "ReporteGeneralGestiones/gestiones-por-usuario",
     COMPROMISOS_DE_PAGO_POR_USUARIO: "ReporteGeneralGestiones/compromisos-pago-por-usuario",
     PAGOS_POR_USUARIO: "ReporteGeneralGestiones/gestiones-pago-por-usuario",
+    PAGOS_COMPROMISOS_GESTION_POR_USUARIO: "ReporteGeneralGestiones/reporte-por-empresa-mes-actual",
+
+    OBTENER_RESULTADOS: "OpcionesGestion/obtener-respuesta-gestion",
+    OBTENER_TIPO_CONTACTO: "OpcionesGestion/obtener-tipo-contacto",
+    OBTENER_RESPUESTA: "OpcionesGestion/obtener-respuesta-tipo-contacto",
+
+    BANCOS_ACTIVOS: "OpcionesRegistrarPagos/bancos-activos",
+    CUENTAS_ACTIVAS: "OpcionesRegistrarPagos/cuentas-activos",
+    TRANSACCIONES_ACTIVAS: "OpcionesRegistrarPagos/transacciones-activas",
+    ABONO_LIQUIDACIONES_ACTIVAS: "OpcionesRegistrarPagos/abono-liquidacion-activas"
+
 
 }
 
