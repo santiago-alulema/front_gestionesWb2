@@ -7,8 +7,11 @@ WORKDIR /app
 # Copiar package.json y package-lock.json primero
 COPY package*.json ./
 
-# Instalar dependencias
+# Instalar dependencias con legacy peer deps (para compatibilidad)
 RUN npm install --legacy-peer-deps
+
+# Asegurar compatibilidad Recharts + Redux
+RUN npm install redux@4.2.1
 
 # Copiar el resto del proyecto
 COPY . .
