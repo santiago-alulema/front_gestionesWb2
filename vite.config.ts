@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { fileURLToPath } from 'node:url' // Usa 'node:url' en lugar de 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      { find: "@", replacement: resolve(__dirname, "./src") },
+      {
+        find: "@",
+        replacement: fileURLToPath(new URL("./src", import.meta.url))
+      },
       {
         find: /^@mui\/icons-material\/esm\/(.*)\.js$/,
         replacement: '@mui/icons-material/$1'
