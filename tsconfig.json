@@ -6,6 +6,7 @@
     "noImplicitAny": true,
     "lib": ["es2017", "dom"],
     "outDir": "./dist/",
+    "skipLibCheck": true,
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
@@ -18,7 +19,8 @@
     "moduleResolution": "node",
     "types": [
       "react",
-      "react-dom"
+      "react-dom",
+      "vite/client"
     ],
    "baseUrl": "./src",
     "paths": {
