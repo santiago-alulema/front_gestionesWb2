@@ -1,26 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2022",                     // Compatibilidad con features modernas
-    "module": "esnext",                     // Compatible con Vite / ES Modules
-    "moduleResolution": "node16",           // Soluciona errores de react-router-dom
-    "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext"], // Incluye APIs modernas y DOM
     "allowJs": true,
-    "noImplicitAny": false,                 // Puedes ajustar según necesidad
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "module": "commonjs",               
+    "noImplicitAny": true,
+    "lib": ["es2017", "dom"],
+    "outDir": "./dist/",
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
-    "skipLibCheck": true,                   // Ignora errores de tipos de librerías externas
-    "outDir": "./dist",
-    "allowImportingTsExtensions": true,
+    "target": "es2015",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "moduleResolution": "node",         
     "types": ["react", "react-dom"],
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["*"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/**/*"
+  ]
 }
