@@ -25,6 +25,6 @@ ENV VITE_REACT_APP_BASE_URL=http://localhost:5191/api/
 
 # Exponer puerto 80 (Nginx)
 EXPOSE 80
-
+EXPOSE 5191
 # Iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
