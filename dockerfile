@@ -13,7 +13,7 @@ RUN npm install --legacy-peer-deps
 # Instalar versiones específicas de dependencias problemáticas
 RUN npm install date-fns@2.30.0
 RUN npm install react-router-dom@6.20.1
-RUN npm install recharts@2.8.0
+#RUN npm install recharts@2.8.0
 RUN npm install redux@4.2.1
 
 # Copiar el resto del proyecto
