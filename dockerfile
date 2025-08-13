@@ -1,15 +1,26 @@
-FROM nginx:alpine
-WORKDIR /usr/share/nginx/html
+# Imagen base
+FROM node:18.15-alpine
 
-# Limpiar contenido default de nginx
-RUN rm -rf ./*
+# Carpeta de trabajo
+WORKDIR /app
 
-# Copiar build desde el contenedor de frontend
-COPY --from=frontend-build /app/dist .
+# Copiar package.json y package-lock.json primero
+COPY package*.json ./
 
-# Copiar configuración de Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Instalar dependencias
+RUN npm install --legacy-peer-deps
 
-EXPOSE 80
+# Copiar el resto del proyecto
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+# Construir la app para producción
+RUN npm run build
+
+# Instalar servidor estático
+RUN npm install -g serve
+
+# Exponer puerto 5173
+EXPOSE 5173
+
+# Comando por defecto
+CMD ["serve", "-s", "dist", "-l", "5173"]
