@@ -2,14 +2,12 @@ import CustomModalTs from '@/components/CustomModalTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
-import GestionarDeuda from '@/Pages/componentsClientDebt/GestionarDeuda';
 import GestionarCompromisoPago from '@/Pages/GestionarCompromisosPagos/components/GestionarCompromisoPago';
 import { ConfiguracionColumnasCompromisosPago } from '@/Pages/GestionarCompromisosPagos/config/ConfiguracionColumnasCompromisosPago'
 import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
 import { useEffect } from 'react'
 
 const CompromisosPagoComponentes = () => {
-
 
     const { setCompromisoPagoSeleccionado,
         cargarCompromisos,
@@ -34,29 +32,31 @@ const CompromisosPagoComponentes = () => {
         }
     ];
 
-
     useEffect(() => {
         cargarCompromisos()
     }, [])
 
     return (
         <>
-            <CustomDataGridTs
-                rows={compromisosPago}
-                columns={ConfiguracionColumnasCompromisosPago()}
-                gridId="gidChartOfAccounts"
-                columsHide={['id']}
-                hiddenFilterColumn={['actions']}
-                actions={actionsConfig}
-                iconDirectionFilter="end"
-                searchLabel={"Buscar"}
-            />
-            <CustomModalTs open={abrirModalGestionarCompromiso}
-                positionLeft="23%"
-                width={1060}
-                handleClose={() => setAbrirModalGestionarCompromiso(false)}>
-                <GestionarCompromisoPago />
-            </CustomModalTs>
+            <div className="custom-data-grid-container">
+                <CustomDataGridTs
+                    rows={compromisosPago}
+                    columns={ConfiguracionColumnasCompromisosPago()}
+                    gridId="gidChartOfAccounts"
+                    columsHide={['id']}
+                    hiddenFilterColumn={['actions']}
+                    actions={actionsConfig}
+                    iconDirectionFilter="end"
+                    searchLabel={"Buscar"}
+                />
+                <CustomModalTs open={abrirModalGestionarCompromiso}
+                    positionLeft="23%"
+                    width={1060}
+                    handleClose={() => setAbrirModalGestionarCompromiso(false)}>
+                    <GestionarCompromisoPago />
+                </CustomModalTs>
+            </div>
+
         </>
     )
 }

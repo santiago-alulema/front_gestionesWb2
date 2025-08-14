@@ -39,16 +39,20 @@ const Deudores = () => {
     ];
     return (
         <>
-            <CustomDataGridTs
-                rows={clientDebt}
-                columns={ConfigurarColumnaDeudores()}
-                gridId="gidChartOfAccounts"
-                columsHide={['id']}
-                hiddenFilterColumn={['actions']}
-                actions={actionsConfig}
-                iconDirectionFilter="end"
-                searchLabel={"Buscar"}
-            />
+            <div className="custom-data-grid-container">
+                <CustomDataGridTs
+                    rows={clientDebt}
+                    columns={ConfigurarColumnaDeudores()}
+                    gridId="gidChartOfAccounts"
+                    columsHide={['id']}
+                    hiddenFilterColumn={['actions']}
+                    actions={actionsConfig}
+                    iconDirectionFilter="end"
+                    searchLabel={"Buscar"}
+                    titleEmptyTable='Tabla sin datos'
+                />
+            </div>
+
         </>
     )
 }

@@ -15,22 +15,29 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    Button
+    Button,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
 } from '@mui/material';
 import {
     InsertDriveFile as FileIcon,
     Close as CloseIcon,
     CloudUpload as UploadIcon,
     CheckCircle as CheckCircleIcon,
-    Error as ErrorIcon
+    Error as ErrorIcon,
+    Info as InfoIcon
 } from '@mui/icons-material';
 
 interface ExcelUploaderProps {
     legend?: string;
     acceptedFileTypes?: string[];
-    requiredColumns?: { [columnName: string]: 'string' | 'number' | 'boolean' };
+    requiredColumns?: { [columnName: string]: 'string' | 'number' | 'boolean' | 'string?' | 'number?' | 'boolean?' };
     onFileProcessed?: (data: any[]) => void;
-    maxFileSize?: number; // in MB
+    maxFileSize?: number;
 }
 
 interface ExcelRow {
@@ -51,6 +58,17 @@ const DropzoneContainer = styled(Paper)<{ isDragActive: boolean }>(({ theme, isD
     }
 }));
 
+const normalizeColumnName = (name: string) => {
+    return name
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/_/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+};
+
 const UploadExcel: React.FC<ExcelUploaderProps> = ({
     legend = "Arrastra y suelta un archivo Excel aquí, o haz clic para seleccionarlo",
     acceptedFileTypes = ['.xlsx', '.xls', '.csv'],
@@ -64,11 +82,13 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [fileData, setFileData] = useState<ExcelRow[]>([]);
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
+    const [detectedColumns, setDetectedColumns] = useState<string[]>([]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         setError(null);
         setValidationErrors([]);
         setFileData([]);
+        setDetectedColumns([]);
 
         if (acceptedFiles.length === 0) {
             setError('Por favor, sube un archivo Excel válido.');
@@ -122,65 +142,111 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                     throw new Error('El archivo Excel está vacío o no tiene datos.');
                 }
 
-                const headers = jsonData[0] as string[];
-                const columnNames = Object.keys(requiredColumns);
-                const missingColumns = columnNames.filter(col => !headers.includes(col));
+                const headers = (jsonData[0] as string[]).filter(h => h !== undefined && h !== null);
+                setDetectedColumns(headers);
+
+                const normalizedHeaders = headers.map(header => normalizeColumnName(header));
+
+                const headerMap: Record<string, string> = {};
+                headers.forEach(originalHeader => {
+                    headerMap[normalizeColumnName(originalHeader)] = originalHeader;
+                });
+
+                const requiredCols = Object.keys(requiredColumns).map(col => {
+                    const cleanCol = col.replace(/\?$/, '');
+                    console.log("col", col)
+
+                    console.log("col.endsWith('?')", col.endsWith('?'))
+                    return {
+                        original: cleanCol,
+                        normalized: normalizeColumnName(cleanCol),
+                        isOptional: col.endsWith('?'),
+                        type: requiredColumns[col].replace(/\?$/, '')
+                    };
+                });
+
+                console.log("requiredCols", requiredCols)
+
+                const missingColumns = requiredCols
+                    .filter(({ normalized, isOptional }) => !normalizedHeaders.includes(normalized) && !isOptional)
+                    .map(({ original }) => original);
 
                 if (missingColumns.length > 0) {
                     setValidationErrors(missingColumns);
-                    throw new Error(`Columnas faltantes: ${missingColumns.join(', ')}`);
+                    throw new Error(`Columnas requeridas faltantes: ${missingColumns.join(', ')}`);
                 }
 
                 const rows = (jsonData.slice(1) as any[]).reduce<ExcelRow[]>((acc, row, index) => {
-                    const isEmptyRow = row.every((cell: any) => cell === undefined || cell === null || cell === '');
+                    const isEmptyRow = row.every((cell: any) =>
+                        cell === undefined || cell === null || cell === '' || cell === ' ');
                     if (isEmptyRow) return acc;
 
                     const rowObj: ExcelRow = { __rowNumber: index + 2 };
+                    const errorsInRow: string[] = [];
+                    const normalizedValues: Record<string, any> = {};
+
                     headers.forEach((header: string, i: number) => {
-                        rowObj[header] = row[i];
+                        const normalizedHeader = normalizeColumnName(header);
+                        let value = row[i];
+
+                        if (value === '' || value === ' ') {
+                            value = null;
+                        }
+                        normalizedValues[normalizedHeader] = value;
                     });
 
-                    const errorsInRow: string[] = [];
+                    for (const { original, normalized, isOptional, type } of requiredCols) {
+                        const value = normalizedValues[normalized];
+                        const displayName = headerMap[normalized] || original;
 
-                    for (const [col, expectedType] of Object.entries(requiredColumns)) {
-                        let value = rowObj[col];
+                        if (isOptional && (value === undefined || value === null || value === '' || value === ' ')) {
+                            rowObj[displayName] = " ";
+                            continue;
+                        }
 
-                        if (value !== undefined && value !== null && value !== '') {
-                            try {
-                                switch (expectedType) {
-                                    case 'string':
-                                        rowObj[col] = String(value);
-                                        break;
-                                    case 'number':
-                                        const num = Number(value);
-                                        if (isNaN(num)) throw new Error(`${col} debe ser un número válido`);
-                                        rowObj[col] = num;
-                                        break;
-                                    case 'boolean':
-                                        if (value === 1 || value === '1' || value === true || value === 'true') {
-                                            rowObj[col] = true;
-                                        } else if (value === 0 || value === '0' || value === false || value === 'false') {
-                                            rowObj[col] = false;
-                                        } else {
-                                            throw new Error(`${col} debe ser booleano (1/0 o true/false)`);
-                                        }
-                                        break;
-                                    default:
-                                        rowObj[col] = value;
-                                }
-                            } catch (conversionError) {
-                                errorsInRow.push((conversionError as Error).message);
+                        if (value === undefined || value === null || value === '' || value === ' ') {
+                            if (!isOptional) {
+                                errorsInRow.push(`${displayName} no puede estar vacío`);
                             }
-                        } else {
-                            // valor vacío en columna requerida
-                            errorsInRow.push(`${col} no puede estar vacío`);
+                            continue;
+                        }
+
+                        try {
+                            switch (type) {
+                                case 'string':
+                                    rowObj[displayName] = String(value);
+                                    break;
+                                case 'number':
+                                    const num = Number(value);
+                                    if (isNaN(num)) throw new Error(`${displayName} debe ser un número válido`);
+                                    rowObj[displayName] = num;
+                                    break;
+                                case 'boolean':
+                                    if (value === 1 || value === '1' || value === true || value === 'true') {
+                                        rowObj[displayName] = true;
+                                    } else if (value === 0 || value === '0' || value === false || value === 'false') {
+                                        rowObj[displayName] = false;
+                                    } else {
+                                        throw new Error(`${displayName} debe ser booleano (1/0 o true/false)`);
+                                    }
+                                    break;
+                                default:
+                                    rowObj[displayName] = value;
+                            }
+                        } catch (conversionError) {
+                            errorsInRow.push((conversionError as Error).message);
                         }
                     }
-
 
                     if (errorsInRow.length > 0) {
                         throw new Error(`Fila ${index + 2}: ${errorsInRow.join(', ')}`);
                     }
+
+                    headers.forEach(header => {
+                        if (!rowObj[header]) {
+                            rowObj[header] = normalizedValues[normalizeColumnName(header)] ?? null;
+                        }
+                    });
 
                     acc.push(rowObj);
                     return acc;
@@ -218,6 +284,7 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
         setError(null);
         setValidationErrors([]);
         setProgress(0);
+        setDetectedColumns([]);
     };
 
     const fileSize = useMemo(() => {
@@ -243,15 +310,24 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                             Columnas requeridas:
                         </Typography>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, justifyContent: 'center', mt: 1 }}>
-                            {Object.entries(requiredColumns).map(([col, type]) => (
-                                <Chip
-                                    key={col}
-                                    label={`${col} (${type})`}
-                                    size="small"
-                                    color={validationErrors.includes(col) ? 'error' : 'default'}
-                                    icon={validationErrors.includes(col) ? <ErrorIcon fontSize="small" /> : undefined}
-                                />
-                            ))}
+                            {Object.entries(requiredColumns).map(([col, type]) => {
+                                const cleanCol = col.replace(/\?$/, '');
+                                const isOptional = col.endsWith('?');
+                                const isError = validationErrors.some(err =>
+                                    normalizeColumnName(err) === normalizeColumnName(cleanCol));
+
+                                return (
+                                    <Tooltip key={col} title={isOptional ? "Columna opcional" : "Columna requerida"}>
+                                        <Chip
+                                            label={`${cleanCol} (${type.replace(/\?$/, '')}${isOptional ? '?' : ''}`}
+                                            size="small"
+                                            color={isError ? 'error' : 'default'}
+                                            icon={isError ? <ErrorIcon fontSize="small" /> :
+                                                (isOptional ? <InfoIcon fontSize="small" /> : undefined)}
+                                        />
+                                    </Tooltip>
+                                );
+                            })}
                         </Box>
                     </Box>
                 )}
@@ -272,6 +348,23 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                         <ErrorIcon color="error" sx={{ mr: 1 }} />
                         <Typography color="error">{error}</Typography>
                     </Box>
+                    {detectedColumns.length > 0 && (
+                        <Box sx={{ mt: 2 }}>
+                            <Typography variant="caption" display="block" gutterBottom>
+                                Columnas detectadas en el archivo:
+                            </Typography>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {detectedColumns.map(col => (
+                                    <Chip
+                                        key={col}
+                                        label={col}
+                                        size="small"
+                                        variant="outlined"
+                                    />
+                                ))}
+                            </Box>
+                        </Box>
+                    )}
                 </Paper>
             )}
 
@@ -299,28 +392,34 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                     {fileData.length > 0 && (
                         <Box sx={{ mt: 3 }}>
                             <Typography variant="subtitle2" gutterBottom>
-                                Vista previa de datos:
+                                Vista previa de datos (primeras 3 filas):
                             </Typography>
-                            <List dense sx={{ maxHeight: 200, overflow: 'auto', border: '1px solid #eee', borderRadius: 1 }}>
-                                {fileData.slice(0, 3).map((row, index) => (
-                                    <ListItem key={index}>
-                                        <ListItemIcon>
-                                            <CheckCircleIcon color="success" fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={`Fila ${row.__rowNumber}`}
-                                        />
-                                    </ListItem>
-                                ))}
-                                {fileData.length > 3 && (
-                                    <ListItem>
-                                        <ListItemText
-                                            primary={`... y ${fileData.length - 3} filas más`}
-                                            primaryTypographyProps={{ variant: 'caption', color: 'text.secondary' }}
-                                        />
-                                    </ListItem>
-                                )}
-                            </List>
+                            <TableContainer component={Paper} sx={{ maxHeight: 300, overflow: 'auto' }}>
+                                <Table size="small" stickyHeader>
+                                    <TableHead>
+                                        <TableRow>
+                                            {Object.keys(fileData[0])
+                                                .filter(k => k !== '__rowNumber')
+                                                .map(key => (
+                                                    <TableCell key={key}>{key}</TableCell>
+                                                ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {fileData.slice(0, 3).map((row, i) => (
+                                            <TableRow key={i}>
+                                                {Object.entries(row)
+                                                    .filter(([k]) => k !== '__rowNumber')
+                                                    .map(([key, value]) => (
+                                                        <TableCell key={key}>
+                                                            {value === null ? 'NULL' : String(value)}
+                                                        </TableCell>
+                                                    ))}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Box>
                     )}
                 </Paper>

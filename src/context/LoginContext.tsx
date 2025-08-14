@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 interface UserData {
     name: string;
+    fullName: string;
     role: string;
     isSessionActive: boolean;
     jti: string;
@@ -56,7 +57,8 @@ const decodeJWT = (token: string): UserData | null => {
             isSessionActive: payload.isSessionActive === "True",
             jti: payload.jti,
             iss: payload.iss,
-            aud: payload.aud
+            aud: payload.aud,
+            fullName: payload.fullName
         };
     } catch (error) {
         console.error("Error decoding JWT:", error);

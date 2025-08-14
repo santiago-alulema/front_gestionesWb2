@@ -1,7 +1,7 @@
 import { ActionColumn } from '@/components/DataGridCommon/ActionConfig';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import TextFieldCustomDataGrid from '@/components/DataGridCommon/TextFieldCustomDataGrid';
-import '@/css/DataGrid.css'
+
 import {
   Column,
   FilteringState,
@@ -140,7 +140,7 @@ const CustomDataGridTs = <T,>({
   getRowId,
   columsHide = [],
   actions = [],
-  titleEmptyTable = '',
+  titleEmptyTable = 'Tabla sin datos',
   heightBodyEmptyData = '',
   onChangeFilters = () => { },
   hasPagination = true,

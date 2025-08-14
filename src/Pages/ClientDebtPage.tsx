@@ -46,16 +46,18 @@ const ClientDebtPage = () => {
         <>
             <BasePage routers={routes}
                 title="Lista de Deudores">
-                <CustomDataGridTs
-                    rows={clientDebt}
-                    columns={useConfigClientDebt()}
-                    gridId="gidChartOfAccounts"
-                    columsHide={['id']}
-                    hiddenFilterColumn={['actions']}
-                    actions={actionsConfig}
-                    iconDirectionFilter="end"
-                    searchLabel={"Buscar"}
-                />
+                <div className="custom-data-grid-container">
+                    <CustomDataGridTs
+                        rows={clientDebt}
+                        columns={useConfigClientDebt()}
+                        gridId="gidChartOfAccounts"
+                        columsHide={['id']}
+                        hiddenFilterColumn={['actions']}
+                        actions={actionsConfig}
+                        iconDirectionFilter="end"
+                        searchLabel={"Buscar"}
+                    />
+                </div>
             </BasePage>
             <CustomModalTs open={open} positionLeft="23%" width={1060} handleClose={() => setOpen(false)}>
                 <DetalleDeudasClientes client={clientSelected} />

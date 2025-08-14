@@ -12,14 +12,14 @@ const MainLayout = () => {
         setSidebarOpen(prev => !prev);
     };
 
-    if (!userData) return null; // o loading
+    if (!userData) return null;
 
     return (
         <div style={{ display: "flex" }}>
             {sidebarOpen && <Sidebar userRole={userData.role} />}
             <div style={{ flex: 1 }}>
                 <Navbar
-                    userName={userData.name}
+                    userName={userData.fullName}
                     onLogout={logout}
                     onToggleSidebar={handleToggleSidebar}
                 />

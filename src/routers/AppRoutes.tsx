@@ -1,5 +1,5 @@
 // AppRoutes.tsx
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Menus from "@/routers/Menus";
 import { JSX } from "react";
 
@@ -26,6 +26,7 @@ const AppRoutes = () => {
 
     return (
         <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             {routes.map(({ path, element }) => (
                 <Route key={path} path={path} element={element} />
             ))}

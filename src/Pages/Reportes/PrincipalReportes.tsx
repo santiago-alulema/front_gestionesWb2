@@ -13,7 +13,7 @@ const PrincipalReportes = () => {
             routers={routes}
             title="Lista de Deudores"
         >
-            <ConsultaReportesVisual />
+            {/* <ConsultaReportesVisual /> */}
         </BasePage>
     )
 }

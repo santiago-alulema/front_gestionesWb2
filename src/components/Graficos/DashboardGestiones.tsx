@@ -53,7 +53,7 @@ const StatCard = ({ title, value, subValue, color = 'primary' }: {
     );
 };
 
-export const Dashboard = () => {
+export const DashboardGestiones = () => {
     const theme = useTheme();
     const { data } = useDashboardStore();
 
@@ -157,3 +157,4 @@ export const Dashboard = () => {
         </Box>
     );
 };
+

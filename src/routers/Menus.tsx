@@ -8,7 +8,6 @@ import UploadDeudasPage from "@/Pages/UploadPages/UploadDeudasPage";
 import ClientDebtPage from "@/Pages/ClientDebtPage";
 import UploadPhonesPage from "@/Pages/UploadPages/UploadPhonesPage";
 import ConsultaReportes from "@/Pages/Reportes/components/ConsultaReportes";
-import { Dashboard } from "@/components/Graficos/Dashboard";
 import HomeIcon from '@mui/icons-material/Home';
 import GestionCompromisoPagosDeudores from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
 import PrincipalCompromisosPagos from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
@@ -17,6 +16,7 @@ import Deudores from "@/Pages/DeudoresGestionPage/Index";
 import Deudas from "@/Pages/DeudoresGestionPage/components/Deudas";
 import InformacionGeneralGestionesIndex from "@/Pages/InformacionGeneralGestiones/InformacionGeneralGestionesIndex";
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import { DashboardGestiones } from "@/components/Graficos/DashboardGestiones";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -27,7 +27,7 @@ const Menus: MenuItem[] = [
     name: "Home",
     roles: ["admin", "user"],
     route: "/dashboard",
-    component: <Dashboard />,
+    component: <DashboardGestiones />,
     icon: WhiteIcon(HomeIcon),
   },
   {
@@ -57,25 +57,25 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Gestiones",
-    roles: ["admin"],
+    roles: ["admin", "user"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
         name: "Ver Clientes",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/gestion/ver-deudores",
         component: <Deudores />
       },
       {
         name: "Ver Deudas por clientes",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/gestion/dudas-por-clientes",
         component: <Deudas />,
         hidden: true
       },
       {
         name: "Gestionar Compromisos",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/gestion/compromisos-pagos",
         component: <PrincipalCompromisosPagos />
       }

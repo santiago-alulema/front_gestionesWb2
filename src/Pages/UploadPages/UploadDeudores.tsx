@@ -28,7 +28,15 @@ const UploadDeudores = () => {
                 title="Subir Excel Deudores">
                 <UploadExcel
                     legend="Subir Deudores en formato Excel"
-                    requiredColumns={{ 'Cedula': 'string', 'Nombre': 'string', 'Direccion': 'string', 'Telefono': 'string', 'Correo': 'string', 'Descripcion': 'string', 'Usuario': 'string' }}
+                    requiredColumns={{
+                        'Cedula': 'string',
+                        'Nombre': 'string',
+                        'Direccion?': 'string?',
+                        'Telefono?': 'string?',
+                        'Correo?': 'string?',
+                        'Descripcion?': 'string?',
+                        'Usuario': 'string'
+                    }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}
                 />

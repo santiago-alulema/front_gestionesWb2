@@ -18,7 +18,7 @@ interface NavbarProps {
     onToggleSidebar: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ userName, onLogout, onToggleSidebar }) => {
+const Navbar = ({ userName, onLogout, onToggleSidebar }: NavbarProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 

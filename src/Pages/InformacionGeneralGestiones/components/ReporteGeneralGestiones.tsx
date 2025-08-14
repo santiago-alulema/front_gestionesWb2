@@ -8,8 +8,8 @@ import { ConfiguracionColumnaReporteEmpresa } from '@/Pages/InformacionGeneralGe
 import { ConfiguracionColumnaGestionesReporte } from '@/Pages/InformacionGeneralGestiones/config/ConfiguracionColumnaGestionesReporte'
 import { ConfiguracionColumnaPagosReporte } from '@/Pages/InformacionGeneralGestiones/config/ConfiguracionColumnaPagosReporte'
 import { compromisosPagosXUsuarioServicioWeb, gestionesPorEmperesaServicioWeb, gestionesXUsuarioServicioWeb, PagosXUsuarioServicioWeb } from '@/services/Service'
-import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, Grid } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 const ReporteGeneralGestiones = () => {
 
