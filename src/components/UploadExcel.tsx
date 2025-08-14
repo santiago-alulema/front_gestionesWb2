@@ -154,9 +154,6 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
 
                 const requiredCols = Object.keys(requiredColumns).map(col => {
                     const cleanCol = col.replace(/\?$/, '');
-                    console.log("col", col)
-
-                    console.log("col.endsWith('?')", col.endsWith('?'))
                     return {
                         original: cleanCol,
                         normalized: normalizeColumnName(cleanCol),
@@ -164,8 +161,6 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                         type: requiredColumns[col].replace(/\?$/, '')
                     };
                 });
-
-                console.log("requiredCols", requiredCols)
 
                 const missingColumns = requiredCols
                     .filter(({ normalized, isOptional }) => !normalizedHeaders.includes(normalized) && !isOptional)

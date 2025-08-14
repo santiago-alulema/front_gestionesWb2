@@ -38,7 +38,6 @@ const BasePage: React.FC<BasePageProps> = ({
     };
 
     useEffect(() => {
-        console.log("baseeeee")
     }, [routers]);
 
     return (

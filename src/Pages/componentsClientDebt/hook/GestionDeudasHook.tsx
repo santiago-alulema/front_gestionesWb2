@@ -9,14 +9,12 @@ const GestionDeudasHook = () => {
     const [telefonosActivos, setTelefonosActivos] = useState<TelefonosClientesActivos[]>([])
 
     const obtenerTelefonosCliente = async (cedulaCliente: string) => {
-        console.log("first")
         const telefonosRespuesta = await telefonosActivosClientes(cedulaCliente);
         setTelefonosActivos(telefonosRespuesta);
     }
 
     const llenarGestionesPadre = async () => {
         const gesitionesPadreRespuesta = await tipoGestionPadre();
-        console.log("gesitionesPadreRespuesta ", gesitionesPadreRespuesta)
         setGestionesPadre(gesitionesPadreRespuesta);
     }
 

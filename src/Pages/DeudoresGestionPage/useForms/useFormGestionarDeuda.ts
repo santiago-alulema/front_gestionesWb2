@@ -60,7 +60,6 @@ export const useFormGestionarDeuda = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log('Formulario enviado:', deudaSeleccionada);
         const enviagrabar: IGestionInDTO = {
             idDeuda: deudaSeleccionada.deudaId,
             idTipoGestion: '3',

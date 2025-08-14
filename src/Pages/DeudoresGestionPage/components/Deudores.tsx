@@ -22,7 +22,6 @@ const Deudores = () => {
         setClientDebt(response)
     }
     const viewDebtsClient = (row: ClientInfo) => {
-        console.log(row)
         setDeudorSeleccionado(row)
         navigate("/gestion/dudas-por-clientes");
     }

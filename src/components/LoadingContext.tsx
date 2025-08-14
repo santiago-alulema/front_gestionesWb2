@@ -1,16 +1,17 @@
-import React, { createContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useContext } from 'react';
 import { Backdrop, CircularProgress } from '@mui/material';
 
-// Definir la interfaz del contexto
+// Definimos el tipo del contexto
 interface LoadingContextType {
     showLoading: boolean;
-    setShowLoading: Dispatch<SetStateAction<boolean>>;
+    startLoading: () => void;
+    stopLoading: () => void;
 }
 
-// Crear el contexto con valor por defecto undefined (forzado con `!`)
 export const LoadingContext = createContext<LoadingContextType>({
     showLoading: false,
-    setShowLoading: () => { }
+    startLoading: () => { },
+    stopLoading: () => { },
 });
 
 interface LoadingContextProviderProps {
@@ -18,12 +19,20 @@ interface LoadingContextProviderProps {
 }
 
 export const LoadingContextProvider: React.FC<LoadingContextProviderProps> = ({ children }) => {
-    const [showLoading, setShowLoading] = useState<boolean>(false);
+    const [showLoading, setShowLoading] = useState(false);
+
+    const startLoading = () => {
+        console.log("showLoading")
+
+        setShowLoading(true)
+        console.log("showLoading")
+    };
+    const stopLoading = () => setShowLoading(false);
 
     return (
-        <LoadingContext.Provider value={{ showLoading, setShowLoading }}>
+        <LoadingContext.Provider value={{ showLoading, startLoading, stopLoading }}>
             <Backdrop
-                sx={{ color: '#fff', zIndex: theme => theme.zIndex.modal + 1 }}
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.modal + 1 }}
                 open={showLoading}
             >
                 <CircularProgress color="inherit" />
@@ -31,4 +40,11 @@ export const LoadingContextProvider: React.FC<LoadingContextProviderProps> = ({ 
             {children}
         </LoadingContext.Provider>
     );
+};
+export const useLoading = () => {
+    const context = useContext(LoadingContext);
+    if (!context) {
+        throw new Error('useLoading debe usarse dentro de un LoadingContextProvider');
+    }
+    return context;
 };

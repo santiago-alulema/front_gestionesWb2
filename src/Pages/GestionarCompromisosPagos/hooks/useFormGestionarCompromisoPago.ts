@@ -102,7 +102,6 @@ const useFormGestionarCompromisoPago = () => {
     }
 
     const onSubmit = handleSubmit((data: FormValues) => {
-        console.log("-------------------- data ", data)
         actualizacionCopromisoPago(data)
     });
 
