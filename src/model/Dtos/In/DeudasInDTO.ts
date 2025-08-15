@@ -11,6 +11,7 @@ export interface DeudasInDTO {
   totalCuotas: number;
   valorCuotas: number;
   compromisoPagoId: string;
+  empresa: string;
 }
 
 export default DeudasInDTO;

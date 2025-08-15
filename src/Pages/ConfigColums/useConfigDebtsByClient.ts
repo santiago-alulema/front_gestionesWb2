@@ -47,12 +47,12 @@ export const useConfigDebtsByClient = () => {
                 width: '15%',
                 align: 'left'
             },
-            // {
-            //     name: 'descripcion',
-            //     title: 'Descripcion',
-            //     width: '15%',
-            //     align: 'center'
-            // },
+            {
+                name: 'empresa',
+                title: 'Empresa',
+                width: '15%',
+                align: 'center'
+            },
             {
                 name: 'actions',
                 title: '',

@@ -38,21 +38,21 @@ export const ConfigurarColumnasDeudas = () => {
             {
                 name: 'fechaVencimiento',
                 title: 'Fecha Vencimiento',
-                width: '15%',
+                width: '10%',
                 align: 'left'
             },
             {
                 name: 'fechaAsignacion',
                 title: 'Fecha Asignacion',
-                width: '15%',
+                width: '10%',
                 align: 'left'
             },
-            // {
-            //     name: 'descripcion',
-            //     title: 'Descripcion',
-            //     width: '15%',
-            //     align: 'center'
-            // },
+            {
+                name: 'empresa',
+                title: 'Empresa',
+                width: '10%',
+                align: 'center'
+            },
             {
                 name: 'actions',
                 title: 'Acciones',
