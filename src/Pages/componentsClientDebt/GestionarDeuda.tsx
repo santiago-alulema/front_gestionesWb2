@@ -53,13 +53,13 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
         format(new Date(dateString), "dd MMM yyyy", { locale: es });
 
     const daysRemaining = () => {
-        const today = new Date();
-        const dueDate = new Date(debt.fechaVencimiento);
-        const diffTime = dueDate.getTime() - today.getTime();
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        // const today = new Date();
+        // // const dueDate = new Date(debt.fechaVencimiento);
+        // const diffTime = dueDate.getTime() - today.getTime();
+        // return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     };
 
-    const isOverdue = daysRemaining() <= 0;
+    // const isOverdue = daysRemaining() <= 0;
 
     const verificartipoGestion = (value: any) => {
         setGestionSeleccionada(value)
@@ -176,7 +176,7 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid size={{ xs: 6, md: 6, lg: 6 }} sx={{
+                                {/* <Grid size={{ xs: 6, md: 6, lg: 6 }} sx={{
                                     display: 'flex',
                                     justifyContent: 'center'
                                 }}>
@@ -194,7 +194,7 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
                                             height: 36,
                                         }}
                                     />
-                                </Grid>
+                                </Grid> */}
                             </Grid>
 
                             <Divider sx={{ my: 2 }} />
@@ -212,7 +212,7 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
                                     <Typography variant="body2" color="text.secondary">
                                         Fecha de vencimiento
                                     </Typography>
-                                    <Typography
+                                    {/* <Typography
                                         variant="body1"
                                         sx={{
                                             fontWeight: 500,
@@ -222,7 +222,7 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
                                         }}
                                     >
                                         {formatDate(debt.fechaVencimiento)}{" "}
-                                    </Typography>
+                                    </Typography> */}
                                 </Grid>
                             </Grid>
                         </CardContent>
