@@ -50,25 +50,38 @@ export const request = async <T>(
     responseType: isDownload ? 'blob' : 'json'
   };
 
-  const response: AxiosResponse<T> = await api().request(config);
+  const response = await api().request<T>(config);
 
   if (isDownload && response.data instanceof Blob) {
-    const blob = new Blob([response.data]);
-    if (!blob.size) {
-      return response.data;
-    }
+    const contentType = response.headers['content-type'];
     const contentDisposition = response.headers['content-disposition'];
-    let filename = 'archivo_descargado';
-    if (contentDisposition && contentDisposition.includes('filename=')) {
-      filename = contentDisposition.split('filename=')[1].replace(/['"]/g, '');
+
+    // Extraer el nombre del archivo
+    let filename = 'documento_descargado';
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1].replace(/['"]/g, '');
+      }
     }
 
+    // Crear el blob con el tipo MIME correcto
+    const blob = new Blob([response.data], { type: contentType });
+
+    // Crear enlace y descargar
     const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
+    const url = window.URL.createObjectURL(blob);
+    link.href = url;
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
-    link.remove();
+
+    // Limpiar
+    setTimeout(() => {
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }, 100);
   }
+
   return response.data;
 };

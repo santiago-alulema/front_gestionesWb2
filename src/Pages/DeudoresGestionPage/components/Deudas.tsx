@@ -20,6 +20,12 @@ const Deudas = () => {
     const { deudorSeleccionado, setDeudaSeleccionada, abrirModalGestionarDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [deudasDeudor, setDeudasDeudor] = useState<DebstByClientInfoInDTO[]>([]);
 
+    useEffect(() => {
+        if (!deudorSeleccionado) {
+            navigate("/gestion/ver-deudores");
+            return;
+        }
+    }, [deudorSeleccionado, navigate]);
 
     const seleccionarDeudaFuncion = (item: DebstByClientInfoInDTO) => {
         setDeudaSeleccionada(item)
@@ -39,28 +45,29 @@ const Deudas = () => {
     ];
 
     const onInit = async () => {
-        if (!deudorSeleccionado.cedula) {
-            navigate("-1")
-        }
+        if (!deudorSeleccionado) return;
         const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula);
         setDeudasDeudor(response)
     }
-
 
     useEffect(() => {
         onInit()
     }, [])
 
-
     const routes = [
         {
             text: "Deudores",
-            link: () => { console.log("") }
+            link: () => { navigate("/gestion/ver-deudores") }
         },
         {
             text: "Deudas"
         }
     ]
+
+    // Si no hay deudor seleccionado, no renderizar nada (será redirigido)
+    if (!deudorSeleccionado) {
+        return null;
+    }
 
     return (
         <>
@@ -75,7 +82,7 @@ const Deudas = () => {
                                         <PersonIcon />
                                     </Avatar>
                                     <Typography variant="h5" fontWeight="bold">
-                                        {deudorSeleccionado.nombre}
+                                        {deudorSeleccionado?.nombre ?? ""}
                                     </Typography>
                                 </Box>
 
