@@ -21,10 +21,13 @@ const Deudores = () => {
         const response = await allDeuodoresServiceWeb()
         setClientDebt(response)
     }
+
+
     const viewDebtsClient = (row: ClientInfo) => {
         setDeudorSeleccionado(row)
         navigate("/gestion/dudas-por-clientes");
     }
+
     const actionsConfig: IActionConfig[] = [
         {
             tooltip: "Ver",

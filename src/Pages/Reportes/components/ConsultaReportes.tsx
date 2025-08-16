@@ -30,7 +30,7 @@ const ConsultaReportes = () => {
                     >
                         <MenuItem value="gestiones">Gestiones</MenuItem>
                         <MenuItem value="compromisos">Compromisos</MenuItem>
-                        <MenuItem value="deudas">Deudas</MenuItem>
+                        <MenuItem value="pagos">Pagos</MenuItem>
                     </Select>
                 </Grid>
                 <Grid size={{ xs: 12, md: 12, lg: 12 }}>

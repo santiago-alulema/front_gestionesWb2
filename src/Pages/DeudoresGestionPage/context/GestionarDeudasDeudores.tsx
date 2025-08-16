@@ -23,6 +23,8 @@ interface IGestionarDeudasContext {
 
     // Estados UI
     abrirModalGestionarDeuda: boolean;
+    abrirModalInformacionDeuda: boolean;
+
 
     // Setters tipados correctamente
     setDeudaSeleccionada: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO | null>>;
@@ -32,6 +34,8 @@ interface IGestionarDeudasContext {
     setGrabarCompromiso: React.Dispatch<React.SetStateAction<ICompromisoPagoOutDTO | null>>;
     setGrabarPago: React.Dispatch<React.SetStateAction<PagoGrabarOutDTO>>;
     setAbrirModalGestionarDeuda: React.Dispatch<React.SetStateAction<boolean>>;
+    setAbrirModalInformacionDeuda: React.Dispatch<React.SetStateAction<boolean>>;
+
     setTelefonosActivos: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>;
 
     // Métodos
@@ -56,6 +60,9 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
     const [deudorSeleccionado, setDeudorSeleccionado] = useState<ClientInfo | null>(null);
     const [deudaSeleccionada, setDeudaSeleccionada] = useState<DebstByClientInfoInDTO | null>(null);
     const [abrirModalGestionarDeuda, setAbrirModalGestionarDeuda] = useState<boolean>(false);
+
+    const [abrirModalInformacionDeuda, setAbrirModalInformacionDeuda] = useState<boolean>(false);
+
 
     // Estados de grabación
     const [grabarGestion, setGrabarGestion] = useState<IGestionInDTO>({
@@ -124,7 +131,10 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
 
                 // Métodos
                 obtenerTelefonosCliente,
-                LlenarGestionesHijo
+                LlenarGestionesHijo,
+
+                abrirModalInformacionDeuda,
+                setAbrirModalInformacionDeuda
             }}
         >
             {children}

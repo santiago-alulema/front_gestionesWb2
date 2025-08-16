@@ -14,10 +14,16 @@ import { useEffect, useState } from "react";
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import CustomModalTs from "@/components/CustomModalTs";
 import GestionarDeuda from "@/Pages/DeudoresGestionPage/components/GestionarDeuda";
+import TabInformacionDeuda from "@/Pages/DeudoresGestionPage/components/TabInformacionDeuda";
 
 const Deudas = () => {
     const navigate = useNavigate();
-    const { deudorSeleccionado, setDeudaSeleccionada, abrirModalGestionarDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
+    const { deudorSeleccionado,
+        setDeudaSeleccionada,
+        abrirModalGestionarDeuda,
+        setAbrirModalGestionarDeuda,
+        setAbrirModalInformacionDeuda,
+        abrirModalInformacionDeuda } = useGestionarDeudas();
     const [deudasDeudor, setDeudasDeudor] = useState<DebstByClientInfoInDTO[]>([]);
 
     useEffect(() => {
@@ -32,16 +38,33 @@ const Deudas = () => {
         setAbrirModalGestionarDeuda(true)
     }
 
+    const abrirModalInformacion = (item: DebstByClientInfoInDTO) => {
+        setDeudaSeleccionada(item)
+        setAbrirModalInformacionDeuda(true)
+    }
+
+
     const actionsConfig: IActionConfig[] = [
         {
-            tooltip: "Ver",
+            tooltip: "Gestionar",
             onClick: seleccionarDeudaFuncion,
             hidden: false,
             sizeIcon: 'small',
             typeInput: 'button',
             label: 'Gestionar',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
+        },
+        {
+            tooltip: "Ver",
+            onClick: abrirModalInformacion,
+            hidden: false,
+            sizeIcon: 'small',
+            typeInput: 'button',
+            label: 'Informacion',
+            inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
+
+
     ];
 
     const onInit = async () => {
@@ -57,7 +80,8 @@ const Deudas = () => {
     const routes = [
         {
             text: "Deudores",
-            link: () => { navigate("/gestion/ver-deudores") }
+            link: () => { navigate("/gestion/ver-deudores") },
+            function: () => { navigate("/gestion/ver-deudores") }
         },
         {
             text: "Deudas"
@@ -126,6 +150,11 @@ const Deudas = () => {
             <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda}
                 handleClose={() => setAbrirModalGestionarDeuda(!abrirModalGestionarDeuda)} width={800}>
                 <GestionarDeuda />
+            </CustomModalTs>
+
+            <CustomModalTs positionTop="2px" open={abrirModalInformacionDeuda}
+                handleClose={() => setAbrirModalInformacionDeuda(!abrirModalInformacionDeuda)} width={800}>
+                <TabInformacionDeuda></TabInformacionDeuda>
             </CustomModalTs>
         </>
     )

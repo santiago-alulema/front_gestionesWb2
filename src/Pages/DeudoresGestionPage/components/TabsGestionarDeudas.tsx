@@ -1,5 +1,6 @@
 import CompromisosPagosComponents from '@/Pages/DeudoresGestionPage/components/CompromisosPagosComponents';
 import GestionarDeudaComponents from '@/Pages/DeudoresGestionPage/components/GestionarDeudaComponents';
+import MovimientosDeuda from '@/Pages/DeudoresGestionPage/components/MovimientosDeuda';
 import PagosComponents from '@/Pages/DeudoresGestionPage/components/PagosComponents';
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
