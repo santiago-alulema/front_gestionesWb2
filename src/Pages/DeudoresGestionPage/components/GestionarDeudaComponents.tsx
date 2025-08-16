@@ -118,8 +118,7 @@ const GestionarDeudaComponents = () => {
                         name='email'
                         control={control}
                         errors={errors}
-                        rules={rules.email}
-                        requiredField={true}
+                        requiredField={false}
                         label="Email"
                         labelFullField="Email"
                     />

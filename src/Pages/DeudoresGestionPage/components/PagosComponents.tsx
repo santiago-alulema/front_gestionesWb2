@@ -107,7 +107,7 @@ const PagosComponents = () => {
                     <CustomAutocompleteFormTs
                         name="tipoTransaccion"
                         options={tiposTransaccion}
-                        label="tipo Transaccion"
+                        label="Tipo Transaccion"
                         labelFullField="Seleccione Tipo Transaccion"
                         optionLabel="nombre"
                         optionValue="id"
