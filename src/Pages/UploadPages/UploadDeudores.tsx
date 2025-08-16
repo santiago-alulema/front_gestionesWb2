@@ -11,7 +11,6 @@ const UploadDeudores = () => {
     const handleFileProcessed = async (data: any[]) => {
         startLoading();
         try {
-            // Dividir el array en chunks de 500 elementos
             await uploadDeudoresServiceWeb(data);
             const configAlert = {
                 title: "Correcto",
@@ -30,6 +29,7 @@ const UploadDeudores = () => {
             showAlert(configAlert);
             console.error("Error en handleFileProcessed:", error);
         } finally {
+            stopLoading();
         }
     };
     const routes = [

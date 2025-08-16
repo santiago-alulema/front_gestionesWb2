@@ -56,7 +56,7 @@ export const useFormCompromisoPago = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         const enviagrabar: ICompromisoPagoOutDTO = {
-            idDeuda: deudaSeleccionada.deudaId,
+            idDeuda: deudaSeleccionada.idDeuda,
             fechaCompromiso: data.fechaCompromiso,
             montoComprometido: data.valorCompromiso,
             estado: true,

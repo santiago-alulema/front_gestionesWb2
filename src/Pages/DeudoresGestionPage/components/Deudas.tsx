@@ -39,6 +39,9 @@ const Deudas = () => {
     ];
 
     const onInit = async () => {
+        if (!deudorSeleccionado.cedula) {
+            navigate("-1")
+        }
         const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula);
         setDeudasDeudor(response)
     }

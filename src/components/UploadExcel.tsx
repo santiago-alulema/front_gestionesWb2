@@ -179,12 +179,13 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                     const rowObj: ExcelRow = { __rowNumber: index + 2 };
                     const errorsInRow: string[] = [];
                     const normalizedValues: Record<string, any> = {};
+                    const warningsInRow: string[] = [];
 
                     headers.forEach((header: string, i: number) => {
                         const normalizedHeader = normalizeColumnName(header);
                         let value = row[i];
 
-                        if (value === '' || value === ' ') {
+                        if (value === '' || value === ' ' || value === undefined || value === null) {
                             value = null;
                         }
                         normalizedValues[normalizedHeader] = value;
@@ -193,21 +194,35 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                     for (const { original, normalized, isOptional, type } of requiredCols) {
                         const value = normalizedValues[normalized];
                         const displayName = headerMap[normalized] || original;
+                        const cleanType = type.replace(/\?$/, ''); // Remover el ? de tipos opcionales
 
-                        if (isOptional && (value === undefined || value === null || value === '' || value === ' ')) {
-                            rowObj[displayName] = " ";
-                            continue;
-                        }
+                        // Manejo de valores vacíos
+                        if (value === null || value === undefined || value === '' || value === ' ') {
+                            // Asignar valor por defecto según el tipo
+                            switch (cleanType) {
+                                case 'string':
+                                    rowObj[displayName] = ""; // String vacío por defecto
+                                    break;
+                                case 'number':
+                                    rowObj[displayName] = 0; // Cero por defecto para números
+                                    break;
+                                case 'boolean':
+                                    rowObj[displayName] = false; // Falso por defecto para booleanos
+                                    break;
+                                default:
+                                    rowObj[displayName] = null;
+                            }
 
-                        if (value === undefined || value === null || value === '' || value === ' ') {
+                            // Registrar advertencia si no es opcional
                             if (!isOptional) {
-                                errorsInRow.push(`${displayName} no puede estar vacío`);
+                                warningsInRow.push(`${displayName} estaba vacío - valor por defecto asignado (${cleanType})`);
                             }
                             continue;
                         }
 
+                        // Validación y conversión de tipos para valores no vacíos
                         try {
-                            switch (type) {
+                            switch (cleanType) {
                                 case 'string':
                                     rowObj[displayName] = String(value);
                                     break;
@@ -233,19 +248,35 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                         }
                     }
 
+                    // Mostrar advertencias si existen (pero no son errores fatales)
+                    if (warningsInRow.length > 0) {
+                        console.warn(`Fila ${index + 2}: ${warningsInRow.join(', ')}`);
+                    }
+
+                    // Manejar errores de validación
                     if (errorsInRow.length > 0) {
                         throw new Error(`Fila ${index + 2}: ${errorsInRow.join(', ')}`);
                     }
 
+                    // Procesar columnas no requeridas
                     headers.forEach(header => {
                         if (!rowObj[header]) {
-                            rowObj[header] = normalizedValues[normalizeColumnName(header)] ?? null;
+                            const normalizedHeader = normalizeColumnName(header);
+                            const value = normalizedValues[normalizedHeader];
+
+                            // Asignar valor por defecto para columnas no requeridas si están vacías
+                            if (value === null || value === undefined || value === '' || value === ' ') {
+                                rowObj[header] = null; // o podrías asignar un valor por defecto genérico aquí
+                            } else {
+                                rowObj[header] = value;
+                            }
                         }
                     });
 
                     acc.push(rowObj);
                     return acc;
                 }, []);
+
 
                 setFileData(rows);
                 setProgress(100);

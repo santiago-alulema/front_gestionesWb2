@@ -78,7 +78,7 @@ export const useFormPagos = () => {
             tipoTransaccionId: data.tipoTransaccion,
             abonoLiquidacionId: data.abonoLiquidacion,
             numeroDocumento: data.numeroDocumento,
-            idDeuda: deudaSeleccionada.deudaId,
+            idDeuda: deudaSeleccionada.idDeuda,
             observaciones: data.observaciones
         }
         await grabarPagosServicioWeb(enviagrabar);

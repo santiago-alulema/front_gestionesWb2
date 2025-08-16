@@ -1,19 +1,27 @@
 import BasePage from "@/components/BasePage";
+import { useLoading } from "@/components/LoadingContext";
 import UploadExcel from "@/components/UploadExcel"
 import { uploadDeudasServiceWeb } from "@/services/Service";
 import { showAlert } from "@/utils/modalAlerts";
 
 const UploadDeudasPage = () => {
 
+    const { startLoading, stopLoading } = useLoading();
+
     const handleFileProcessed = async (data: any[]) => {
-        await uploadDeudasServiceWeb(data);
-        const configAlert = {
-            title: "Correcto",
-            message: "Todas las deudas se grabaron exitosamente.",
-            type: 'success',
-            callBackFunction: false
-        };
-        showAlert(configAlert);
+        startLoading();
+        try {
+            await uploadDeudasServiceWeb(data);
+            const configAlert = {
+                title: "Correcto",
+                message: "Todas las deudas se grabaron exitosamente.",
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
     }
 
     const routes = [
@@ -29,27 +37,26 @@ const UploadDeudasPage = () => {
                 <UploadExcel
                     legend="Subir deudas de clientes mensual en formato Excel"
                     requiredColumns={{
-                        'CedulaDeudor': 'string',
-                        'MontoOriginal': 'number',
-                        'SaldoActual': 'number',
-                        'FechaVencimiento': 'string',
-                        'FechaAsignacion': 'string',
-                        'Estado': 'string',
-                        'Descripcion': 'string',
-
-                        'NumeroFactura': 'string',
-                        'TotalFactura': 'string',
-                        'NumeroAutorizacion': 'string',
-
-
-                        'SaldoDeuda': 'number',
-                        'NumeroCuotas': 'number',
-                        'CuotaActual': 'number',
-                        'ValorCuota': 'number',
-                        'Tramo': 'string',
-                        'UltimoPago': 'number',
-                        'Empresa': 'string',
-
+                        'cedulaDeudor': 'string',
+                        'deudaCapital?': 'number',
+                        'interes?': 'number',
+                        'gastosCobranza?': 'number',
+                        'saldoDeuda': 'number',
+                        'descuento': 'string',
+                        'montoCobrar': 'number',
+                        'fechaVenta': 'string',
+                        'fechaUltimoPago?': 'string',
+                        'estado?': 'string',
+                        'diasMora?': 'number',
+                        'numeroFactura?': 'string',
+                        'calificacion?': 'string',
+                        'creditos?': 'number',
+                        'numeroCuotas?': 'number',
+                        'tipoDeDocumento?': 'string',
+                        'valorCuota?': 'number',
+                        'tramo': 'string',
+                        'ultimoPago?': 'number',
+                        'empresa': 'string'
                     }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}

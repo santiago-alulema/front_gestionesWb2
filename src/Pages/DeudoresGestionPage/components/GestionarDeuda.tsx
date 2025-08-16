@@ -56,7 +56,7 @@ const GestionarDeuda = () => {
     const seleccionarHijo = (value: TipoGestioneOutDTO) => {
         setSelectedHijo(null)
         setSelectedHijo(value)
-        actualizarCampoGestion("idDeuda", deudaSeleccionada.deudaId)
+        actualizarCampoGestion("idDeuda", deudaSeleccionada.idDeuda)
         grabarGestion.idTipoGestion = "";
     }
 
@@ -136,7 +136,7 @@ const GestionarDeuda = () => {
         const enviagrabar: PagoGrabarOutDTO = {
             ...pagosGrabar,
             numeroDocumento: numeroDocumentoPago,
-            idDeuda: deudaSeleccionada.deudaId,
+            idDeuda: deudaSeleccionada.idDeuda,
             observaciones: observaciones
         }
         await grabarPagosServicioWeb(enviagrabar);

@@ -61,7 +61,7 @@ export const useFormGestionarDeuda = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         const enviagrabar: IGestionInDTO = {
-            idDeuda: deudaSeleccionada.deudaId,
+            idDeuda: deudaSeleccionada.idDeuda,
             idTipoGestion: '3',
             descripcion: data.observaciones,
             idTipoContactoDeudor: data.tipoContactoCliente,

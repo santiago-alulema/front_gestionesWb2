@@ -6,44 +6,44 @@ export const ConfigurarColumnasDeudas = () => {
     const columns = useMemo<Column[]>(
         () => [
             {
-                name: 'montoOriginal',
-                title: 'Monto Original',
+                name: 'saldoDeuda',
+                title: 'Saldo Deuda',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'saldoActual',
-                title: 'Saldo Actual',
+                name: 'descuento',
+                title: 'Descuento',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'numeroFactura',
-                title: 'º Factura',
+                name: 'montoCobrar',
+                title: 'Monto Cobrar',
                 width: '15%',
                 align: 'center'
             },
             {
-                name: 'numeroCouta',
-                title: 'º Cuota',
+                name: 'fechaVenta',
+                title: 'Fecha Venta',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'valorCuotas',
-                title: 'Valor Couta',
+                name: 'fechaUltimoPago',
+                title: 'Fecha Ultimo Pago',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'fechaVencimiento',
-                title: 'Fecha Vencimiento',
+                name: 'diasMora',
+                title: 'Dias Mora',
                 width: '10%',
                 align: 'left'
             },
             {
-                name: 'fechaAsignacion',
-                title: 'Fecha Asignacion',
+                name: 'estado',
+                title: 'Estado',
                 width: '10%',
                 align: 'left'
             },
