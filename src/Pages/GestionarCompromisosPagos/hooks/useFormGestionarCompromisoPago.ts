@@ -130,7 +130,7 @@ const useFormGestionarCompromisoPago = () => {
                 tipoTransaccionId: data.tipoTransaccion,
                 abonoLiquidacionId: data.abonoLiquidacion,
                 numeroDocumento: data.numeroDocumento,
-                idDeuda: compromisoPagoSeleccionado.deudaId,
+                idDeuda: compromisoPagoSeleccionado.idDeuda,
                 observaciones: data.observaciones
             }
             await grabarPagosServicioWeb(enviagrabar);

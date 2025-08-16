@@ -79,7 +79,7 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
 
         if (gestionSeleccionada?.tipoGestion === 'G') {
             const gestion: IGestionInDTO = {
-                idDeuda: debt.deudaId,
+                idDeuda: debt.idDeuda,
                 descripcion: observaciones,
                 idTipoGestion: gestionSeleccionada.idTipoGestion,
                 idTipoContactoDeudor: ""
