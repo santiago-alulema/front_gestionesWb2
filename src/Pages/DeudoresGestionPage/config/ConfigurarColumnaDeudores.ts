@@ -8,13 +8,13 @@ export const ConfigurarColumnaDeudores = () => {
             {
                 name: 'cedula',
                 title: 'Cedula',
-                width: '15%',
+                width: '10%',
                 align: 'center'
             },
             {
                 name: 'nombre',
                 title: 'Nombre',
-                width: '25%',
+                width: '15%',
                 align: 'left'
             },
             {
@@ -32,13 +32,13 @@ export const ConfigurarColumnaDeudores = () => {
             {
                 name: 'correo',
                 title: 'Correo',
-                width: '15%',
+                width: '20%',
                 align: 'center'
             },
             {
                 name: 'descripcion',
                 title: 'Descripcion',
-                width: '10%',
+                width: '20%',
                 align: 'left'
             },
 

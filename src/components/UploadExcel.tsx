@@ -323,7 +323,7 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
         <Box sx={{ width: '100%' }}>
             <DropzoneContainer {...getRootProps()} isDragActive={isDragActive} elevation={3}>
                 <input {...getInputProps()} />
-                <UploadIcon color="primary" sx={{ fontSize: 48, mb: 2 }} />
+                <UploadIcon color="primary" sx={{ fontSize: "48px !important", mb: 2 }} />
                 <Typography variant="h6" gutterBottom>
                     {legend}
                 </Typography>

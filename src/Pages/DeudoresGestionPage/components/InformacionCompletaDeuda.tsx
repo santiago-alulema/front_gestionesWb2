@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale"; // Opcional: para formato en español
 
 const InformacionCompletaDeuda = () => {
-    const { deudaSeleccionada, setAbrirModalInformacionDeuda } = useGestionarDeudas();
+    const { deudaSeleccionada, setAbrirModalInformacionDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
 
     if (!deudaSeleccionada) {
         return (
@@ -41,36 +41,33 @@ const InformacionCompletaDeuda = () => {
         mb: 2,
     };
 
+    const seleccionarDeudaFuncion = () => {
+        setAbrirModalGestionarDeuda(true)
+    }
+
     return (
         <>
-            <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 1 }}>
+            <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 1 }} >
                 <CardContent>
                     <Box
                         sx={{
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center",
-                            mb: 3,
+                            mb: 1,
                         }}
                     >
-                        <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
+                        <Typography variant="h6" component="h2" sx={{ fontWeight: "bold" }}>
                             Detalles de la Deuda
                         </Typography>
-                        <Chip
-                            label={deudaSeleccionada.estado || "Sin estado"}
-                            color={
-                                deudaSeleccionada.estado?.includes("E3") ? "warning" : "default"
-                            }
-                            variant="outlined"
-                        />
+                        <Button variant="contained" sx={{ borderRadius: 5 }} onClick={seleccionarDeudaFuncion}>Gestionar</Button>
                     </Box>
 
-                    <Divider sx={{ mb: 3 }} />
+                    <Divider sx={{ mb: 1 }} />
 
                     <Grid container spacing={3}>
-                        {/* Columna 1 */}
-                        <Grid size={{ xs: 12, md: 6 }} >
-                            <Paper elevation={0} sx={{ p: 2, bgcolor: "background.paper" }}>
+                        <Grid size={{ xs: 12, md: 4 }} >
+                            <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
                                 <Typography variant="subtitle2" sx={titleStyle}>
                                     Información Básica
                                 </Typography>
@@ -99,7 +96,7 @@ const InformacionCompletaDeuda = () => {
                             </Paper>
                         </Grid>
 
-                        <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
                                 <Typography variant="subtitle2" sx={titleStyle}>
                                     Detalles Financieros
@@ -136,25 +133,25 @@ const InformacionCompletaDeuda = () => {
                             </Paper>
                         </Grid>
 
-                        <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
                                 <Typography variant="subtitle2" sx={titleStyle}>
                                     Plan de Pagos
                                 </Typography>
                                 <Grid container spacing={2}>
-                                    <Grid size={{ xs: 4 }}>
+                                    <Grid size={{ xs: 12 }}>
                                         <DetailItem
                                             title="Créditos"
                                             value={deudaSeleccionada.creditos?.toString()}
                                         />
                                     </Grid>
-                                    <Grid size={{ xs: 4 }}>
+                                    <Grid size={{ xs: 12 }}>
                                         <DetailItem
                                             title="Total de Cuotas"
                                             value={deudaSeleccionada.numeroCuotas?.toString()}
                                         />
                                     </Grid>
-                                    <Grid size={{ xs: 4 }}>
+                                    <Grid size={{ xs: 12 }}>
                                         <DetailItem
                                             title="Valor por Cuota"
                                             value={`$${deudaSeleccionada.valorCuota?.toLocaleString()}`}

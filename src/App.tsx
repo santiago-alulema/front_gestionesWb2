@@ -4,13 +4,10 @@ import { useLogin } from "@/context/LoginContext";
 import MainLayout from "@/routers/MainLayout";
 
 function App() {
-  const { isAuthenticated } = useLogin(); // Suponiendo que añades isLoading en tu contexto
-
-
-
+  const { isAuthenticated } = useLogin();
   return (
-    <> {/* Opcional si usas temas */}
-      <CssBaseline /> {/* Normaliza estilos y hace que MUI funcione mejor */}
+    <>
+      <CssBaseline />
       {!isAuthenticated ? <Login /> : <MainLayout />}
     </>
   );

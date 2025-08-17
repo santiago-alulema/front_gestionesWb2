@@ -1,0 +1,18 @@
+.MuiCardContent-root {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.MuiCardContent-root:last-child {
+  padding-bottom: 0 !important;
+}
+
+/* Para todos los iconos */
+.MuiSvgIcon-root {
+  font-size: 19px !important;
+}
+
+/* Para iconos específicos */
+.my-custom-icon {
+  font-size: 14px;
+}

@@ -15,7 +15,8 @@ import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import CustomModalTs from "@/components/CustomModalTs";
 import GestionarDeuda from "@/Pages/DeudoresGestionPage/components/GestionarDeuda";
 import TabInformacionDeuda from "@/Pages/DeudoresGestionPage/components/TabInformacionDeuda";
-
+import InfoIcon from '@mui/icons-material/Info';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 const Deudas = () => {
     const navigate = useNavigate();
     const { deudorSeleccionado,
@@ -43,24 +44,15 @@ const Deudas = () => {
         setAbrirModalInformacionDeuda(true)
     }
 
-
     const actionsConfig: IActionConfig[] = [
-        {
-            tooltip: "Gestionar",
-            onClick: seleccionarDeudaFuncion,
-            hidden: false,
-            sizeIcon: 'small',
-            typeInput: 'button',
-            label: 'Gestionar',
-            inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
-        },
         {
             tooltip: "Ver",
             onClick: abrirModalInformacion,
+            icon: <InfoIcon />,
             hidden: false,
             sizeIcon: 'small',
+            label: 'Info',
             typeInput: 'button',
-            label: 'Informacion',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
 
@@ -81,14 +73,13 @@ const Deudas = () => {
         {
             text: "Deudores",
             link: () => { navigate("/gestion/ver-deudores") },
-            function: () => { navigate("/gestion/ver-deudores") }
+            function: () => { navigate("/gestion/ver-deudores") },
         },
         {
             text: "Deudas"
         }
     ]
 
-    // Si no hay deudor seleccionado, no renderizar nada (será redirigido)
     if (!deudorSeleccionado) {
         return null;
     }
@@ -96,63 +87,67 @@ const Deudas = () => {
     return (
         <>
             <BasePage routers={routes}
-                title="Lista de Deudores">
+                title="Lista de Deudas">
                 <Box >
-                    <div >
-                        <Card sx={{ maxWidth: 600, width: "100%", p: 1, boxShadow: 0 }}>
-                            <CardContent>
-                                <Box display="flex" alignItems="center" mb={2}>
-                                    <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
-                                        <PersonIcon />
-                                    </Avatar>
-                                    <Typography variant="h5" fontWeight="bold">
-                                        {deudorSeleccionado?.nombre ?? ""}
-                                    </Typography>
-                                </Box>
+                    <Card sx={{ width: "100%", boxShadow: 0, mb: 2 }}>
+                        <CardContent>
+                            <Box display="flex" alignItems="center" mb={1}>
+                                <Avatar sx={{ bgcolor: "primary.main", mr: 1, width: 25, height: 25 }}>
+                                    <PersonIcon sx={{ width: 20 }} />
+                                </Avatar>
+                                <Typography variant="body1" fontWeight="bold">
+                                    {deudorSeleccionado?.nombre ?? ""}
+                                </Typography>
+                            </Box>
 
-                                <Grid container spacing={2}>
-                                    <Grid >
-                                        <Box display="flex" alignItems="center">
-                                            <LocationOnIcon color="action" sx={{ mr: 1 }} />
-                                            <Typography variant="body1">{deudorSeleccionado.direccion}</Typography>
-                                        </Box>
-                                    </Grid>
-
-                                    <Grid >
-                                        <Box display="flex" alignItems="center">
-                                            <PhoneIcon color="action" sx={{ mr: 1 }} />
-                                            <Typography variant="body1">{deudorSeleccionado.telefono}</Typography>
-                                        </Box>
-                                    </Grid>
-
-                                    <Grid >
-                                        <Box display="flex" alignItems="center">
-                                            <EmailIcon color="action" sx={{ mr: 1 }} />
-                                            <Typography variant="body1">{deudorSeleccionado.correo}</Typography>
-                                        </Box>
-                                    </Grid>
+                            <Grid container spacing={1}>
+                                <Grid size={{ lg: 6 }}>
+                                    <Box display="flex" alignItems="center">
+                                        <LocationOnIcon color="action" sx={{ mr: 1 }} />
+                                        <Typography variant="body2">{deudorSeleccionado.direccion}</Typography>
+                                    </Box>
                                 </Grid>
-                            </CardContent>
-                        </Card>
-                        <CustomDataGridTs
-                            rows={deudasDeudor}
-                            columns={ConfigurarColumnasDeudas()}
-                            gridId="gidChartOfAccounts"
-                            columsHide={['id']}
-                            hiddenFilterColumn={['actions']}
-                            actions={actionsConfig}
-                            iconDirectionFilter="end"
-                            searchLabel={"Buscar"}
-                        />
-                    </div>
+
+                                <Grid size={{ lg: 6 }}  >
+                                    <Box display="flex" alignItems="center">
+                                        <PhoneIcon color="action" sx={{ mr: 1 }} />
+                                        <Typography variant="body2">{deudorSeleccionado.telefono}</Typography>
+                                    </Box>
+                                </Grid>
+
+                                <Grid size={{ lg: 6 }} >
+                                    <Box display="flex" alignItems="center">
+                                        <EmailIcon color="action" sx={{ mr: 1 }} />
+                                        <Typography variant="body2">{deudorSeleccionado.correo}</Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid size={{ lg: 6 }}>
+                                    <Box display="flex" alignItems="center">
+                                        <FingerprintIcon color="action" sx={{ mr: 1 }} />
+                                        <Typography variant="body2"><strong>DNI:</strong> {deudorSeleccionado.cedula}</Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                    <CustomDataGridTs
+                        rows={deudasDeudor}
+                        columns={ConfigurarColumnasDeudas()}
+                        gridId="gidChartOfAccounts"
+                        columsHide={['id']}
+                        hiddenFilterColumn={['actions']}
+                        actions={actionsConfig}
+                        iconDirectionFilter="end"
+                        searchLabel={"Buscar"}
+                    />
                 </Box >
             </BasePage>
-            <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda}
+            <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda} height={'70%'}
                 handleClose={() => setAbrirModalGestionarDeuda(!abrirModalGestionarDeuda)} width={800}>
                 <GestionarDeuda />
             </CustomModalTs>
 
-            <CustomModalTs positionTop="2px" open={abrirModalInformacionDeuda}
+            <CustomModalTs positionTop="2px" open={abrirModalInformacionDeuda} height={'90%'}
                 handleClose={() => setAbrirModalInformacionDeuda(!abrirModalInformacionDeuda)} width={800}>
                 <TabInformacionDeuda></TabInformacionDeuda>
             </CustomModalTs>

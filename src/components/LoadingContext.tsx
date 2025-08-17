@@ -22,11 +22,9 @@ export const LoadingContextProvider: React.FC<LoadingContextProviderProps> = ({ 
     const [showLoading, setShowLoading] = useState(false);
 
     const startLoading = () => {
-        console.log("showLoading")
-
         setShowLoading(true)
-        console.log("showLoading")
     };
+
     const stopLoading = () => setShowLoading(false);
 
     return (

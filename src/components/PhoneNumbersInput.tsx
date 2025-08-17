@@ -40,11 +40,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     const [telefonoElimnar, setTelefonoEliminar] = useState<string>("");
     const [idTelefonoElimnar, setIdTelefonoEliminar] = useState<string>("");
     const [observacionEliminar, setObservacionEliminar] = useState<string>("");
-
-
     const [origenTelefono, setOrigenTelefono] = useState<string>("");
-
-
 
     const actualizarTelefonos = async () => {
         const nuevosTelefonos = await telefonosActivosClientes(cedula);
@@ -53,6 +49,16 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
 
 
     const handleAddPhone = async () => {
+        if (!phone) {
+            const configAlert = {
+                title: "Error",
+                message: "El telefono no puede estar vacio",
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+            return
+        }
         const verificarTelefono = await verificarEstadoTelefonoCliente(phone);
         let mensaje = '';
         if (verificarTelefono.estado === 'NoExiste') {
@@ -81,6 +87,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             origen: origenTelefono,
             telefono: phone
         }
+
         await grabarTelefonoCliente(telegonoNuevo);
         const configAlert = {
             title: "Correcto",
@@ -149,7 +156,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     );
 
     return (
-        <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
+        <Paper elevation={3} sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom textAlign="center">
                 Números de Teléfono
             </Typography>
@@ -172,7 +179,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                         inputMode: 'numeric',
                         maxLength: 10,
                         sx: {
-                            height: '43px',
+                            height: '24px',
                         },
                     }}
                 />
@@ -182,7 +189,6 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             </Stack>
 
             <Divider />
-
             {phones.length > 0 ? (
                 <>
                     <List dense>

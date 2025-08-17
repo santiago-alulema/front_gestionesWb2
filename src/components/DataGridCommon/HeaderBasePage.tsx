@@ -65,6 +65,7 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
         if (routes.length === minLength) {
             navigate("/dashboard");
         } else {
+            navigate(-1);
             const disabledStep = routes.find(route => route.disabled);
             if (disabledStep?.function) {
                 disabledStep.function(disabledStep.id - 1);
@@ -84,7 +85,7 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
                         <Breadcrumbs aria-label="breadcrumb">
                             <Link
                                 underline="hover"
-                                sx={{ display: 'flex', alignItems: 'center' }}
+                                sx={{ display: 'flex', alignItems: 'center', fontSize: 12 }}
                                 color="primary"
                                 variant="subtitle2"
                                 onClick={() => navigate("/dashboard")}
@@ -96,11 +97,10 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
                                 <Link
                                     id={String(item.id)}
                                     underline="none"
-                                    sx={{ display: 'flex', alignItems: 'center' }}
+                                    sx={{ display: 'flex', alignItems: 'center', fontSize: 12 }}
                                     color={item.disabled ? 'inherit' : 'primary'}
                                     href={item.link}
                                     key={`path_${index}`}
-                                    variant="subtitle2"
                                     onClick={e => handleClickLinkItem(e, item)}
                                 >
                                     {item.text}
@@ -129,8 +129,8 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
                         </Tooltip>
                     </div>
                 )}
-                <div>
-                    <Typography variant="h4" fontWeight={'bold'}>
+                <div style={{ paddingBottom: 25 }}>
+                    <Typography variant="h6" fontWeight={'bold'}>
                         {title}
                     </Typography>
                     {showRequiredFieldLabel && (

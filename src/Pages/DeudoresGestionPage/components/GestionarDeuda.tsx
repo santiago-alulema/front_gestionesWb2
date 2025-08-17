@@ -152,66 +152,6 @@ const GestionarDeuda = () => {
 
     return (
         <>
-            {/* <Stack mb={2}>
-                <Typography variant="h5" fontWeight='bold' textAlign='center' mb={2}>GESTIONAR DEUDA</Typography>
-                <Typography textAlign='left'><strong>Nombre Cliente: </strong> {deudorSeleccionado.nombre}</Typography>
-                <Typography textAlign='left'><strong>Factura: </strong>{deudaSeleccionada.numeroFactura}</Typography>
-            </Stack>
-
-            <Grid container spacing={2}>
-                <Grid size={{ lg: 6 }} >
-                    <CustomAutocompleteTs
-                        options={gestionesPadre}
-                        optionLabel="nombre"
-                        optionValue="idTipoGestion"
-                        label="Seleccione el tipo de Gestion Padre"
-                        labelFullField="Tipo de Gestion Padre"
-                        handleChange={(event, value: TipoGestioneOutDTO) => seleccionarPadre(value)}
-                    />
-                </Grid>
-                <Grid size={{ lg: 6 }}>
-                    <CustomAutocompleteTs
-                        key={`hijo_${selectedPadre?.idTipoGestion || 'empty'}`}
-                        options={gestionHijo}
-                        optionLabel="nombre"
-                        optionValue="idTipoGestion"
-                        label="Seleccione el tipo de Gestion Hijo"
-                        labelFullField="Tipo de Gestion Hijo"
-                        defaultValue={null}
-                        handleChange={(event, value: TipoGestioneOutDTO) => seleccionarHijo(value)}
-                    />
-                </Grid>
-                <Grid size={{ lg: 12 }}>
-                    {selectedHijo?.tipoGestion === 'P' && (<PagosComponents pagosGrabar={pagosGrabar}
-                        setPagosGrabar={setPagosGrabar}
-                        numeroDocumentoPago={numeroDocumentoPago}
-                        setNumeroDocumentoPago={setNumeroDocumentoPago} />)}
-                    {selectedHijo?.tipoGestion === 'G' && (<GestionarDeudaComponents />)}
-                    {selectedHijo?.tipoGestion === 'C' && (<CompromisosPagosComponents />)}
-                </Grid>
-                <Grid size={{ lg: 12 }}>
-                    <TextField variant="outlined"
-                        label="Escribir Observacion"
-                        fullWidth
-                        multiline
-                        rows={5}
-                        value={observaciones}
-                        onChange={(e) => setObservaciones(e.target.value)} />
-                </Grid>
-            </Grid>
-            <Stack direction='row' justifyContent='right' mt={2} spacing={2}>
-                <Button variant="contained"
-                    style={{ width: 120, borderRadius: 15 }}
-                    color="success"
-                    onClick={grabarGestionesApi}>
-                    Grabar
-                </Button>
-                <Button variant="contained"
-                    style={{ width: 120, borderRadius: 15 }}
-                    onClick={() => setAbrirModalGestionarDeuda(false)}>
-                    Cancelar
-                </Button>
-            </Stack> */}
             <TabsGestionarDeudas></TabsGestionarDeudas>
         </>
     )

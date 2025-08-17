@@ -36,32 +36,44 @@ const Navbar = ({ userName, onLogout, onToggleSidebar }: NavbarProps) => {
     };
 
     return (
-        <AppBar elevation={0} position="fixed" color="primary" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <AppBar
+            elevation={0}
+            position="fixed"
+            color="primary"
+
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, maxHeight: 48 }}
+        >
+            <Toolbar
+                sx={{
+                    display: "flex",
+                    alignItems: "center",  // verticalmente centrado
+                    justifyContent: "space-between",
+                    maxHeight: 48,          // altura estándar MUI
+                    px: 1,
+                }}
+            >
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     <IconButton
                         color="inherit"
                         edge="start"
                         onClick={onToggleSidebar}
-                        sx={{ mr: 2, display: { xs: "block", sm: "none" } }}
+                        sx={{ mr: 1, display: { xs: "block", sm: "none" }, p: 0.5 }}
                     >
-                        <MenuIcon />
+                        <MenuIcon fontSize="small" />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" noWrap component="div" sx={{ fontSize: "0.9rem", lineHeight: 1 }}>
                         Gestiones Web
                     </Typography>
                 </Box>
 
-                <Box>
-                    <IconButton
-                        color="inherit"
-                        onClick={handleMenuClick}
-                        sx={{ gap: 1 }}
-                    >
-                        <Avatar sx={{ width: 32, height: 32 }}>
-                            <AccountCircleIcon />
+                <Box sx={{ display: "flex", alignItems: "center" }}>  {/* <--- Aseguramos flex y centrado */}
+                    <IconButton color="inherit" onClick={handleMenuClick} sx={{ gap: 0.5, p: 0.5 }}>
+                        <Avatar sx={{ width: 28, height: 28 }}>
+                            <AccountCircleIcon fontSize="small" />
                         </Avatar>
-                        <Typography variant="body1">{userName}</Typography>
+                        <Typography variant="body2" sx={{ fontSize: "0.75rem", lineHeight: 1 }}>
+                            {userName}
+                        </Typography>
                     </IconButton>
 
                     <Menu
@@ -75,7 +87,10 @@ const Navbar = ({ userName, onLogout, onToggleSidebar }: NavbarProps) => {
                     </Menu>
                 </Box>
             </Toolbar>
+
         </AppBar>
+
+
     );
 };
 

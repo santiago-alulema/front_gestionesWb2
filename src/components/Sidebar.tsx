@@ -22,8 +22,8 @@ const Sidebar = ({ userRole }: SidebarProps) => {
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>({});
   const [hovered, setHovered] = useState(false);
 
-  const collapsedWidth = 60;
-  const expandedWidth = 240;
+  const collapsedWidth = 40;
+  const expandedWidth = 200;
 
   const normalizedRole = userRole.toLowerCase();
 
@@ -52,10 +52,10 @@ const Sidebar = ({ userRole }: SidebarProps) => {
             <React.Fragment key={`${depth}-${item.name}`}>
               <ListItemButton
                 onClick={() => handleToggle(item.name)}
-                sx={{ pl: paddingLeft }}
+                sx={{ pl: paddingLeft, py: 0.8, }}
               >
-                {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-                {hovered && <ListItemText primary={item.name} />}
+                {item.icon && <ListItemIcon sx={{ minWidth: 32, }}>{item.icon}</ListItemIcon>}
+                {hovered && <ListItemText sx={{ ml: 0, my: 0 }} primary={item.name} />}
                 {hovered && (isOpen ? <ExpandLess /> : <ExpandMore />)}
               </ListItemButton>
               {hovered && (
@@ -78,10 +78,10 @@ const Sidebar = ({ userRole }: SidebarProps) => {
                 navigate(item.route);
               }
             }}
-            sx={{ pl: paddingLeft }}
+            sx={{ pl: paddingLeft, fontSize: 2 }}
           >
             {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-            {hovered && <ListItemText primary={item.name} />}
+            {hovered && <ListItemText sx={{ ml: 0, my: 0, fontSize: '0.3rem', }} primary={item.name} />}
           </ListItemButton>
         );
       });
@@ -99,8 +99,8 @@ const Sidebar = ({ userRole }: SidebarProps) => {
           transition: "width 0.3s ease",
           bgcolor: "primary.main",
           color: "#fff",
-          mt: 7,
-          height: `calc(100vh - 56px)`,
+          mt: 5,
+          height: `calc(120vh - 56px)`,
         },
       }}
     >

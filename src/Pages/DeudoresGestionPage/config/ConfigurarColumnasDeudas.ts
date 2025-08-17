@@ -24,14 +24,14 @@ export const ConfigurarColumnasDeudas = () => {
                 align: 'center'
             },
             {
-                name: 'fechaVenta',
-                title: 'Fecha Venta',
+                name: 'creditos',
+                title: 'Creditos',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'fechaUltimoPago',
-                title: 'Fecha Ultimo Pago',
+                name: 'numeroCuotas',
+                title: 'Numero Cuotas',
                 width: '10%',
                 align: 'center'
             },
@@ -42,8 +42,8 @@ export const ConfigurarColumnasDeudas = () => {
                 align: 'left'
             },
             {
-                name: 'estado',
-                title: 'Estado',
+                name: 'tramo',
+                title: 'Tramo',
                 width: '10%',
                 align: 'left'
             },

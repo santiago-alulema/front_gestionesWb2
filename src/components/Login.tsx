@@ -112,7 +112,7 @@ const Login = () => {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={(e) => loginUser(e)}
               >
-                Login
+                Ingresar
               </Button>
 
               <Typography variant="body2" align="center" sx={{ mt: 2 }}>

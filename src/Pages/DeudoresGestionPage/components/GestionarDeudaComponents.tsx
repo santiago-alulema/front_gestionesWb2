@@ -65,7 +65,6 @@ const GestionarDeudaComponents = () => {
         setRespuestas(respuesta)
     }
 
-
     return (
         <>
             <Grid container spacing={2}>

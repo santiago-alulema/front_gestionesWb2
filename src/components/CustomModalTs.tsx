@@ -9,19 +9,22 @@ interface Props {
     onSave?: () => void;
     positionTop?: string;
     positionLeft?: string;
+    height?: string;
 }
 
-const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop = null, positionLeft = null }: Props) => {
+const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop = null, positionLeft = null, height = "900px" }: Props) => {
     const style = {
-        position: 'absolute',
-        top: !!positionTop ? positionTop : '5%',
-        left: !!positionLeft ? positionLeft : '30%',
-        transform: 'translate(-50%a, -50%)',
-        width: width,
+        position: 'absolute' as const,
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width,
+        maxHeight: height,
+        overflowY: 'auto',
         bgcolor: 'background.paper',
         boxShadow: 24,
         p: 3,
-        borderRadius: '12px',
+        borderRadius: 2
     };
     return (
         <>

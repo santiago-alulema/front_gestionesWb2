@@ -23,7 +23,7 @@ const MainLayout = () => {
                     onLogout={logout}
                     onToggleSidebar={handleToggleSidebar}
                 />
-                <div style={{ paddingLeft: "5rem", paddingTop: 30, marginTop: 56 }}>
+                <div style={{ paddingLeft: "4rem", paddingTop: 30, marginTop: 50 }}>
                     <AppRoutes />
                 </div>
             </div>

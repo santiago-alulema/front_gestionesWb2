@@ -1,17 +1,15 @@
 import BasePage from "@/components/BasePage";
-import CustomDataGridTs from "@/components/DataGridCommon/CustomDataGridTs";
-import { IActionConfig } from "@/components/DataGridCommon/IActionConfig";
-import ClientInfo from "@/model/Dtos/In/ClientInfo";
 import Deudores from "@/Pages/DeudoresGestionPage/components/Deudores";
-import { ConfigurarColumnaDeudores } from "@/Pages/DeudoresGestionPage/config/ConfigurarColumnaDeudores";
-import { allDeuodoresServiceWeb } from "@/services/Service";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const Index = () => {
+    const navigate = useNavigate();
 
     const routes = [
         {
-            text: "Deudores"
+            text: "Deudores",
+            link: () => { navigate("/") },
+            function: () => { navigate("/") }
         }
     ]
 
