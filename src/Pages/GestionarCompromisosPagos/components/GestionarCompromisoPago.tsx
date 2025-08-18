@@ -19,15 +19,17 @@ const GestionarCompromisoPago = () => {
     const [cuentas, setCuentas] = useState<SeleccionGeneral[]>([])
     const [tiposTransaccion, setTiposTransaccion] = useState<SeleccionGeneral[]>([])
     const [abonosLiquidaciones, setAbonosLiquidaciones] = useState<SeleccionGeneral[]>([])
+    const { deudaSeleccionada } = useGestionarDeudas();
 
     const { control,
         errors,
         rules,
         onSubmit,
         setIncumplioCompromisoPago,
-        incumplioCompromisoPago, getRules } = useFormGestionarCompromisoPago();
+        incumplioCompromisoPago } = useFormGestionarCompromisoPago();
 
     useEffect(() => {
+        console.log("deudaSeleccionada", deudaSeleccionada)
         cargarBancos();
         cargarCuentas();
         cargarTransacciones();
@@ -54,7 +56,7 @@ const GestionarCompromisoPago = () => {
 
     return (
         <>
-            <Typography textAlign='center' variant='h5' mb={2}>Gestionar Compromiso de pago</Typography>
+            <Typography textAlign='center' variant='h5' mb={2}>Gestionar Tarea: {deudaSeleccionada.tipoTarea}</Typography>
             <Grid size={{ lg: 12 }} mb={2}>
                 <CustomCheckboxGroup
                     name="incumplioCompromisoPago"

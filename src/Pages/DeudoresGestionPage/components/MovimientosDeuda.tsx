@@ -10,6 +10,7 @@ const MovimientosDeuda = () => {
     const [movimientosDeuda, setMovimientosDeuda] = useState<MovimientosDeudaInDTO[]>([]);
 
     const onInit = async () => {
+        console.log(deudaSeleccionada)
         const respuesta = await movimientoDeudasPorDeuda(deudaSeleccionada.idDeuda);
         setMovimientosDeuda(respuesta);
     }

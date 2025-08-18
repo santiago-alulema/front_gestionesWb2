@@ -8,8 +8,14 @@ export const ConfiguracionColumnasCompromisosPago = () => {
             {
                 name: 'cedulaCliente',
                 title: 'Cedula',
-                width: '15%',
+                width: '10%',
                 align: 'center'
+            },
+            {
+                name: 'nombreCliente',
+                title: 'Cliente',
+                width: '15%',
+                align: 'left'
             },
             {
                 name: 'numeroFactura',
@@ -18,25 +24,25 @@ export const ConfiguracionColumnasCompromisosPago = () => {
                 align: 'left'
             },
             {
-                name: 'nombreCliente',
-                title: 'Deudor',
+                name: 'tipoTarea',
+                title: 'Tipo Tarea',
                 width: '15%',
                 align: 'left'
             },
             {
-                name: 'fechaCompromiso',
-                title: 'Fecha Compromiso',
-                width: '15%',
+                name: 'horaTarea',
+                title: 'Hora Tarea',
+                width: '12%',
                 align: 'left'
             },
             {
-                name: 'montoCompromiso',
-                title: 'Monto Compromiso',
-                width: '10%',
+                name: 'diasMora',
+                title: 'Dias Mora',
+                width: '8%',
                 align: 'left'
             },
             {
-                name: 'valorCuotas',
+                name: 'valorCuota',
                 title: 'Valor Cuota',
                 width: '10%',
                 align: 'left'
@@ -44,7 +50,7 @@ export const ConfiguracionColumnasCompromisosPago = () => {
             {
                 name: 'numeroCouta',
                 title: 'º Cuota',
-                width: '15%',
+                width: '10%',
                 align: 'center'
             },
             {
@@ -54,7 +60,6 @@ export const ConfiguracionColumnasCompromisosPago = () => {
                 width: '10%',
                 align: 'center',
                 hiddenFilterColumn: true
-
             }
         ],
         []

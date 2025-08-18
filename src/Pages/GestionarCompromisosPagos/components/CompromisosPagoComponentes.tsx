@@ -4,10 +4,11 @@ import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import GestionarCompromisoPago from '@/Pages/GestionarCompromisosPagos/components/GestionarCompromisoPago';
+import TabsGestionarTareas from '@/Pages/GestionarCompromisosPagos/components/TabsGestionarTareas';
 import { ConfiguracionColumnasCompromisosPago } from '@/Pages/GestionarCompromisosPagos/config/ConfiguracionColumnasCompromisosPago'
 import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
 import { compromisoPagoServiceWeb } from '@/services/Service';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const CompromisosPagoComponentes = () => {
 
@@ -16,16 +17,13 @@ const CompromisosPagoComponentes = () => {
         compromisosPago,
         setAbrirModalGestionarCompromiso,
         abrirModalGestionarCompromiso } = useGestionarCompromisoPago();
-
+    const { deudorSeleccionado, setDeudaSeleccionada } = useGestionarDeudas();
 
     const selectDebt = (row: DebstByClientInfoInDTO) => {
         setCompromisoPagoSeleccionado(row)
+        setDeudaSeleccionada(row)
         setAbrirModalGestionarCompromiso(true)
     }
-
-
-
-
 
     const actionsConfig: IActionConfig[] = [
         {
@@ -42,6 +40,18 @@ const CompromisosPagoComponentes = () => {
     useEffect(() => {
         cargarCompromisos()
     }, [])
+    const [autoRefresh, setAutoRefresh] = useState(true);
+
+    useEffect(() => {
+        if (!autoRefresh) return;
+
+        const intervalId = setInterval(() => {
+            cargarCompromisos();
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, [autoRefresh, cargarCompromisos]);
+
 
     return (
         <>
@@ -60,7 +70,8 @@ const CompromisosPagoComponentes = () => {
                     positionLeft="23%"
                     width={1060}
                     handleClose={() => setAbrirModalGestionarCompromiso(false)}>
-                    <GestionarCompromisoPago />
+                    {/* <GestionarCompromisoPago /> */}
+                    <TabsGestionarTareas />
                 </CustomModalTs>
             </div>
 

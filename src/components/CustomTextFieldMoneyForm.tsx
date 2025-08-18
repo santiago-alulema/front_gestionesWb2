@@ -45,33 +45,19 @@ const CustomTextFieldMoneyForm = <TFieldValues extends FieldValues = FieldValues
     const [internalValue, setInternalValue] = useState<string>(defaultValue);
 
     const handleValueChange = (value: string, onChange: (value: string) => void) => {
+        // Solo números y un punto decimal
         const inputValue = value.replace(/[^0-9.]/g, '');
 
-        if (inputValue === '') {
-            const newValue = defaultValue;
-            setInternalValue(newValue);
-            onChange(newValue);
-            return;
-        }
-
-        if (internalValue === defaultValue && inputValue.length > 0 && inputValue !== defaultValue) {
-            const newValue = inputValue.replace(defaultValue, '');
-            setInternalValue(newValue);
-            onChange(newValue);
-            return;
-        }
-
-        if ((inputValue.match(/\./g) || []).length <= 1) {
-            setInternalValue(inputValue);
-            onChange(inputValue);
-        }
+        // Permitimos que quede vacío mientras el usuario borra
+        setInternalValue(inputValue);
+        onChange(inputValue);
     };
 
     const handleBlur = (onBlur: () => void) => {
         setIsFocus(false);
-        if (internalValue === '') {
-            const newValue = defaultValue;
-            setInternalValue(newValue);
+        // Si quedó vacío, poner el valor por defecto
+        if (internalValue === '' || internalValue === undefined) {
+            setInternalValue(defaultValue);
             onBlur();
         } else {
             onBlur();
@@ -80,9 +66,9 @@ const CustomTextFieldMoneyForm = <TFieldValues extends FieldValues = FieldValues
 
     const handleFocus = () => {
         setIsFocus(true);
+        // Si es el valor por defecto, limpiar para que el usuario empiece a escribir
         if (internalValue === defaultValue) {
-            const newValue = '';
-            setInternalValue(newValue);
+            setInternalValue('');
         }
     };
 

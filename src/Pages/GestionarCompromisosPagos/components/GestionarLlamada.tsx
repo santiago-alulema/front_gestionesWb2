@@ -7,10 +7,11 @@ import { SeleccionGeneral } from '@/model/Dtos/In/SeleccionGeneral';
 import CustomAutocompleteFormTs from '@/components/DataGridCommon/CustomAutocompleteFormTs';
 import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFormTs';
 import { useFormGestionarDeuda } from '@/Pages/DeudoresGestionPage/useForms/useFormGestionarDeuda';
+import { useFormTareasLLamadas } from '@/Pages/GestionarCompromisosPagos/hooks/useFormTareasLLamadas';
 
-const GestionarDeudaComponents = () => {
+const GestionarLlamada = () => {
 
-    const { control, errors, onSubmit, rules } = useFormGestionarDeuda();
+    const { control, errors, onSubmit, rules } = useFormTareasLLamadas();
 
     const { deudorSeleccionado, telefonosActivos, setTelefonosActivos, obtenerTelefonosCliente, setGrabarGestion, grabarGestion, setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [formasContactoCliente, setFormasContactoCliente] = useState<TipoContactoGestionInDTO[]>([])
@@ -27,7 +28,7 @@ const GestionarDeudaComponents = () => {
 
     useEffect(() => {
         onInit();
-        obtenerTelefonosCliente(deudorSeleccionado.cedula);
+        // obtenerTelefonosCliente(deudorSeleccionado.cedula);
         cargarResultado()
     }, []);
 
@@ -147,4 +148,4 @@ const GestionarDeudaComponents = () => {
     )
 }
 
-export default GestionarDeudaComponents
+export default GestionarLlamada

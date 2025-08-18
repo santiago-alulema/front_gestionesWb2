@@ -15,8 +15,6 @@ interface GestionarCompromisoPagoContextProps {
     setAbrirModalGestionarCompromiso: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
-
 const GestionarCompromisoPagoContext = createContext<GestionarCompromisoPagoContextProps | undefined>(undefined);
 
 export const GestionarCompromisoPagoProvider = ({ children }: { children: ReactNode }) => {
@@ -25,7 +23,7 @@ export const GestionarCompromisoPagoProvider = ({ children }: { children: ReactN
     const [abrirModalGestionarCompromiso, setAbrirModalGestionarCompromiso] = useState(false)
 
     const cargarCompromisos = async () => {
-        const respuesta = await compromisoPagoServiceWeb();
+        const respuesta = await compromisoPagoServiceWeb(true);
         setCompromisosPago(respuesta);
     }
 
