@@ -22,7 +22,7 @@ export const DetalleDeudasClientes = ({ client }: Props) => {
     const [isVisible, setIsVisible] = useState<boolean>(false)
 
     const onInit = async () => {
-        const response = await deudasPorClienteServiceWeb(client.cedula);
+        const response = await deudasPorClienteServiceWeb(client.cedula, "TODOS", false);
         setDebts(response)
     }
     useEffect(() => {
@@ -95,7 +95,7 @@ export const DetalleDeudasClientes = ({ client }: Props) => {
                         searchLabel={"Buscar"}
                     />
                 </div>
-                {isVisible && (<GestionarDeuda debt={debt} setIsVisible={setIsVisible} />)}
+                {/* {isVisible && (<GestionarDeuda debt={debt} setIsVisible={setIsVisible} />)} */}
             </Box >
         </>
     )
