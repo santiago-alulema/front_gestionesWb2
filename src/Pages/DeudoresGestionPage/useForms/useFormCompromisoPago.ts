@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
-import { grabarCompromisoPago, grabarGestionServicioWeb, grabarPagosServicioWeb } from '@/services/Service';
+import { compromisoPagoServiceWeb, grabarCompromisoPago, grabarGestionServicioWeb, grabarPagosServicioWeb } from '@/services/Service';
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
@@ -28,7 +28,7 @@ export const useFormCompromisoPago = () => {
     });
 
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda
+        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
     } = useGestionarDeudas();
 
     const rules = {
@@ -73,8 +73,14 @@ export const useFormCompromisoPago = () => {
             callBackFunction: false
         };
         showAlert(configAlert);
+        buscarTareasPendientes();
         setAbrirModalGestionarDeuda(false)
     });
+
+    const buscarTareasPendientes = async () => {
+        const respuesta = await compromisoPagoServiceWeb(true)
+        setTareasPendientes(respuesta)
+    }
 
     return {
         control,

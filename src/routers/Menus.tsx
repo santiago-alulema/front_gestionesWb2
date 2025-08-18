@@ -16,7 +16,7 @@ import Deudores from "@/Pages/DeudoresGestionPage/Index";
 import Deudas from "@/Pages/DeudoresGestionPage/components/Deudas";
 import InformacionGeneralGestionesIndex from "@/Pages/InformacionGeneralGestiones/InformacionGeneralGestionesIndex";
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import DashboardGestiones from "@/components/Graficos/DashboardGestiones";
+import { DashboardGestiones } from "@/components/Graficos/DashboardGestiones";
 
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
