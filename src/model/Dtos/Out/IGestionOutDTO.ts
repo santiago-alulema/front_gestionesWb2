@@ -6,4 +6,5 @@ export interface IGestionInDTO {
     idTipoContactoCliente: string;
     IdRespuesta?: string;
     email?: string;
+    idTipoContactoDeudor?: string;
 }

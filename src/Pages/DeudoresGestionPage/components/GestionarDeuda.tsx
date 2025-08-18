@@ -60,15 +60,15 @@ const GestionarDeuda = () => {
         grabarGestion.idTipoGestion = "";
     }
 
-    useEffect(() => {
-        const nuevaGestion: IGestionInDTO = {
-            idDeuda: '',
-            idTipoGestion: '',
-            descripcion: '',
-            idTipoContactoDeudor: ''
-        }
-        setGrabarGestion(nuevaGestion)
-    }, [])
+    // useEffect(() => {
+    //     const nuevaGestion: IGestionInDTO = {
+    //         idDeuda: '',
+    //         idTipoGestion: '',
+    //         descripcion: '',
+    //         idTipoContactoDeudor: ''
+    //     }
+    //     setGrabarGestion(nuevaGestion)
+    // }, [])
 
     const actualizarCampoGestion = (campo: keyof IGestionInDTO, valor: string) => {
         setGrabarGestion({
@@ -79,58 +79,58 @@ const GestionarDeuda = () => {
 
 
 
-    const grabarGestionesApi = () => {
-        if (selectedHijo?.tipoGestion === 'G') {
-            grabarTipoGestionApi();
-        }
-        if (selectedHijo?.tipoGestion === 'C') {
-            grabarCompromisosPagosApi();
-        }
-        if (selectedHijo?.tipoGestion === 'P') {
-            grabarPagosApi();
-        }
-        setAbrirModalGestionarDeuda(false)
-    }
+    // const grabarGestionesApi = () => {
+    //     if (selectedHijo?.tipoGestion === 'G') {
+    //         grabarTipoGestionApi();
+    //     }
+    //     if (selectedHijo?.tipoGestion === 'C') {
+    //         grabarCompromisosPagosApi();
+    //     }
+    //     if (selectedHijo?.tipoGestion === 'P') {
+    //         grabarPagosApi();
+    //     }
+    //     setAbrirModalGestionarDeuda(false)
+    // }
 
-    const grabarTipoGestionApi = async () => {
-        const enviagrabar: IGestionInDTO = {
-            idDeuda: grabarGestion.idDeuda,
-            idTipoGestion: selectedHijo.idTipoGestion,
-            descripcion: observaciones,
-            idTipoContactoDeudor: grabarGestion.idTipoContactoDeudor,
-            idRespuesta: grabarGestion.idRespuesta,
-            email: grabarGestion.email
-        }
-        await grabarGestionServicioWeb(enviagrabar);
-        const configAlert = {
-            title: "Correcto",
-            message: "Se grabo correctamente la Gestion",
-            type: 'success',
-            callBackFunction: false
-        };
-        showAlert(configAlert);
-    }
+    // const grabarTipoGestionApi = async () => {
+    //     const enviagrabar: IGestionInDTO = {
+    //         idDeuda: grabarGestion.idDeuda,
+    //         idTipoGestion: selectedHijo.idTipoGestion,
+    //         descripcion: observaciones,
+    //         idTipoContactoDeudor: grabarGestion.idTipoContactoDeudor,
+    //         idRespuesta: grabarGestion.idRespuesta,
+    //         email: grabarGestion.email
+    //     }
+    //     await grabarGestionServicioWeb(enviagrabar);
+    //     const configAlert = {
+    //         title: "Correcto",
+    //         message: "Se grabo correctamente la Gestion",
+    //         type: 'success',
+    //         callBackFunction: false
+    //     };
+    //     showAlert(configAlert);
+    // }
 
 
 
-    const grabarCompromisosPagosApi = async () => {
-        const enviagrabar: ICompromisoPagoOutDTO = {
-            idDeuda: grabarGestion.idDeuda,
-            fechaCompromiso: grabarCompromiso.fechaCompromiso,
-            montoComprometido: grabarCompromiso.montoComprometido,
-            estado: true,
-            observaciones: observaciones,
-            formaPagoId: grabarCompromiso.formaPagoId
-        }
-        await grabarCompromisoPago(enviagrabar);
-        const configAlert = {
-            title: "Correcto",
-            message: "Se grabo correctamente la Gestion",
-            type: 'success',
-            callBackFunction: false
-        };
-        showAlert(configAlert);
-    }
+    // const grabarCompromisosPagosApi = async () => {
+    //     const enviagrabar: ICompromisoPagoOutDTO = {
+    //         idDeuda: grabarGestion.idDeuda,
+    //         fechaCompromiso: grabarCompromiso.fechaCompromiso,
+    //         montoComprometido: grabarCompromiso.montoComprometido,
+    //         estado: true,
+    //         observaciones: observaciones,
+    //         formaPagoId: grabarCompromiso.formaPagoId
+    //     }
+    //     await grabarCompromisoPago(enviagrabar);
+    //     const configAlert = {
+    //         title: "Correcto",
+    //         message: "Se grabo correctamente la Gestion",
+    //         type: 'success',
+    //         callBackFunction: false
+    //     };
+    //     showAlert(configAlert);
+    // }
 
     const grabarPagosApi = async () => {
         const enviagrabar: PagoGrabarOutDTO = {
