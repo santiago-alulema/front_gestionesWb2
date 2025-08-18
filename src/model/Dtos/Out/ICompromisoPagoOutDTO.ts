@@ -4,5 +4,7 @@ export interface ICompromisoPagoOutDTO {
     montoComprometido: number;
     estado?: boolean;
     observaciones?: string;
-    formaPagoId: string;
+    TipoTarea: string;
+    HoraRecordatorio: string;
+
 }

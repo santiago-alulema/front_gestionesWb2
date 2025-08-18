@@ -47,8 +47,9 @@ const InformacionCompletaDeuda = () => {
 
     return (
         <>
-            <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 1 }} >
-                <CardContent>
+            <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 1, }} >
+                <CardContent
+                    sx={{ borderRadius: 2, boxShadow: 1, p: "1.2rem !important" }}>
                     <Box
                         sx={{
                             display: "flex",
@@ -65,7 +66,7 @@ const InformacionCompletaDeuda = () => {
 
                     <Divider sx={{ mb: 1 }} />
 
-                    <Grid container spacing={3}>
+                    <Grid container spacing={5}>
                         <Grid size={{ xs: 12, md: 4 }} >
                             <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
                                 <Typography variant="subtitle2" sx={titleStyle}>

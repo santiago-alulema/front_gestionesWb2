@@ -48,17 +48,12 @@ export const uploadDeudasServiceWeb = (dataDeudas: any) =>
     dataDeudas
   );
 
-export const allDeuodoresServiceWeb = () =>
+export const allDeuodoresServiceWeb = (empresa: string, sinGestionar: boolean) =>
   request<ClientInfo[]>(
     'get',
-    END_POINT.LISTAR_DEUDORES,
+    `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&sinGestionar=${sinGestionar}`,
   );
 
-export const tipoGestionPadre = () =>
-  request<TipoGestioneOutDTO[]>(
-    'get',
-    END_POINT.TIPO_GESTIONES_PADRE,
-  );
 
 export const formaPagosServicioWeb = () =>
   request<FormaPagoInDTO[]>(
@@ -66,28 +61,28 @@ export const formaPagosServicioWeb = () =>
     END_POINT.OBTENER_FORMAS_PAGO_ACTIVOS,
   );
 
-export const gestionesXUsuarioServicioWeb = () =>
+export const gestionesXUsuarioServicioWeb = (fechaInicio: string, fechaFin: string) =>
   request<GestionesPorUsuarioInDTO[]>(
     'get',
-    END_POINT.GESTIONES_POR_USUARIO,
+    `${END_POINT.GESTIONES_POR_USUARIO}?FechaInicio=${fechaInicio}&FechaFin=${fechaFin}`,
   );
 
-export const compromisosPagosXUsuarioServicioWeb = () =>
+export const compromisosPagosXUsuarioServicioWeb = (fechaInicio: string, fechaFin: string) =>
   request<CompromisosPagoPorUsuarioInDTO[]>(
     'get',
-    END_POINT.COMPROMISOS_DE_PAGO_POR_USUARIO,
+    `${END_POINT.COMPROMISOS_DE_PAGO_POR_USUARIO}?FechaInicio=${fechaInicio}&FechaFin=${fechaFin}`,
   );
 
-export const PagosXUsuarioServicioWeb = () =>
+export const PagosXUsuarioServicioWeb = (fechaInicio: string, fechaFin: string) =>
   request<GestionesPagoPorUsuarioInDTO[]>(
     'get',
-    END_POINT.PAGOS_POR_USUARIO,
+    `${END_POINT.PAGOS_POR_USUARIO}?FechaInicio=${fechaInicio}&FechaFin=${fechaFin}`,
   );
 
-export const gestionesPorEmperesaServicioWeb = () =>
+export const gestionesPorEmperesaServicioWeb = (fechaInicio: string, fechaFin: string) =>
   request<ReporteEmpresaDto[]>(
     'get',
-    END_POINT.PAGOS_COMPROMISOS_GESTION_POR_USUARIO,
+    `${END_POINT.PAGOS_COMPROMISOS_GESTION_POR_USUARIO}?FechaInicio=${fechaInicio}&FechaFin=${fechaFin}`,
   );
 
 
@@ -180,10 +175,10 @@ export const desactivarTelefonoCliente = (desactivarTelefono: DesactivarTelefono
     desactivarTelefono
   );
 
-export const deudasPorClienteServiceWeb = (codigoCliente: String) =>
+export const deudasPorClienteServiceWeb = (codigoCliente: String, empresa: string, sinGestionar: boolean) =>
   request<DebstByClientInfoInDTO[]>(
     'get',
-    `${END_POINT.LISTAR_DEUDAS_POR_CLIENTE}/${codigoCliente}`,
+    `${END_POINT.LISTAR_DEUDAS_POR_CLIENTE}/${codigoCliente}?empresa=${empresa}&sinGestionar=${sinGestionar}`,
   );
 
 export const compromisoPagoServiceWeb = (esHoy: boolean = false) =>
@@ -192,6 +187,11 @@ export const compromisoPagoServiceWeb = (esHoy: boolean = false) =>
     `${END_POINT.COMPROMISO_PAGO}/${esHoy}`,
   );
 
+// export const tareasHoy = (esHoy: boolean = false) =>
+// request<DebstByClientInfoInDTO[]>(
+//   'get',
+//   `${END_POINT.TAREAS_HOY}/${esHoy}`,
+// );
 
 
 export const grabarCompromisoPago = (compromisoPago: ICompromisoPagoOutDTO) =>

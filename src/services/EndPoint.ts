@@ -32,7 +32,10 @@ const END_POINT = {
     BANCOS_ACTIVOS: "OpcionesRegistrarPagos/bancos-activos",
     CUENTAS_ACTIVAS: "OpcionesRegistrarPagos/cuentas-activos",
     TRANSACCIONES_ACTIVAS: "OpcionesRegistrarPagos/transacciones-activas",
-    ABONO_LIQUIDACIONES_ACTIVAS: "OpcionesRegistrarPagos/abono-liquidacion-activas"
+    ABONO_LIQUIDACIONES_ACTIVAS: "OpcionesRegistrarPagos/abono-liquidacion-activas",
+
+    TAREAS_HOY: "Gestiones/compromiso-pagos"
+
 
 
 }

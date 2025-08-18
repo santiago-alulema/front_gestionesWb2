@@ -8,20 +8,26 @@ export const ConfigurarColimnasMovimientoDeudas = () => {
             {
                 name: 'tipo',
                 title: 'Tipo Movimiento',
-                width: '30%',
+                width: '15%',
                 align: 'center'
             },
             {
                 name: 'fecha',
                 title: 'Fecha Movimiento',
-                width: '30%',
+                width: '15%',
                 align: 'center'
             },
             {
                 name: 'observaciones',
                 title: 'Observaciones',
-                width: '40%',
+                width: '20%',
                 align: 'center'
+            },
+            {
+                name: 'tracking',
+                title: 'Tracking',
+                width: '50%',
+                align: 'left'
             }
         ],
         []

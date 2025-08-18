@@ -24,6 +24,7 @@ const GestionarDeudaComponents = () => {
     const [tiposContacto, setTiposContacto] = useState<SeleccionGeneral[]>([])
     const [respuestas, setRespuestas] = useState<SeleccionGeneral[]>([])
 
+    const [tipoContactoSeleccionado, setTipoContactoSeleccionado] = useState<any>(null); // nuevo estado
 
     const accionBotonVerTelefono = () => {
         setVerTelefonos(prev => !prev)
@@ -40,28 +41,32 @@ const GestionarDeudaComponents = () => {
         cargarResultado()
     }, []);
 
-    const actualizarCampoGestion = (campo: keyof IGestionInDTO, valor: string) => {
-        setGrabarGestion({
-            ...grabarGestion,
-            [campo]: valor
-        });
-    };
-
     const cargarResultado = async () => {
         const respuesta = await resultadosServicioWeb();
         setResultados(respuesta)
     }
 
-
     const cargarTipoContacto = async (value: any) => {
+        if (!value) {
+            setRespuestas([]);
+            setTipoContactoSeleccionado(null)
+            setTiposContacto([])
+            return
+        }
         const respuesta = await tipoContactoServicioWeb(value.id);
-        actualizarCampoGestion("idTipoContactoDeudor", value?.id || "")
         setTiposContacto(respuesta)
+        setRespuestas([]);
+
     }
 
     const cargarRespuestas = async (value: any) => {
+        if (!value) {
+            setRespuestas([]);
+            setTipoContactoSeleccionado(null)
+            return
+        }
+        setTipoContactoSeleccionado(value.id)
         const respuesta = await respuestasServicioWeb(value.id);
-        actualizarCampoGestion("idRespuesta", value?.id || "")
         setRespuestas(respuesta)
     }
 
@@ -70,7 +75,7 @@ const GestionarDeudaComponents = () => {
             <Grid container spacing={2}>
                 <Grid size={{ lg: 6 }} >
                     <CustomAutocompleteFormTs
-                        name='tipoContacto'
+                        name='idResultado'
                         options={resultados}
                         label="Resultado"
                         labelFullField="Resultado"
@@ -85,7 +90,7 @@ const GestionarDeudaComponents = () => {
                 </Grid>
                 <Grid size={{ lg: 6 }} >
                     <CustomAutocompleteFormTs
-                        name='tipoContactoCliente'
+                        name='idTipoContactoCliente'
                         options={tiposContacto}
                         label="Tipo de contacto Cliente"
                         labelFullField="Tipo de contacto Cliente"
@@ -99,7 +104,7 @@ const GestionarDeudaComponents = () => {
                 </Grid>
                 <Grid size={{ lg: 6 }} >
                     <CustomAutocompleteFormTs
-                        name='respuesta'
+                        name='idRespuesta'
                         options={respuestas}
                         label="Respuesta"
                         labelFullField="Respuesta"
@@ -109,8 +114,14 @@ const GestionarDeudaComponents = () => {
                         errors={errors}
                         rules={rules.respuesta}
                         requiredField={true}
-
+                        disabled={!tipoContactoSeleccionado}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                borderColor: !tipoContactoSeleccionado ? 'red' : undefined
+                            }
+                        }}
                     />
+                    <p style={{ fontSize: 10, color: 'red' }}>{!tipoContactoSeleccionado ? "Primero seleccione un Tipo de contacto Cliente" : ""}</p>
                 </Grid>
                 <Grid size={{ lg: 6 }} >
                     <CustomTextFieldFormTs

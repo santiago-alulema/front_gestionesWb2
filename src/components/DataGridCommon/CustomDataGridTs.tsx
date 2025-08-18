@@ -1,5 +1,6 @@
 import { ActionColumn } from '@/components/DataGridCommon/ActionConfig';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
+import RenderHTML from '@/components/DataGridCommon/RenderHTML';
 import TextFieldCustomDataGrid from '@/components/DataGridCommon/TextFieldCustomDataGrid';
 
 import {
@@ -270,7 +271,16 @@ const CustomDataGridTs = <T,>({
         </Table.Cell>
       );
     }
-    return <Table.Cell {...props} style={commonStyle} />;
+
+    // Verifica si el valor contiene etiquetas HTML
+    const value = row[column.name];
+    const containsHTML = typeof value === 'string' && /<[a-z][\s\S]*>/i.test(value);
+
+    return (
+      <Table.Cell {...props} style={commonStyle}>
+        {containsHTML ? <RenderHTML html={value} /> : value}
+      </Table.Cell>
+    );
   };
 
   const theme = useTheme();
@@ -314,6 +324,12 @@ const CustomDataGridTs = <T,>({
       }
     }
   };
+  useEffect(() => {
+    if (!rows || rows.length === 0) {
+      setFilteredRowsNumber([]);
+      setCurrentPage(0); // reset paginación también
+    }
+  }, [rows]);
 
   const FilterCellComponent = useMemo(() => {
     return (props: any) => {
@@ -342,7 +358,6 @@ const CustomDataGridTs = <T,>({
       );
     };
   }, [searchLabel]);
-
 
 
 

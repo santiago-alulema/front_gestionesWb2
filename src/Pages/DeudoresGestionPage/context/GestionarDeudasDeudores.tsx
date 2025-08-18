@@ -3,7 +3,7 @@ import ClientInfo from '@/model/Dtos/In/ClientInfo';
 import DeudasInDTO from '@/model/Dtos/In/DeudasInDTO';
 import TelefonosClientesActivos from '@/model/Dtos/In/TelefonosClientesActivos';
 import TipoGestioneOutDTO from '@/model/Dtos/In/TipoGestioneOutDTO';
-import { telefonosActivosClientes, tipoGestionHijosPorPadreId, tipoGestionPadre } from '@/services/Service';
+import { telefonosActivosClientes, tipoGestionHijosPorPadreId } from '@/services/Service';
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
@@ -25,6 +25,9 @@ interface IGestionarDeudasContext {
     abrirModalGestionarDeuda: boolean;
     abrirModalInformacionDeuda: boolean;
 
+    // Nuevos estados para filtrado
+    empresaSeleccionada: string;
+    sinGestionar: boolean;
 
     // Setters tipados correctamente
     setDeudaSeleccionada: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO | null>>;
@@ -35,7 +38,8 @@ interface IGestionarDeudasContext {
     setGrabarPago: React.Dispatch<React.SetStateAction<PagoGrabarOutDTO>>;
     setAbrirModalGestionarDeuda: React.Dispatch<React.SetStateAction<boolean>>;
     setAbrirModalInformacionDeuda: React.Dispatch<React.SetStateAction<boolean>>;
-
+    setEmpresaSeleccionada: React.Dispatch<React.SetStateAction<string>>;
+    setSinGestionar: React.Dispatch<React.SetStateAction<boolean>>;
     setTelefonosActivos: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>;
 
     // Métodos
@@ -62,15 +66,11 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
     const [abrirModalGestionarDeuda, setAbrirModalGestionarDeuda] = useState<boolean>(false);
 
     const [abrirModalInformacionDeuda, setAbrirModalInformacionDeuda] = useState<boolean>(false);
-
+    const [empresaSeleccionada, setEmpresaSeleccionada] = useState<string>("TODOS");
+    const [sinGestionar, setSinGestionar] = useState(false);
 
     // Estados de grabación
-    const [grabarGestion, setGrabarGestion] = useState<IGestionInDTO>({
-        idDeuda: '',
-        idTipoGestion: '',
-        descripcion: '',
-        idTipoContactoDeudor: ''
-    });
+    const [grabarGestion, setGrabarGestion] = useState<IGestionInDTO>();
     const [grabarCompromiso, setGrabarCompromiso] = useState<ICompromisoPagoOutDTO | null>(null);
     const [grabarPago, setGrabarPago] = useState<PagoGrabarOutDTO>({
         idDeuda: '',
@@ -90,10 +90,6 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
         setTelefonosActivos(telefonosRespuesta);
     };
 
-    const llenarGestionesPadre = async () => {
-        const respuesta = await tipoGestionPadre();
-        setGestionesPadre(respuesta);
-    };
 
     const LlenarGestionesHijo = async (gestionPadreId: string) => {
         if (!gestionPadreId) return setGestionHijo([]);
@@ -102,7 +98,6 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
     };
 
     useEffect(() => {
-        llenarGestionesPadre();
     }, []);
 
     return (
@@ -134,7 +129,11 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
                 LlenarGestionesHijo,
 
                 abrirModalInformacionDeuda,
-                setAbrirModalInformacionDeuda
+                setAbrirModalInformacionDeuda,
+                setEmpresaSeleccionada,
+                setSinGestionar,
+                empresaSeleccionada,
+                sinGestionar,
             }}
         >
             {children}

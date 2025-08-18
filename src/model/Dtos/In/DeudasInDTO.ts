@@ -12,7 +12,6 @@ export interface DeudasInDTO {
   saldoDeuda: number;         // "valorCuota": 84.31
   compromisoPagoId: string;    // No está en el JSON
   empresa: string;             // "empresa": "MARCIMEX"
-  // Campos faltantes:
   interes?: number | null;
   gastosCobranzas?: number | null;
   descuento?: number;
@@ -27,6 +26,5 @@ export interface DeudasInDTO {
   ultimoPago?: number | null;
   valorCuota?: number | null;
   numeroCuotas?: number | null;
-
 }
 export default DeudasInDTO;

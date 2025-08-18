@@ -8,6 +8,8 @@ import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFo
 import { TipoContactoGestionInDTO } from '@/model/Dtos/In/TipoContactoGestionInDTO'
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO'
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores'
+import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO'
+import { tiposTareasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios'
 import { useFormCompromisoPago } from '@/Pages/DeudoresGestionPage/useForms/useFormCompromisoPago'
 import { acercamientoDeudorServicioWeb } from '@/services/Service'
 import { Box, Button, Grid } from '@mui/material'
@@ -18,10 +20,10 @@ const CompromisosPagosComponents = () => {
     const [valorPago, setValorPago] = useState<string>("0.0")
     const fechaActual = dayjs().format('YYYY-MM-DD')
     const [formasContactoCliente, setFormasContactoCliente] = useState<TipoContactoGestionInDTO[]>([])
-
+    const [tiposTareas, setTiposTareas] = useState<TiposTareaInDTO[]>([]);
     const onInit = async () => {
-        const respuesta = await acercamientoDeudorServicioWeb();
-        setFormasContactoCliente(respuesta);
+        const respuesta = await tiposTareasServicioWeb();
+        setTiposTareas(respuesta)
     }
 
     const { control, errors, rules, onSubmit } = useFormCompromisoPago();
@@ -31,18 +33,44 @@ const CompromisosPagosComponents = () => {
         onInit()
     }, [])
 
+    const horarioRecordatorio = [
+        { "id": "8:00 AM", "name": "8:00 AM" },
+        { "id": "9:00 AM", "name": "9:00 AM" },
+        { "id": "10:00 AM", "name": "10:00 AM" },
+        { "id": "11:00 AM", "name": "11:00 AM" },
+        { "id": "12:00 PM", "name": "12:00 PM" },
+        { "id": "13:00 PM", "name": "1:00 PM" },
+        { "id": "14:00 PM", "name": "2:00 PM" },
+        { "id": "15:00 PM", "name": "3:00 PM" },
+        { "id": "16:00 PM", "name": "4:00 PM" },
+        { "id": "17:00 PM", "name": "5:00 PM" },
+        { "id": "18:00 PM", "name": "6:00 PM" },
+        { "id": "19:00 PM", "name": "7:00 PM" },
+        { "id": "20:00 PM", "name": "8:00 PM" }
+    ]
     return (
         <>
             <Grid container spacing={2}>
                 <Grid size={{ lg: 6 }}>
                     <CustomDatePickerForm
                         name='fechaCompromiso'
-                        label="Fecha de pago"
+                        label="Fecha recordatorio"
                         requiredField
                         defaultValue={fechaActual}
                         control={control}
                         errors={errors}
                         rules={rules.fechaCompromiso}
+                    />
+                </Grid>
+                <Grid size={{ lg: 6 }}>
+                    <CustomAutocompleteFormTs
+                        name='horaRecordatorio'
+                        options={horarioRecordatorio}
+                        label="Hora recordatorio"
+                        labelFullField="Seleccione Hora Recordatorio"
+                        control={control}
+                        errors={errors}
+                        rules={rules.campoObligatorio}
                     />
                 </Grid>
                 <Grid size={{ lg: 6 }}>
@@ -55,16 +83,16 @@ const CompromisosPagosComponents = () => {
                         rules={rules.valorCompromiso}
                     />
                 </Grid>
-                <Grid size={{ lg: 12 }}>
+                <Grid size={{ lg: 6 }}>
                     <CustomAutocompleteFormTs
-                        name='tipoContactoCliente'
-                        options={formasContactoCliente}
-                        label="Tipo de contacto Cliente"
-                        labelFullField="Contacto Cliente"
+                        name='tipoTarea'
+                        options={tiposTareas}
+                        label="Tipo de tarea"
+                        labelFullField="Tipo de tarea"
                         optionLabel='nombre'
                         control={control}
                         errors={errors}
-                        rules={rules.tipoContactoCliente}
+                        rules={rules.campoObligatorio}
                     />
                 </Grid>
                 <Grid size={{ lg: 12 }} >

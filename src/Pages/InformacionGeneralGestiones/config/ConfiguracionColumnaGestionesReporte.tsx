@@ -18,7 +18,7 @@ export const ConfiguracionColumnaGestionesReporte = () => {
                 align: 'left'
             },
             {
-                name: 'CantidadGestiones',
+                name: 'cantidadGestiones',
                 title: 'Cantidad',
                 width: '20%',
                 align: 'left'

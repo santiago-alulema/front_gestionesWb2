@@ -7,10 +7,11 @@ const InformacionGeneralGestionesIndex = () => {
             text: "Compromisos"
         }
     ]
+
     return (
         <BasePage
             routers={routes}
-            title="Gestionar Compromisos de Pago"
+            title="Reporte general de gestiones"
         >
             <ReporteGeneralGestiones />
         </BasePage>

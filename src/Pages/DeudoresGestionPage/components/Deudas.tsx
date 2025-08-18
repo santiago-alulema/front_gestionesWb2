@@ -24,7 +24,8 @@ const Deudas = () => {
         abrirModalGestionarDeuda,
         setAbrirModalGestionarDeuda,
         setAbrirModalInformacionDeuda,
-        abrirModalInformacionDeuda } = useGestionarDeudas();
+        abrirModalInformacionDeuda,
+        sinGestionar, empresaSeleccionada, } = useGestionarDeudas();
     const [deudasDeudor, setDeudasDeudor] = useState<DebstByClientInfoInDTO[]>([]);
 
     useEffect(() => {
@@ -56,12 +57,11 @@ const Deudas = () => {
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
 
-
     ];
 
     const onInit = async () => {
         if (!deudorSeleccionado) return;
-        const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula);
+        const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula, empresaSeleccionada, sinGestionar);
         setDeudasDeudor(response)
     }
 

@@ -2,7 +2,8 @@ export interface IGestionInDTO {
     idDeuda: string;
     idTipoGestion: string;
     descripcion: string;
-    idTipoContactoDeudor: string;
-    idRespuesta?: string;
+    IdResultado: string;
+    idTipoContactoCliente: string;
+    IdRespuesta?: string;
     email?: string;
 }

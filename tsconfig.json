@@ -4,7 +4,7 @@
     "jsx": "react-jsx",
     "module": "commonjs",
     "noImplicitAny": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2023", "dom"],
     "outDir": "./dist/",
     "skipLibCheck": true,
     "preserveConstEnums": true,

@@ -1,6 +1,6 @@
 import TelefonosClientesActivos from '@/model/Dtos/In/TelefonosClientesActivos';
 import TipoGestioneOutDTO from '@/model/Dtos/In/TipoGestioneOutDTO';
-import { telefonosActivosClientes, tipoGestionHijosPorPadreId, tipoGestionPadre } from '@/services/Service';
+import { telefonosActivosClientes, tipoGestionHijosPorPadreId } from '@/services/Service';
 import { useState, useEffect, useCallback } from 'react';
 
 const GestionDeudasHook = () => {
@@ -13,10 +13,10 @@ const GestionDeudasHook = () => {
         setTelefonosActivos(telefonosRespuesta);
     }
 
-    const llenarGestionesPadre = async () => {
-        const gesitionesPadreRespuesta = await tipoGestionPadre();
-        setGestionesPadre(gesitionesPadreRespuesta);
-    }
+    // const llenarGestionesPadre = async () => {
+    //     const gesitionesPadreRespuesta = await tipoGestionPadre();
+    //     setGestionesPadre(gesitionesPadreRespuesta);
+    // }
 
     const LlenarGestionesHijo = async (gestionPadreId: string) => {
         if (!gestionPadreId) {
@@ -27,7 +27,7 @@ const GestionDeudasHook = () => {
     }
 
     useEffect(() => {
-        llenarGestionesPadre();
+        // llenarGestionesPadre();
     }, [])
 
 

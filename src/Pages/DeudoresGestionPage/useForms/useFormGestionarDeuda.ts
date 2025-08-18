@@ -16,8 +16,9 @@ export const useFormGestionarDeuda = () => {
         getValues
     } = useForm({
         defaultValues: {
-            tipoContactoCliente: '',
-            respuesta: '',
+            idResultado: '',
+            idRespuesta: '',
+            idTipoContactoCliente: '',
             email: '',
             tipoContacto: '',
             observaciones: ''
@@ -64,8 +65,9 @@ export const useFormGestionarDeuda = () => {
             idDeuda: deudaSeleccionada.idDeuda,
             idTipoGestion: '3',
             descripcion: data.observaciones,
-            idTipoContactoDeudor: data.tipoContactoCliente,
-            idRespuesta: data.respuesta,
+            IdResultado: data.idResultado,
+            idTipoContactoCliente: data.idTipoContactoCliente,
+            IdRespuesta: data.idRespuesta,
             email: data.email
         }
         await grabarGestionServicioWeb(enviagrabar);

@@ -21,8 +21,9 @@ export const useFormCompromisoPago = () => {
         defaultValues: {
             fechaCompromiso: dayjs().format('YYYY-MM-DD'),
             valorCompromiso: 0.0,
-            tipoContactoCliente: '',
-            observaciones: ''
+            observaciones: '',
+            horaRecordatorio: '',
+            tipoTarea: ''
         }
     });
 
@@ -37,8 +38,8 @@ export const useFormCompromisoPago = () => {
         valorCompromiso: {
             required: 'El valor a pagar es obligatorio'
         },
-        tipoContactoCliente: {
-            required: 'El banco es obligatoria'
+        campoObligatorio: {
+            required: 'El campo es obligatoria'
         },
         observaciones: {
             required: 'Las observaciones es obligatoria'
@@ -61,7 +62,8 @@ export const useFormCompromisoPago = () => {
             montoComprometido: data.valorCompromiso,
             estado: true,
             observaciones: data.observaciones,
-            formaPagoId: data.tipoContactoCliente
+            HoraRecordatorio: data.horaRecordatorio,
+            TipoTarea: data.tipoTarea
         }
         await grabarCompromisoPago(enviagrabar);
         const configAlert = {

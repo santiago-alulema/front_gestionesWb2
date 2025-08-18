@@ -19,13 +19,13 @@ export const ConfiguracionColumnaReporteEmpresa = () => {
             {
                 name: 'cantidadCompromisosPago',
                 title: 'Compromisos',
-                width: '15%',
+                width: '12%',
                 align: 'center'
             },
             {
                 name: 'cantidadPagos',
                 title: 'Pagos',
-                width: '15%',
+                width: '12%',
                 align: 'center'
             },
             {
@@ -42,7 +42,7 @@ export const ConfiguracionColumnaReporteEmpresa = () => {
             {
                 name: 'valorTotalCompromisos',
                 title: 'Valor Compromisos',
-                width: '15%',
+                width: '14%',
                 align: 'right',
                 getCellValue: (row: any) =>
                     new Intl.NumberFormat('es-CO', {

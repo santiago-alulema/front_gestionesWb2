@@ -6,17 +6,18 @@ export const ConfigurarColumnasDeudas = () => {
     const columns = useMemo<Column[]>(
         () => [
             {
+                name: 'numeroFactura',
+                title: 'Numero Factura',
+                width: '10%',
+                align: 'center'
+            },
+            {
                 name: 'saldoDeuda',
                 title: 'Saldo Deuda',
                 width: '10%',
                 align: 'center'
             },
-            {
-                name: 'descuento',
-                title: 'Descuento',
-                width: '10%',
-                align: 'center'
-            },
+
             {
                 name: 'montoCobrar',
                 title: 'Monto Cobrar',
