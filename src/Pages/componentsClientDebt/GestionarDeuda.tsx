@@ -77,15 +77,15 @@ const GestionarDeuda = ({ debt, setIsVisible }: GestionarDeudaProps) => {
         //     await grabarCompromisoPago(compromisoPago)
         // }
 
-        if (gestionSeleccionada?.tipoGestion === 'G') {
-            const gestion: IGestionInDTO = {
-                idDeuda: debt.idDeuda,
-                descripcion: observaciones,
-                idTipoGestion: gestionSeleccionada.idTipoGestion,
-                idTipoContactoDeudor: ""
-            }
-            await grabarGestionServicioWeb(gestion)
-        }
+        // if (gestionSeleccionada?.tipoGestion === 'G') {
+        //     const gestion: IGestionInDTO = {
+        //         idDeuda: debt.idDeuda,
+        //         descripcion: observaciones,
+        //         idTipoGestion: gestionSeleccionada.idTipoGestion,
+        //         idTipoContactoDeudor: ""
+        //     }
+        //     await grabarGestionServicioWeb(gestion)
+        // }
 
 
         await actualizarCompromisoServicioWeb({
