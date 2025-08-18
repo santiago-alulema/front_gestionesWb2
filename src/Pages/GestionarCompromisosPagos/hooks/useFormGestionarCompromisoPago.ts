@@ -1,11 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
-// import { showAlert } from '@/utils/modalAlerts';
-import { grabarPagosServicioWeb } from '@/services/Service';
+import { compromisoPagoServiceWeb, grabarPagosServicioWeb } from '@/services/Service';
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DESACTIVAR_COMPROMISO_PAGO, INCUMPLIO_COMPROMISO_PAGO } from '@/Pages/GestionarCompromisosPagos/services/GestionarCompromisosPagoServicioWeb';
 import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
 import { showAlert } from '@/utils/modalAlerts';
@@ -34,15 +33,35 @@ const useFormGestionarCompromisoPago = () => {
     });
 
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda
+        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
     } = useGestionarDeudas();
-
-    const [incumplioCompromisoPago, setIncumplioCompromisoPago] = useState(false)
+    const [incumplioCompromisoPago, setIncumplioCompromisoPago] = useState(false);
     const {
         compromisoPagoSeleccionado,
-        cargarCompromisos, setCompromisosPago,
-        setAbrirModalGestionarCompromiso } = useGestionarCompromisoPago();
+        cargarCompromisos,
+        setCompromisosPago,
+        setAbrirModalGestionarCompromiso
+    } = useGestionarCompromisoPago();
 
+    // Función para obtener reglas condicionales
+    const getRules = (fieldName: keyof typeof rules) => {
+        return incumplioCompromisoPago ? {} : rules[fieldName];
+    }
+
+    useEffect(() => {
+        if (incumplioCompromisoPago) {
+            // Resetear valores cuando se marca como incumplido
+            setValue("valorPago", 0);
+            setValue("banco", '');
+            setValue("cuenta", '');
+            setValue("tipoTransaccion", '');
+            setValue("abonoLiquidacion", '');
+            setValue("numeroDocumento", '');
+            setValue("observaciones", '');
+        }
+    }, [incumplioCompromisoPago, setValue]);
+
+    // Reglas base de validación
     const rules = {
         fechaPago: {
             required: 'La fecha de pago es obligatorio',
@@ -77,9 +96,11 @@ const useFormGestionarCompromisoPago = () => {
         },
         observaciones: {
             required: 'La observacion es obligatorio'
+        },
+        campoObligatorio: {
+            required: 'El campo es obligatorio'
         }
     };
-
 
     const handleAutocompleteChange = (field: keyof IGestionInDTO, value: any, returnObject = false) => {
         const val = returnObject ? value : value?.id || '';
@@ -102,7 +123,14 @@ const useFormGestionarCompromisoPago = () => {
     }
 
     const onSubmit = handleSubmit((data: FormValues) => {
+        console.log("@entra aquiii")
         actualizacionCopromisoPago(data)
+        try {
+            actualizacionCopromisoPago(data);
+        } catch (error) {
+            console.error('Submission error:', error);
+            // Show error message to user
+        }
     });
 
     const mensajeCorrecto = () => {
@@ -116,10 +144,10 @@ const useFormGestionarCompromisoPago = () => {
         setAbrirModalGestionarDeuda(false);
     }
 
-
     const actualizacionCopromisoPago = async (data: FormValues) => {
         if (incumplioCompromisoPago) {
             await INCUMPLIO_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId);
+            buscarTareasPendientes();
             mensajeCorrecto();
         } else {
             const enviagrabar: PagoGrabarOutDTO = {
@@ -135,13 +163,17 @@ const useFormGestionarCompromisoPago = () => {
             }
             await grabarPagosServicioWeb(enviagrabar);
             await DESACTIVAR_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId)
+            buscarTareasPendientes();
             mensajeCorrecto();
         }
         cargarCompromisos();
-
         setAbrirModalGestionarCompromiso(false)
     }
 
+    const buscarTareasPendientes = async () => {
+        const respuesta = await compromisoPagoServiceWeb(true)
+        setTareasPendientes(respuesta)
+    }
 
     return {
         control,
@@ -154,6 +186,7 @@ const useFormGestionarCompromisoPago = () => {
         onSubmit,
         formValues: watch(),
         rules,
+        getRules, // Añadimos la nueva función al return
         incumplioCompromisoPago,
         setIncumplioCompromisoPago,
         actualizacionCopromisoPago,

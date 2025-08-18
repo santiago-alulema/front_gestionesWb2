@@ -7,11 +7,12 @@ import { Alert, Button, Stack } from "@mui/material";
 import { compromisoPagoServiceWeb } from "@/services/Service";
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import { useNavigate } from "react-router";
+import { useGestionarDeudas } from "@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores";
 
 const MainLayout = () => {
     const { userData, logout } = useLogin();
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [tareasPendientes, setTareasPendientes] = useState<DebstByClientInfoInDTO[]>([]);
+    const { tareasPendientes, setTareasPendientes } = useGestionarDeudas();
     const navigate = useNavigate();
 
     const handleToggleSidebar = () => {
@@ -46,7 +47,6 @@ const MainLayout = () => {
                     {!!tareasPendientes.length && (<Stack sx={{ width: '100%' }} spacing={2} mb={2}>
                         <Alert severity="info">Tiene {tareasPendientes.length} tareas pendientes. <Button onClick={irTareasPendientes}> presione aqui para atender</Button></Alert>
                     </Stack>)}
-
                     <AppRoutes />
                 </div>
             </div>

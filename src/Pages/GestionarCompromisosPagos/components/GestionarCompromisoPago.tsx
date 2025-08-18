@@ -25,8 +25,7 @@ const GestionarCompromisoPago = () => {
         rules,
         onSubmit,
         setIncumplioCompromisoPago,
-        incumplioCompromisoPago,
-        actualizacionCopromisoPago } = useFormGestionarCompromisoPago();
+        incumplioCompromisoPago, getRules } = useFormGestionarCompromisoPago();
 
     useEffect(() => {
         cargarBancos();
@@ -74,11 +73,10 @@ const GestionarCompromisoPago = () => {
                     <CustomDatePickerForm
                         name="fechaPago"
                         label="Fecha de pago"
-                        requiredField
+                        requiredField={incumplioCompromisoPago ? true : false}
                         defaultValue={fechaActual}
                         control={control}
                         errors={errors}
-                        rules={rules.fechaPago}
                         disabled={incumplioCompromisoPago}
                     />
                 </Grid>
@@ -89,7 +87,6 @@ const GestionarCompromisoPago = () => {
                         fullWidth
                         control={control}
                         errors={errors}
-                        rules={rules.valorPago}
                         disabled={incumplioCompromisoPago}
                     />
                 </Grid>
@@ -103,8 +100,6 @@ const GestionarCompromisoPago = () => {
                         optionValue="id"
                         control={control}
                         errors={errors}
-                        rules={rules.banco}
-                        requiredField={true}
                         disabled={incumplioCompromisoPago}
                     />
                 </Grid>
@@ -118,7 +113,6 @@ const GestionarCompromisoPago = () => {
                         optionValue="id"
                         control={control}
                         errors={errors}
-                        rules={rules.cuenta}
                         requiredField={true}
                         disabled={incumplioCompromisoPago}
                     />
@@ -133,7 +127,6 @@ const GestionarCompromisoPago = () => {
                         optionValue="id"
                         control={control}
                         errors={errors}
-                        rules={rules.tipoTransaccion}
                         requiredField={true}
                         disabled={incumplioCompromisoPago}
                     />
@@ -148,7 +141,6 @@ const GestionarCompromisoPago = () => {
                         optionValue="id"
                         control={control}
                         errors={errors}
-                        rules={rules.abonoLiquidacion}
                         requiredField={true}
                         disabled={incumplioCompromisoPago}
                     />
@@ -158,10 +150,9 @@ const GestionarCompromisoPago = () => {
                         name="numeroDocumento"
                         control={control}
                         errors={errors}
-                        rules={rules.numeroDocumento}
                         label="Numero de Documento"
                         labelFullField="Numero de Documento"
-                        requiredField={true}
+                        requiredField={!incumplioCompromisoPago && !!rules.observaciones?.required}
                         disabled={incumplioCompromisoPago}
                     />
                 </Grid>
@@ -170,18 +161,17 @@ const GestionarCompromisoPago = () => {
                         name="observaciones"
                         control={control}
                         errors={errors}
-                        rules={rules.observaciones}
                         label="Observaciones"
                         labelFullField="Observaciones"
-                        requiredField={true}
+                        requiredField={!incumplioCompromisoPago} // Esto controla el asterisco visual
+                        disabled={incumplioCompromisoPago}
                         multiline
                         rows={3}
-                        disabled={incumplioCompromisoPago}
                     />
                 </Grid>
                 <Grid size={{ lg: 12 }} >
                     <Box display="flex" justifyContent="flex-end" gap={2}>
-                        <Button onClick={onSubmit} variant='contained' >Grabar</Button>
+                        <Button onClick={onSubmit} type="submit" variant='contained' >Grabar</Button>
                         <Button color='inherit' variant='contained'>Cancelar</Button>
                     </Box>
                 </Grid>

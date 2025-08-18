@@ -15,7 +15,7 @@ interface IGestionarDeudasContext {
     telefonosActivos: TelefonosClientesActivos[];
     deudorSeleccionado: ClientInfo | null;
     deudaSeleccionada: DebstByClientInfoInDTO | null;
-
+    tareasPendientes: DebstByClientInfoInDTO[];
     // Estados de grabación
     grabarGestion: IGestionInDTO | null;
     grabarCompromiso: ICompromisoPagoOutDTO | null;
@@ -41,6 +41,7 @@ interface IGestionarDeudasContext {
     setEmpresaSeleccionada: React.Dispatch<React.SetStateAction<string>>;
     setSinGestionar: React.Dispatch<React.SetStateAction<boolean>>;
     setTelefonosActivos: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>;
+    setTareasPendientes: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO[]>>;
 
     // Métodos
     obtenerTelefonosCliente: (cedulaCliente: string) => Promise<void>;
@@ -57,13 +58,14 @@ export const useGestionarDeudas = () => {
 };
 
 export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Estados existentes
+
     const [gestionesPadre, setGestionesPadre] = useState<TipoGestioneOutDTO[]>([]);
     const [gestionHijo, setGestionHijo] = useState<TipoGestioneOutDTO[]>([]);
     const [telefonosActivos, setTelefonosActivos] = useState<TelefonosClientesActivos[]>([]);
     const [deudorSeleccionado, setDeudorSeleccionado] = useState<ClientInfo | null>(null);
     const [deudaSeleccionada, setDeudaSeleccionada] = useState<DebstByClientInfoInDTO | null>(null);
     const [abrirModalGestionarDeuda, setAbrirModalGestionarDeuda] = useState<boolean>(false);
+    const [tareasPendientes, setTareasPendientes] = useState<DebstByClientInfoInDTO[]>([]);
 
     const [abrirModalInformacionDeuda, setAbrirModalInformacionDeuda] = useState<boolean>(false);
     const [empresaSeleccionada, setEmpresaSeleccionada] = useState<string>("TODOS");
@@ -113,6 +115,8 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
                 grabarCompromiso,
                 grabarPago,
                 abrirModalGestionarDeuda,
+                setTareasPendientes,
+                tareasPendientes,
 
                 // Setters
                 setDeudaSeleccionada,

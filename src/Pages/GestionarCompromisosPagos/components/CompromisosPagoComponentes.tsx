@@ -2,9 +2,11 @@ import CustomModalTs from '@/components/CustomModalTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
+import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import GestionarCompromisoPago from '@/Pages/GestionarCompromisosPagos/components/GestionarCompromisoPago';
 import { ConfiguracionColumnasCompromisosPago } from '@/Pages/GestionarCompromisosPagos/config/ConfiguracionColumnasCompromisosPago'
 import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
+import { compromisoPagoServiceWeb } from '@/services/Service';
 import { useEffect } from 'react'
 
 const CompromisosPagoComponentes = () => {
@@ -15,10 +17,15 @@ const CompromisosPagoComponentes = () => {
         setAbrirModalGestionarCompromiso,
         abrirModalGestionarCompromiso } = useGestionarCompromisoPago();
 
+
     const selectDebt = (row: DebstByClientInfoInDTO) => {
         setCompromisoPagoSeleccionado(row)
         setAbrirModalGestionarCompromiso(true)
     }
+
+
+
+
 
     const actionsConfig: IActionConfig[] = [
         {
