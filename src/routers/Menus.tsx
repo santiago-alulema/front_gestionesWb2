@@ -17,7 +17,8 @@ import Deudas from "@/Pages/DeudoresGestionPage/components/Deudas";
 import InformacionGeneralGestionesIndex from "@/Pages/InformacionGeneralGestiones/InformacionGeneralGestionesIndex";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import { DashboardGestiones } from "@/components/Graficos/DashboardGestiones";
-
+import EditarGestionesIndex from "@/Pages/EditarGestiones/EditarGestionesIndex";
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -30,6 +31,19 @@ const Menus: MenuItem[] = [
     route: "/dashboard",
     component: <DashboardGestiones />,
     icon: WhiteIcon(HomeIcon),
+  },
+  {
+    name: "Administracion",
+    roles: ["admin"],
+    icon: WhiteIcon(SupervisorAccountIcon),
+    children: [
+      {
+        name: "Editar Gestiones",
+        roles: ["admin"],
+        route: "/mantenimiento/editar-gestiones",
+        component: <EditarGestionesIndex />
+      }
+    ],
   },
   {
     name: "Subir Archivos",
@@ -84,12 +98,12 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Reportes",
-    roles: ["admin"],
+    roles: ["admin", "user"],
     icon: WhiteIcon(SummarizeIcon),
     children: [
       {
         name: "Reporte General",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/gestion/reporte-general",
         component: <InformacionGeneralGestionesIndex />
       },

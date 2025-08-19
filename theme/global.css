@@ -85,3 +85,29 @@
 .sin-gestionar-checkbox:hover .MuiCheckbox-root {
   color: #1976d2;
 }
+
+
+@media (max-width: 600px) {
+  .MuiSvgIcon-root {
+    font-size: 16px !important; /* más pequeño en móviles */
+  }
+
+  .MuiTableBody-root .MuiTableCell-root {
+    font-size: 11px !important; /* texto más compacto */
+    padding: 4px;
+  }
+
+  .MuiPickersInputBase-root {
+    width: 180px;
+    height: 40px;
+  }
+
+  .sin-gestionar-container {
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .sin-gestionar-label {
+    font-size: 12px;
+  }
+}

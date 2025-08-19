@@ -40,6 +40,7 @@ const CompromisosPagoComponentes = () => {
     useEffect(() => {
         cargarCompromisos()
     }, [])
+
     const [autoRefresh, setAutoRefresh] = useState(true);
 
     useEffect(() => {
@@ -69,6 +70,7 @@ const CompromisosPagoComponentes = () => {
                 <CustomModalTs open={abrirModalGestionarCompromiso}
                     positionLeft="23%"
                     width={1060}
+                    height={'70%'}
                     handleClose={() => setAbrirModalGestionarCompromiso(false)}>
                     {/* <GestionarCompromisoPago /> */}
                     <TabsGestionarTareas />
