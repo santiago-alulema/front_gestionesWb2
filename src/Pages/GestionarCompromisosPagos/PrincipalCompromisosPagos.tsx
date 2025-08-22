@@ -12,7 +12,7 @@ const PrincipalCompromisosPagos = () => {
     return (
         <BasePage
             routers={routes}
-            title="Gestionar Compromisos de Pago"
+            title="Gestionar Tareas"
         >
             <GestionarCompromisoPagoProvider>
                 <CompromisosPagoComponentes />

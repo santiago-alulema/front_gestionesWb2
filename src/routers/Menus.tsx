@@ -27,7 +27,7 @@ const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
 const Menus: MenuItem[] = [
   {
     name: "Home",
-    roles: ["admin", "user"],
+    roles: ["admin"],
     route: "/dashboard",
     component: <DashboardGestiones />,
     icon: WhiteIcon(HomeIcon),
@@ -76,7 +76,7 @@ const Menus: MenuItem[] = [
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
-        name: "Ver Clientes",
+        name: "Ver Deudores",
         roles: ["admin", "user"],
         route: "/gestion/ver-deudores",
         component: <Deudores />
@@ -89,7 +89,7 @@ const Menus: MenuItem[] = [
         hidden: true
       },
       {
-        name: "Gestionar Compromisos",
+        name: "Gestionar Tareas",
         roles: ["admin", "user"],
         route: "/gestion/compromisos-pagos",
         component: <PrincipalCompromisosPagos />

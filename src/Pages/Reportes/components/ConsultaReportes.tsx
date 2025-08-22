@@ -29,7 +29,7 @@ const ConsultaReportes = () => {
                         size="small"
                     >
                         <MenuItem value="gestiones">Gestiones</MenuItem>
-                        <MenuItem value="compromisos">Compromisos</MenuItem>
+                        <MenuItem value="compromisos">Tareas</MenuItem>
                         <MenuItem value="pagos">Pagos</MenuItem>
                     </Select>
                 </Grid>

@@ -4,7 +4,10 @@ interface ClientInfo {
     direccion: string;
     telefono: string;
     correo: string;
-    descripcion: string;
+    numeroDeudas: string;
+    tramos: string;
+    gestor: string;
+
 }
 
 export default ClientInfo

@@ -17,9 +17,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 const CompromisosPagosComponents = () => {
-    const [valorPago, setValorPago] = useState<string>("0.0")
     const fechaActual = dayjs().format('YYYY-MM-DD')
-    const [formasContactoCliente, setFormasContactoCliente] = useState<TipoContactoGestionInDTO[]>([])
     const [tiposTareas, setTiposTareas] = useState<TiposTareaInDTO[]>([]);
     const onInit = async () => {
         const respuesta = await tiposTareasServicioWeb();

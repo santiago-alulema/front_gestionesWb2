@@ -1,13 +1,15 @@
 import BasePage from '@/components/BasePage'
+import { EditarGestionesProvider } from '@/Pages/EditarGestiones/contexts/EditarGestionesContext'
 import TabMantenimientoGestiones from '@/Pages/EditarGestiones/Pages/TabMantenimientoGestiones'
-import React from 'react'
 
 const EditarGestionesIndex = () => {
     return (
         <>
-            <BasePage title='Administrar Gestiones'>
-                <TabMantenimientoGestiones />
-            </BasePage>
+            <EditarGestionesProvider>
+                <BasePage title='Administrar Gestiones'>
+                    <TabMantenimientoGestiones />
+                </BasePage>
+            </EditarGestionesProvider>
         </>
     )
 }

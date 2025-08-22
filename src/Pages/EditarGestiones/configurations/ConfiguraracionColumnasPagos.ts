@@ -1,57 +1,63 @@
 import { Column } from '@devexpress/dx-react-grid';
 import { useMemo } from 'react';
 
-export const ConfiguracionColumnasCompromisosPago = () => {
+export const ConfiguraracionColumnasPagos = () => {
 
     const columns = useMemo<Column[]>(
         () => [
             {
-                name: 'cedulaCliente',
+                name: 'cedula',
                 title: 'Cedula',
                 width: '10%',
                 align: 'center'
             },
             {
-                name: 'nombreCliente',
-                title: 'Cliente',
-                width: '15%',
-                align: 'left'
-            },
-            {
-                name: 'numeroFactura',
-                title: 'º Factura',
+                name: 'nombre',
+                title: 'Deudor',
                 width: '10%',
                 align: 'left'
             },
             {
-                name: 'tipoTarea',
-                title: 'Tipo Tarea',
-                width: '15%',
-                align: 'left'
-            },
-            {
-                name: 'valorCompromisoPago',
-                title: 'Valor del Compromiso',
-                width: '12%',
-                align: 'left'
-            },
-            {
-                name: 'saldoDeuda',
-                title: 'Deuda Total',
-                width: '8%',
-                align: 'left'
-            },
-            {
-                name: 'montoCobrar',
-                title: 'Monto a Cobrar',
-                width: '10%',
-                align: 'left'
-            },
-            {
-                name: 'tramo',
-                title: 'Tramo',
+                name: 'fechaPago',
+                title: 'Fecha',
                 width: '10%',
                 align: 'center'
+            },
+            {
+                name: 'banco',
+                title: 'Banco',
+                width: '10%',
+                align: 'left'
+            },
+            {
+                name: 'cuenta',
+                title: 'Cuenta',
+                width: '10%',
+                align: 'left'
+            },
+            {
+                name: 'tipoTransaccion',
+                title: 'Tipo Transaccion',
+                width: '10%',
+                align: 'left'
+            },
+            {
+                name: 'abonoLiquidacion',
+                title: 'Abono/Liquidacion',
+                width: '10%',
+                align: 'left'
+            },
+            {
+                name: 'numeroDocumenro',
+                title: 'Numero Documento',
+                width: '10%',
+                align: 'left'
+            },
+            {
+                name: 'observaciones',
+                title: 'Observacion',
+                width: '10%',
+                align: 'left'
             },
             {
                 name: 'actions',
@@ -60,6 +66,7 @@ export const ConfiguracionColumnasCompromisosPago = () => {
                 width: '10%',
                 align: 'center',
                 hiddenFilterColumn: true
+
             }
         ],
         []

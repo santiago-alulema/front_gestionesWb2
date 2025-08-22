@@ -1,6 +1,7 @@
 import CustomAutocompleteTs from '@/components/DataGridCommon/CustomAutocompleteTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
+import { useLoading } from '@/components/LoadingContext';
 import ClientInfo from '@/model/Dtos/In/ClientInfo';
 import { ConfigurarColumnaDeudores } from '@/Pages/DeudoresGestionPage/config/ConfigurarColumnaDeudores';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
@@ -16,16 +17,19 @@ const Deudores = () => {
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([{ id: "TODOS", nombre: "Todos" }]);
     const { setDeudorSeleccionado, sinGestionar, setSinGestionar, empresaSeleccionada, setEmpresaSeleccionada } = useGestionarDeudas();
     const navigate = useNavigate();
+    const { startLoading, stopLoading } = useLoading();
 
     useEffect(() => {
         onInit();
     }, [])
 
     const onInit = async () => {
+        startLoading()
         const listaEmpresaRespuesta = await empresasServicioWeb();
         setEmpresas(prev => [...prev, ...listaEmpresaRespuesta]);
         const response = await allDeuodoresServiceWeb(empresaSeleccionada, sinGestionar)
         setClientDebt(response)
+        stopLoading();
     }
 
     const viewDebtsClient = (row: ClientInfo) => {

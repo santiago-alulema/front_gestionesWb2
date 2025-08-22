@@ -1,45 +1,51 @@
 import { Column } from '@devexpress/dx-react-grid';
 import { useMemo } from 'react';
 
-export const ConfigurarColumnaDeudores = () => {
+export const ConfiguracionColumnasTareas = () => {
 
     const columns = useMemo<Column[]>(
         () => [
             {
                 name: 'cedula',
                 title: 'Cedula',
-                width: '15%',
+                width: '14%',
                 align: 'center'
             },
             {
                 name: 'nombre',
                 title: 'Deudor',
-                width: '20%',
+                width: '16%',
                 align: 'left'
             },
             {
-                name: 'numeroDeudas',
-                title: 'Creditos',
-                width: '15%',
+                name: 'fechaCompromiso',
+                title: 'Fecha Recordatorio',
+                width: '14%',
                 align: 'center'
             },
             {
-                name: 'tramos',
-                title: 'Tramo',
-                width: '10%',
+                name: 'montoComprometido',
+                title: 'Valor',
+                width: '14%',
                 align: 'left'
             },
             {
-                name: 'gestor',
-                title: 'Gestor',
-                width: '30%',
+                name: 'tipoTarea',
+                title: 'Tipo Tarea',
+                width: '14%',
+                align: 'left'
+            },
+            {
+                name: 'observaciones',
+                title: 'Observacion',
+                width: '14%',
                 align: 'left'
             },
             {
                 name: 'actions',
                 title: '',
                 getCellValue: (row: any) => row,
-                width: '10%',
+                width: '14%',
                 align: 'center',
                 hiddenFilterColumn: true
 

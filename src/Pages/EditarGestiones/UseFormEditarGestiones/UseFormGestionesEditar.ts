@@ -3,10 +3,11 @@ import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
 import { compromisoPagoServiceWeb, grabarGestionServicioWeb } from '@/services/Service';
-import { DESACTIVAR_COMPROMISO_PAGO } from '@/Pages/GestionarCompromisosPagos/services/GestionarCompromisosPagoServicioWeb';
-import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
+import { useEditarGestiones } from '@/Pages/EditarGestiones/contexts/EditarGestionesContext';
+import { editarGestionServicioWeb, eliminarGestionServicioWeb, obtenerGestionesServicioWeb } from '@/Pages/EditarGestiones/services/ServiciosWebEditarGestiones';
+import { UpdateGestionDto } from '@/Pages/EditarGestiones/models/UpdateGestionDto';
 
-export const useFormTareasLLamadas = () => {
+export const UseFormGestionesEditar = () => {
 
     const {
         control,
@@ -27,13 +28,15 @@ export const useFormTareasLLamadas = () => {
         }
     });
 
-    const {
-        deudaSeleccionada, setTareasPendientes
-    } = useGestionarDeudas();
+    // const {
+    //     deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
+    // } = useGestionarDeudas();
+
 
     const {
-        compromisoPagoSeleccionado, setAbrirModalGestionarCompromiso, cargarCompromisos
-    } = useGestionarCompromisoPago();
+        setAbrirModalEditarGestiones,
+        setGestionesAEditar,
+        gestionSeleccionada } = useEditarGestiones();
 
     const rules = {
         email: {
@@ -67,34 +70,38 @@ export const useFormTareasLLamadas = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
-        const enviagrabar: IGestionInDTO = {
-            idDeuda: deudaSeleccionada.idDeuda,
-            idTipoGestion: '3',
-            descripcion: data.observaciones,
-            IdResultado: data.idResultado,
-            idTipoContactoCliente: data.idTipoContactoCliente,
-            IdRespuesta: data.idRespuesta,
-            email: data.email
+        const enviagrabar: UpdateGestionDto = {
+            Descripcion: data.observaciones,
+            Email: data.email,
+            IdTipoContactoResultado: data.idTipoContactoCliente,
+            IdTipoResultado: data.idResultado,
+            IdRespuestaTipoContacto: data.idRespuesta
         }
-        await grabarGestionServicioWeb(enviagrabar);
-        await DESACTIVAR_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId)
-        buscarTareasPendientes();
+        await editarGestionServicioWeb(gestionSeleccionada.idGestion, enviagrabar);
         const configAlert = {
             title: "Correcto",
-            message: "Se grabo correctamente la Gestion",
+            message: "Se actualizo correctamente la Gestion",
             type: 'success',
             callBackFunction: false
         };
         showAlert(configAlert);
-        cargarCompromisos();
-        setAbrirModalGestionarCompromiso(false)
+        obtenerTodasLasGestiones();
+        setAbrirModalEditarGestiones(false)
     });
 
-    const buscarTareasPendientes = async () => {
-        const respuesta = await compromisoPagoServiceWeb(true)
-        setTareasPendientes(respuesta)
+    const obtenerTodasLasGestiones = async () => {
+        const respuesta = await obtenerGestionesServicioWeb();
+        setGestionesAEditar(respuesta);
     }
 
+
+    const iniciarGestion = () => {
+        setValue("idResultado", gestionSeleccionada.idTipoResultado)
+        setValue("idTipoContactoCliente", gestionSeleccionada.idTipoContactoResultado)
+        setValue("idRespuesta", gestionSeleccionada.idRespuestaTipoContacto)
+        setValue("email", gestionSeleccionada.email)
+        setValue("observaciones", gestionSeleccionada.descripcion)
+    }
 
 
     return {
@@ -107,6 +114,7 @@ export const useFormTareasLLamadas = () => {
         handleTextChange,
         onSubmit,
         formValues: watch(),
-        rules
+        rules,
+        iniciarGestion
     };
 };

@@ -1,4 +1,7 @@
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
+import ListarPagos from '@/Pages/EditarGestiones/components/ListarPagos';
+import ListarTareas from '@/Pages/EditarGestiones/components/ListarTareas';
+import ListasGestiones from '@/Pages/EditarGestiones/components/ListasGestiones';
 import { Box, Tab, Tabs } from '@mui/material';
 import { useState } from 'react'
 
@@ -44,20 +47,20 @@ const TabMantenimientoGestiones = () => {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Gestionar Tarea" {...a11yProps(0)} />
-                        <Tab label="Movimientos Deuda" {...a11yProps(1)} />
-                        <Tab label="Telefonos Deudor" {...a11yProps(2)} />
+                        <Tab label="Gestiones" {...a11yProps(0)} />
+                        <Tab label="Pagos" {...a11yProps(1)} />
+                        <Tab label="Tareas" {...a11yProps(2)} />
 
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <p>tab Gestiones</p>
+                    <ListasGestiones />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    <p>tab Pagos</p>
+                    <ListarPagos />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
-                    <p>tab Tareas</p>
+                    <ListarTareas />
                 </CustomTabPanel>
             </Box>
         </>
