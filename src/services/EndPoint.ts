@@ -5,6 +5,12 @@ const END_POINT = {
     LISTAR_DEUDORES: 'Cliente/listar-clientes',
     UPLOAD_TELEFONOS_DEUDORES: 'Cliente/grabar-telefonos-cliente',
     LISTAR_DEUDAS_POR_CLIENTE: 'Cliente/deudas-por-cliente',
+
+    BUCAR_DEUDA_POR_ID: 'Cliente/buscar-deuda-por-id',
+    BUCAR_DEUDOR_POR_ID: 'Cliente/buscar-cliente-por-id',
+
+
+
     TIPO_GESTIONES_PADRE: 'TipoGestion/tipo-gestion-padre',
     TIPO_GESTIONES_HIJO_POR_PADRE_ID: 'TipoGestion/tipo-gestion-por-padre',
     TELEFONOS_ACTIVOS_CLIENTE: 'Cliente/listar-telefonos-activos-cliente',

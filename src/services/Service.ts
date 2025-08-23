@@ -181,6 +181,19 @@ export const deudasPorClienteServiceWeb = (codigoCliente: String, empresa: strin
     `${END_POINT.LISTAR_DEUDAS_POR_CLIENTE}/${codigoCliente}?empresa=${empresa}&sinGestionar=${sinGestionar}`,
   );
 
+export const buscarDeudaPorIdServicioWeb = (codigoDeuda: string) =>
+  request<DebstByClientInfoInDTO>(
+    'get',
+    `${END_POINT.BUCAR_DEUDA_POR_ID}/${codigoDeuda}`,
+  );
+
+export const buscarDeudorPorIdServicioWeb = (codigoDeudor: string) =>
+  request<ClientInfo>(
+    'get',
+    `${END_POINT.BUCAR_DEUDOR_POR_ID}/${codigoDeudor}`,
+  );
+
+
 export const compromisoPagoServiceWeb = (esHoy: boolean = false) =>
   request<DebstByClientInfoInDTO[]>(
     'get',

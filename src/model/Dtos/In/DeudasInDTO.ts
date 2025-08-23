@@ -27,6 +27,7 @@ export interface DeudasInDTO {
   valorCuota?: number | null;
   numeroCuotas?: number | null;
   tipoTarea?: string | null;
-  valorCompromisoPago?: string
+  valorCompromisoPago?: string;
+  idDeudor?: string
 }
 export default DeudasInDTO;

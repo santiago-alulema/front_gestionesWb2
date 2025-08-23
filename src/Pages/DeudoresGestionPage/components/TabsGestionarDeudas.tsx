@@ -40,6 +40,7 @@ const TabsGestionarDeudas = () => {
     const [value, setValue] = useState(0);
     const { deudorSeleccionado, telefonosActivos, setTelefonosActivos } = useGestionarDeudas();
 
+    console.log("deudorSeleccionado", deudorSeleccionado)
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };

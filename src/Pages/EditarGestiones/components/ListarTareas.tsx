@@ -5,6 +5,8 @@ import ModalEditarTareas from '@/Pages/EditarGestiones/components/ModalEditarTar
 import { ConfiguracionColumnasTareas } from '@/Pages/EditarGestiones/configurations/ConfiguracionColumnasTareas';
 import { useEditarGestiones } from '@/Pages/EditarGestiones/contexts/EditarGestionesContext';
 import { TareaDto } from '@/Pages/EditarGestiones/models/TareaDto';
+import { eliminarTareaServicioWeb } from '@/Pages/EditarGestiones/services/ServiciosWebEditarGestiones';
+import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect } from 'react';
@@ -20,6 +22,27 @@ const ListarTareas = () => {
         setAbrirModalEditarTareas(true)
     }
 
+    const eliminarTarea = async (item: TareaDto) => {
+        const configAlert = {
+            title: "Advertencia",
+            message: "¿Desea eliminar la <strong>TAREA</strong>?",
+            type: 'warning',
+            callBackFunction: false
+        };
+        const respuesta = await showAlertConfirm(configAlert);
+        if (respuesta) {
+            await eliminarTareaServicioWeb(item.idCompromiso);
+            const configAlert = {
+                title: "Infomacion",
+                message: "El <strong>PAGO</strong> se elimino exitosamente!",
+                type: 'info',
+                callBackFunction: true,
+                onCloseFunction: obtenerTareasAEditar
+            };
+            showAlert(configAlert)
+        }
+    }
+
     const actionsConfig: IActionConfig[] = [
         {
             tooltip: "Ver",
@@ -32,7 +55,7 @@ const ListarTareas = () => {
         },
         {
             tooltip: "Eliminar",
-            onClick: () => { },
+            onClick: eliminarTarea,
             icon: <DeleteIcon />,
             hidden: false,
             sizeIcon: 'small',

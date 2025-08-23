@@ -17,6 +17,8 @@ import GestionarDeuda from "@/Pages/DeudoresGestionPage/components/GestionarDeud
 import TabInformacionDeuda from "@/Pages/DeudoresGestionPage/components/TabInformacionDeuda";
 import InfoIcon from '@mui/icons-material/Info';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+
 const Deudas = () => {
     const navigate = useNavigate();
     const { deudorSeleccionado,
@@ -45,6 +47,25 @@ const Deudas = () => {
         setAbrirModalInformacionDeuda(true)
     }
 
+    const abrirNuevaVentanaDeuda = (item: DebstByClientInfoInDTO) => {
+        console.log(item)
+        //  const queryParams = new URLSearchParams({
+        //     idDeuda: item.id.toString(),
+        //     idDeudor: deudorSeleccionado?.cedula || idDeudor || '',
+        //     empresaId: empresaSeleccionada || empresaId || ''
+        // }).toString();
+
+        //      const deudaId = searchParams.get("deudaId");
+        // const deudorId = searchParams.get("deudorId");
+        // Abrir nueva pestaña
+        const nuevaVentana = window.open(`/gestionar-deuda-nuevo?deudaId=${item.idDeuda}&deudorId=${item.idDeudor}`, '_blank');
+
+        // Opcional: enfocar la nueva ventana
+        if (nuevaVentana) {
+            nuevaVentana.focus();
+        }
+    }
+
     const actionsConfig: IActionConfig[] = [
         {
             tooltip: "Ver",
@@ -53,6 +74,17 @@ const Deudas = () => {
             hidden: false,
             sizeIcon: 'small',
             label: 'Info',
+            typeInput: 'button',
+            inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
+        },
+        {
+            tooltip: "Nueva Ventana",
+            onClick: abrirNuevaVentanaDeuda,
+            icon: <FiberNewIcon />,
+            hidden: false,
+            sizeIcon: 'small',
+            label: 'Vnt',
+
             typeInput: 'button',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }

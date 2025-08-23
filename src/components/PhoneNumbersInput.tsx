@@ -12,7 +12,14 @@ import {
     Paper,
     Button,
     useMediaQuery,
-    useTheme
+    useTheme,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+    FormControlLabel,
+    Checkbox
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,6 +28,7 @@ import { desactivarTelefonoCliente, grabarTelefonoCliente, telefonosActivosClien
 import CustomModalTs from '@/components/CustomModalTs';
 import PhonesClientsOutDTO from '@/model/Dtos/Out/PhonesClientsOutDTO';
 import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
+import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 
 interface phoneNumbersProps {
     phones: TelefonosClientesActivos[],
@@ -41,6 +49,29 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     const [idTelefonoElimnar, setIdTelefonoEliminar] = useState<string>("");
     const [observacionEliminar, setObservacionEliminar] = useState<string>("");
     const [origenTelefono, setOrigenTelefono] = useState<string>("");
+    const [checked, setChecked] = useState<boolean>(false);
+    const [filtrarActivos, setFiltrarActivos] = useState<boolean>(false);
+
+    const [seleccionarPropietario, setSeleccionarPropietario] = useState('');
+
+    const seleccionarPropietarioTelefono = (event: SelectChangeEvent) => {
+        setSeleccionarPropietario(event.target.value);
+    };
+
+    const seleccionarFiltrarActivos = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFiltrarActivos(event.target.checked);
+        if (event.target.checked) {
+            const phoneFilter = phones.filter(x => x.esValido)
+            setPhones(phoneFilter)
+        } else {
+            await actualizarTelefonos();
+        }
+    };
+
+
+    const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    };
 
     const actualizarTelefonos = async () => {
         const nuevosTelefonos = await telefonosActivosClientes(cedula);
@@ -83,9 +114,10 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     const grabarTelefonoNuevo = async () => {
         const telegonoNuevo: PhonesClientsOutDTO = {
             cedula: cedula,
-            esValido: true,
+            esValido: !checked,
             origen: origenTelefono,
-            telefono: phone
+            telefono: phone,
+            propietario: seleccionarPropietario
         }
 
         await grabarTelefonoCliente(telegonoNuevo);
@@ -160,7 +192,22 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             <Typography variant="h6" gutterBottom textAlign="center">
                 Números de Teléfono
             </Typography>
-
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={filtrarActivos}
+                        onChange={seleccionarFiltrarActivos}
+                        icon={<CheckBoxOutlineBlank />}
+                        checkedIcon={<CheckBox />}
+                        color="primary"
+                    />
+                }
+                label={
+                    <Typography variant="body1" color={filtrarActivos ? 'green' : 'black'}>
+                        Filtrar solo los activos
+                    </Typography>
+                }
+            />
             <Stack direction={isMobile ? 'column' : 'row'} spacing={1} alignItems="center" >
                 <TextField
                     label="Número de teléfono"
@@ -201,7 +248,14 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                                     </IconButton>
                                 }
                             >
-                                <ListItemText primary={num.telefono} />
+                                <ListItemText primary={
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        {num.telefono}
+                                        <strong>{num.propietario}</strong>
+                                        {num.esValido}
+                                        <strong style={{ color: num.esValido ? "green" : "red" }}>{num.esValido ? "Activo" : "Inactivo"}</strong>
+                                    </div>
+                                } />
                             </ListItem>
                         ))}
                     </List>
@@ -236,6 +290,40 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                     <Typography textAlign='center' variant='h6' mb={3}>
                         Escriba el origen del telefono: <strong>{phone}</strong> para registrar.
                     </Typography>
+                    <Box sx={{ minWidth: 120 }} mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="relation-select-label">Tipo de Relación</InputLabel>
+                            <Select
+                                labelId="relation-select-label"
+                                id="relation-select"
+                                value={seleccionarPropietario}
+                                label="Tipo de Relación"
+                                onChange={seleccionarPropietarioTelefono}
+                            >
+                                <MenuItem value="deudor">Deudor</MenuItem>
+                                <MenuItem value="familiar">Familiar</MenuItem>
+                                <MenuItem value="conyugue">Cónyuge</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={checked}
+                                    onChange={handleChangeCheck}
+                                    icon={<CheckBoxOutlineBlank />}
+                                    checkedIcon={<CheckBox />}
+                                    color="primary"
+                                />
+                            }
+                            label={
+                                <Typography variant="body1" color={checked ? 'error' : 'textPrimary'}>
+                                    ¿El teléfono es inválido?
+                                </Typography>
+                            }
+                        />
+                    </Box>
                     <TextField variant='outlined' multiline={true} rows={5} onChange={(e) => setOrigenTelefono(e.target.value)} fullWidth></TextField>
                     <Button variant='contained' sx={{ mt: 2, borderRadius: 5 }} fullWidth onClick={grabarTelefonoNuevo}>Grabar Telefono</Button>
                 </Paper>

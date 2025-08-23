@@ -19,6 +19,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import { DashboardGestiones } from "@/components/Graficos/DashboardGestiones";
 import EditarGestionesIndex from "@/Pages/EditarGestiones/EditarGestionesIndex";
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import NuevaVentanaGestionarDeuda from "@/Pages/EditarGestiones/Pages/NuevaVentanaGestionarDeuda";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -33,13 +34,21 @@ const Menus: MenuItem[] = [
     icon: WhiteIcon(HomeIcon),
   },
   {
+    name: "Home",
+    roles: ["admin", "user"],
+    route: "/gestionar-deuda-nuevo",
+    component: <NuevaVentanaGestionarDeuda />,
+    icon: WhiteIcon(HomeIcon),
+    hidden: true
+  },
+  {
     name: "Administracion",
-    roles: ["admin"],
+    roles: ["admin", "user"],
     icon: WhiteIcon(SupervisorAccountIcon),
     children: [
       {
         name: "Editar Gestiones",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/mantenimiento/editar-gestiones",
         component: <EditarGestionesIndex />
       }
