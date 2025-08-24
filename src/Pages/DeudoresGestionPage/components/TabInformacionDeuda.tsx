@@ -2,6 +2,7 @@ import InformacionCompletaDeuda from '@/Pages/DeudoresGestionPage/components/Inf
 import MovimientosDeuda from '@/Pages/DeudoresGestionPage/components/MovimientosDeuda';
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 interface TabPanelProps {
     children?: React.ReactNode;

@@ -1,11 +1,13 @@
 import CustomModalTs from '@/components/CustomModalTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
+import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import ModalEditarTareas from '@/Pages/EditarGestiones/components/ModalEditarTareas';
 import { ConfiguracionColumnasTareas } from '@/Pages/EditarGestiones/configurations/ConfiguracionColumnasTareas';
 import { useEditarGestiones } from '@/Pages/EditarGestiones/contexts/EditarGestionesContext';
 import { TareaDto } from '@/Pages/EditarGestiones/models/TareaDto';
 import { eliminarTareaServicioWeb } from '@/Pages/EditarGestiones/services/ServiciosWebEditarGestiones';
+import { compromisoPagoServiceWeb } from '@/services/Service';
 import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +18,9 @@ const ListarTareas = () => {
     const {
         obtenerTareasAEditar,
         tareasAEditar, setTareaSeleccionada, setAbrirModalEditarTareas, abrirModalEditarTareas } = useEditarGestiones();
+    const {
+        setTareasPendientes
+    } = useGestionarDeudas();
 
     const editarTarea = (item: TareaDto) => {
         setTareaSeleccionada(item);
@@ -32,6 +37,7 @@ const ListarTareas = () => {
         const respuesta = await showAlertConfirm(configAlert);
         if (respuesta) {
             await eliminarTareaServicioWeb(item.idCompromiso);
+            buscarTareasPendientes();
             const configAlert = {
                 title: "Infomacion",
                 message: "El <strong>PAGO</strong> se elimino exitosamente!",
@@ -42,6 +48,12 @@ const ListarTareas = () => {
             showAlert(configAlert)
         }
     }
+
+    const buscarTareasPendientes = async () => {
+        const respuesta = await compromisoPagoServiceWeb(true)
+        setTareasPendientes(respuesta)
+    }
+
 
     const actionsConfig: IActionConfig[] = [
         {

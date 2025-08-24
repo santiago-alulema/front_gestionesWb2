@@ -13,10 +13,13 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { es } from "date-fns/locale"; // Opcional: para formato en español
+import { useSearchParams } from "react-router";
 
 const InformacionCompletaDeuda = () => {
     const { deudaSeleccionada, setAbrirModalInformacionDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
-
+    const [searchParams] = useSearchParams();
+    const deudaId = searchParams.get("deudaId");
+    const deudorId = searchParams.get("deudorId");
     if (!deudaSeleccionada) {
         return (
             <Typography variant="body1" color="textSecondary">
@@ -60,8 +63,12 @@ const InformacionCompletaDeuda = () => {
                     >
                         <Typography variant="h6" component="h2" sx={{ fontWeight: "bold" }}>
                             Detalles de la Deuda
-                        </Typography>
-                        <Button variant="contained" sx={{ borderRadius: 5 }} onClick={seleccionarDeudaFuncion}>Gestionar</Button>
+                        </Typography>{
+                            !deudaId && (
+                                <Button variant="contained" sx={{ borderRadius: 5 }} onClick={seleccionarDeudaFuncion}>Gestionar</Button>
+                            )
+                        }
+
                     </Box>
 
                     <Divider sx={{ mb: 1 }} />
