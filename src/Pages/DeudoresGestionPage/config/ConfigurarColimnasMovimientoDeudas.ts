@@ -12,7 +12,7 @@ export const ConfigurarColimnasMovimientoDeudas = () => {
                 align: 'center'
             },
             {
-                name: 'fecha',
+                name: 'fecha_formateada',
                 title: 'Fecha Movimiento',
                 width: '15%',
                 align: 'center'

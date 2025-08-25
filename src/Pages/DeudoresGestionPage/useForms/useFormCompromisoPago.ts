@@ -6,6 +6,8 @@ import { compromisoPagoServiceWeb, grabarCompromisoPago, grabarGestionServicioWe
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
+import { useState } from 'react';
+import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO';
 
 export const useFormCompromisoPago = () => {
 
@@ -27,6 +29,11 @@ export const useFormCompromisoPago = () => {
         }
     });
 
+    const [seleccionTipoTarea, setSeleccionTipoTarea] = useState<TiposTareaInDTO>({
+        id: '',
+        nombre: ''
+    });
+
     const {
         deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
     } = useGestionarDeudas();
@@ -36,7 +43,9 @@ export const useFormCompromisoPago = () => {
             required: 'La fecha de pago es obligatorio',
         },
         valorCompromiso: {
-            required: 'El valor a pagar es obligatorio'
+            required: seleccionTipoTarea.nombre !== "VOLVER A LLAMAR"
+                ? 'El valor a pagar es obligatorio'
+                : false
         },
         campoObligatorio: {
             required: 'El campo es obligatoria'
@@ -92,6 +101,8 @@ export const useFormCompromisoPago = () => {
         handleTextChange,
         onSubmit,
         formValues: watch(),
-        rules
+        rules,
+        seleccionTipoTarea,
+        setSeleccionTipoTarea
     };
 };

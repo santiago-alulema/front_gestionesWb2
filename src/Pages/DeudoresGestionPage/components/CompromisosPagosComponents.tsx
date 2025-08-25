@@ -11,7 +11,6 @@ import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/Gestiona
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO'
 import { tiposTareasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios'
 import { useFormCompromisoPago } from '@/Pages/DeudoresGestionPage/useForms/useFormCompromisoPago'
-import { acercamientoDeudorServicioWeb } from '@/services/Service'
 import { Box, Button, Grid } from '@mui/material'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -19,12 +18,13 @@ import { useEffect, useState } from 'react'
 const CompromisosPagosComponents = () => {
     const fechaActual = dayjs().format('YYYY-MM-DD')
     const [tiposTareas, setTiposTareas] = useState<TiposTareaInDTO[]>([]);
+
     const onInit = async () => {
         const respuesta = await tiposTareasServicioWeb();
         setTiposTareas(respuesta)
     }
 
-    const { control, errors, rules, onSubmit } = useFormCompromisoPago();
+    const { control, errors, rules, onSubmit, seleccionTipoTarea, setSeleccionTipoTarea } = useFormCompromisoPago();
     const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
 
     useEffect(() => {
@@ -72,16 +72,6 @@ const CompromisosPagosComponents = () => {
                     />
                 </Grid>
                 <Grid size={{ lg: 6 }}>
-                    <CustomTextFieldMoneyForm
-                        name='valorCompromiso'
-                        label="Valor en dólares"
-                        fullWidth
-                        control={control}
-                        errors={errors}
-                        rules={rules.valorCompromiso}
-                    />
-                </Grid>
-                <Grid size={{ lg: 6 }}>
                     <CustomAutocompleteFormTs
                         name='tipoTarea'
                         options={tiposTareas}
@@ -91,7 +81,23 @@ const CompromisosPagosComponents = () => {
                         control={control}
                         errors={errors}
                         rules={rules.campoObligatorio}
+                        handleChange={(e, value: TiposTareaInDTO) => setSeleccionTipoTarea(value)}
                     />
+                </Grid>
+
+                <Grid size={{ lg: 6 }}>
+                    {seleccionTipoTarea?.nombre !== "VOLVER A LLAMAR" && (
+                        <Grid size={{ lg: 12 }}>
+                            <CustomTextFieldMoneyForm
+                                name='valorCompromiso'
+                                label="Valor en dólares"
+                                fullWidth
+                                control={control}
+                                errors={errors}
+                                rules={rules.valorCompromiso} // Hacer obligatorio
+                            />
+                        </Grid>
+                    )}
                 </Grid>
                 <Grid size={{ lg: 12 }} >
                     <CustomTextFieldFormTs
