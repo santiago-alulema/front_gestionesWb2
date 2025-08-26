@@ -3,7 +3,6 @@ export interface DeudasInDTO {
   saldoActual: number;
   fechaVenta: string;
   fechaAsignacion: string;
-  descripcion: string;
   cedulaCliente: string;
   idDeuda: string;
   numeroFactura: string;
@@ -28,6 +27,10 @@ export interface DeudasInDTO {
   numeroCuotas?: number | null;
   tipoTarea?: string | null;
   valorCompromisoPago?: string;
-  idDeudor?: string
+  idDeudor?: string,
+  ciudad?: string
+  agencia?: string
+  productoDescripcion?: string
+
 }
 export default DeudasInDTO;

@@ -56,7 +56,10 @@ const UploadDeudasPage = () => {
                         'valorCuota?': 'number',
                         'tramo': 'string',
                         'ultimoPago?': 'number',
-                        'empresa': 'string'
+                        'empresa': 'string',
+                        'productoDescripcion': 'string',
+                        'agencia': 'string',
+                        'ciudad': 'string'
                     }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}

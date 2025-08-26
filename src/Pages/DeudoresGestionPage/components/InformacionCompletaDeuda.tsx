@@ -10,11 +10,15 @@ import {
     Box,
     Chip,
     Button,
+    AccordionDetails,
+    Accordion,
+    AccordionSummary,
+    AccordionActions,
 } from "@mui/material";
 import { format } from "date-fns";
 import { es } from "date-fns/locale"; // Opcional: para formato en español
 import { useSearchParams } from "react-router";
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const InformacionCompletaDeuda = () => {
     const { deudaSeleccionada, setAbrirModalInformacionDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [searchParams] = useSearchParams();
@@ -71,6 +75,35 @@ const InformacionCompletaDeuda = () => {
 
                     </Box>
 
+                    <Divider sx={{ mb: 1 }} />
+                    <Grid container spacing={0}>
+                        <Grid size={{ xs: 12, md: 12 }} >
+                            <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
+                                <Typography variant="subtitle2" sx={titleStyle}>
+                                    Información Producto
+                                </Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid size={{ lg: 6 }}>
+                            <DetailItem
+                                title="Producto"
+                                value={deudaSeleccionada.productoDescripcion}
+                            />
+
+                        </Grid>
+                        <Grid size={{ lg: 3 }}>
+                            <DetailItem
+                                title="Agencia"
+                                value={deudaSeleccionada.agencia}
+                            />
+                        </Grid>
+                        <Grid size={{ lg: 3 }}>
+                            <DetailItem
+                                title="Ciudad"
+                                value={deudaSeleccionada.ciudad}
+                            />
+                        </Grid>
+                    </Grid>
                     <Divider sx={{ mb: 1 }} />
 
                     <Grid container spacing={5}>
