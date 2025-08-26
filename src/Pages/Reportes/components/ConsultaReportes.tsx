@@ -1,4 +1,5 @@
 import CustomDatePicker from "@/components/DataGridCommon/CustomDatePicker";
+import { useLoading } from "@/components/LoadingContext";
 import { descargarReporteServicioWeb } from "@/Pages/Reportes/services/ReportesServiciosWeb";
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import dayjs from "dayjs";
@@ -10,9 +11,11 @@ const ConsultaReportes = () => {
     const [startDate, setStartDate] = useState<string>(dayjs().subtract(5, 'day').format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState<string>(dayjs().format('YYYY-MM-DD'));
     const [clienteParametroBuscar, setClienteParametroBuscar] = useState<string>("")
-
+    const { startLoading, stopLoading } = useLoading();
     const descargarReporte = async () => {
-        await descargarReporteServicioWeb(startDate, endDate, reportType, !clienteParametroBuscar ? "-SP-" : clienteParametroBuscar)
+        startLoading();
+        await descargarReporteServicioWeb(startDate, endDate, reportType, !clienteParametroBuscar ? "-SP-" : clienteParametroBuscar);
+        stopLoading();
     }
 
     return (
