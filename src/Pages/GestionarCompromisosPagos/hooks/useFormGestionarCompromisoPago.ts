@@ -123,13 +123,11 @@ const useFormGestionarCompromisoPago = () => {
     }
 
     const onSubmit = handleSubmit((data: FormValues) => {
-        console.log("@entra aquiii")
         actualizacionCopromisoPago(data)
         try {
             actualizacionCopromisoPago(data);
         } catch (error) {
             console.error('Submission error:', error);
-            // Show error message to user
         }
     });
 

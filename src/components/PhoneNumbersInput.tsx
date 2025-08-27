@@ -89,8 +89,6 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
         actualizarTelefonos()
     }, [])
 
-
-
     const handleAddPhone = async () => {
         if (!phone) {
             const configAlert = {

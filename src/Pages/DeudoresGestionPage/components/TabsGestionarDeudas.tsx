@@ -15,19 +15,19 @@ interface TabPanelProps {
 function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
-
     return (
         <div
             role="tabpanel"
-            hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}
+            style={{ display: value === index ? "block" : "none" }}
         >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+            <Box sx={{ p: 3 }}>{children}</Box>
         </div>
     );
 }
+
 
 function a11yProps(index: number) {
     return {
@@ -61,13 +61,13 @@ const TabsGestionarDeudas = () => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <GestionarDeudaComponents></GestionarDeudaComponents>
+                <GestionarDeudaComponents />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <PagosComponents ></PagosComponents>
+                <PagosComponents />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <CompromisosPagosComponents></CompromisosPagosComponents>
+                <CompromisosPagosComponents />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 <PhoneNumbersInput cedula={deudorSeleccionado.cedula} phones={telefonosActivos} setPhones={setTelefonosActivos} />
