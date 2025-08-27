@@ -4,7 +4,7 @@ import GestionarDeudaComponents from '@/Pages/DeudoresGestionPage/components/Ges
 import PagosComponents from '@/Pages/DeudoresGestionPage/components/PagosComponents';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { Box, Tab, Tabs } from '@mui/material'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -38,13 +38,17 @@ function a11yProps(index: number) {
 
 const TabsGestionarDeudas = () => {
     const [value, setValue] = useState(0);
-    const { deudorSeleccionado, telefonosActivos, setTelefonosActivos } = useGestionarDeudas();
+    const { deudorSeleccionado, telefonosActivos, setTelefonosActivos, setTelefonoSeleccionado } = useGestionarDeudas();
 
-    console.log("deudorSeleccionado", deudorSeleccionado)
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    useEffect(() => {
+        return () => {
+            setTelefonoSeleccionado('');
+        };
+    }, [setTelefonoSeleccionado]);
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -6,5 +6,5 @@ export interface ICompromisoPagoOutDTO {
     observaciones?: string;
     TipoTarea: string;
     HoraRecordatorio: string;
-
+    telefono: string;
 }

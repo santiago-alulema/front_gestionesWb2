@@ -26,7 +26,7 @@ export const useFormGestionarDeuda = () => {
     });
 
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
+        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
     } = useGestionarDeudas();
 
     const rules = {
@@ -61,6 +61,16 @@ export const useFormGestionarDeuda = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
+        if (!telefonoSeleccionado) {
+            const configAlert = {
+                title: "Correcto",
+                message: "Debe seleccionar un telefono antes de grabar",
+                type: 'warning',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+            return
+        }
         const enviagrabar: IGestionInDTO = {
             idDeuda: deudaSeleccionada.idDeuda,
             idTipoGestion: '3',
@@ -68,7 +78,8 @@ export const useFormGestionarDeuda = () => {
             IdResultado: data.idResultado,
             idTipoContactoCliente: data.idTipoContactoCliente,
             IdRespuesta: data.idRespuesta,
-            email: data.email
+            email: data.email,
+            telefono: telefonoSeleccionado
         }
         await grabarGestionServicioWeb(enviagrabar);
         const configAlert = {

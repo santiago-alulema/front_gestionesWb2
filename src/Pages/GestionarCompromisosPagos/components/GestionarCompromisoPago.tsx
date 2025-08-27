@@ -56,7 +56,6 @@ const GestionarCompromisoPago = () => {
 
     return (
         <>
-            <Typography textAlign='center' variant='h5' mb={2}>Gestionar Tarea: {deudaSeleccionada.tipoTarea}</Typography>
             <Grid size={{ lg: 12 }} mb={2}>
                 <CustomCheckboxGroup
                     name="incumplioCompromisoPago"

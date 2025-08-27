@@ -33,7 +33,7 @@ const useFormGestionarCompromisoPago = () => {
     });
 
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
+        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
     } = useGestionarDeudas();
     const [incumplioCompromisoPago, setIncumplioCompromisoPago] = useState(false);
     const {
@@ -145,6 +145,16 @@ const useFormGestionarCompromisoPago = () => {
     }
 
     const actualizacionCopromisoPago = async (data: FormValues) => {
+        if (!telefonoSeleccionado) {
+            const configAlert = {
+                title: "Correcto",
+                message: "Debe seleccionar un telefono antes de grabar",
+                type: 'warning',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+            return
+        }
         if (incumplioCompromisoPago) {
             await INCUMPLIO_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId);
             buscarTareasPendientes();
@@ -159,7 +169,8 @@ const useFormGestionarCompromisoPago = () => {
                 abonoLiquidacionId: data.abonoLiquidacion,
                 numeroDocumento: data.numeroDocumento,
                 idDeuda: compromisoPagoSeleccionado.idDeuda,
-                observaciones: data.observaciones
+                observaciones: data.observaciones,
+                telefono: telefonoSeleccionado
             }
             await grabarPagosServicioWeb(enviagrabar);
             await DESACTIVAR_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId)

@@ -8,6 +8,7 @@ import CustomAutocompleteFormTs from '@/components/DataGridCommon/CustomAutocomp
 import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFormTs';
 import { useFormGestionarDeuda } from '@/Pages/DeudoresGestionPage/useForms/useFormGestionarDeuda';
 import { useFormTareasLLamadas } from '@/Pages/GestionarCompromisosPagos/hooks/useFormTareasLLamadas';
+import { mt } from 'date-fns/locale';
 
 const GestionarLlamada = () => {
 
@@ -63,7 +64,7 @@ const GestionarLlamada = () => {
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} mt={3}>
                 <Grid size={{ lg: 6 }} >
                     <CustomAutocompleteFormTs
                         name='idResultado'

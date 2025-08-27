@@ -19,7 +19,9 @@ import {
     MenuItem,
     SelectChangeEvent,
     FormControlLabel,
-    Checkbox
+    Checkbox,
+    FormGroup,
+    Grid
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,6 +31,7 @@ import CustomModalTs from '@/components/CustomModalTs';
 import PhonesClientsOutDTO from '@/model/Dtos/Out/PhonesClientsOutDTO';
 import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
+import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 
 interface phoneNumbersProps {
     phones: TelefonosClientesActivos[],
@@ -51,12 +54,16 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     const [origenTelefono, setOrigenTelefono] = useState<string>("");
     const [checked, setChecked] = useState<boolean>(false);
     const [filtrarActivos, setFiltrarActivos] = useState<boolean>(false);
-
+    const { telefonoSeleccionado, setTelefonoSeleccionado } = useGestionarDeudas();
     const [seleccionarPropietario, setSeleccionarPropietario] = useState('');
 
     const seleccionarPropietarioTelefono = (event: SelectChangeEvent) => {
         setSeleccionarPropietario(event.target.value);
     };
+
+    const llenarTelefonoSelecconado = (value: string) => {
+        setTelefonoSeleccionado(value)
+    }
 
     const seleccionarFiltrarActivos = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setFiltrarActivos(event.target.checked);
@@ -77,6 +84,11 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
         const nuevosTelefonos = await telefonosActivosClientes(cedula);
         setPhones(nuevosTelefonos);
     };
+
+    useEffect(() => {
+        actualizarTelefonos()
+    }, [])
+
 
 
     const handleAddPhone = async () => {
@@ -239,6 +251,16 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             {phones.length > 0 ? (
                 <>
                     <List dense>
+                        <ListItem>
+                            <ListItemText primary={
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', padding: '8px 0' }}>
+                                    <span style={{ flex: 1 }}>Seleccionar</span>
+                                    <span style={{ flex: 1 }}>Teléfono</span>
+                                    <span style={{ flex: 1 }}>Propietario</span>
+                                    <span style={{ flex: 1 }}>Estado</span>
+                                </div>
+                            } />
+                        </ListItem>
                         {paginatedPhones.map((num, idx) => (
                             <ListItem
                                 key={idx}
@@ -249,12 +271,26 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                                 }
                             >
                                 <ListItemText primary={
-                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        {num.telefono}
-                                        <strong>{num.propietario}</strong>
-                                        {num.esValido}
-                                        <strong style={{ color: num.esValido ? "green" : "red" }}>{num.esValido ? "Activo" : "Inactivo"}</strong>
-                                    </div>
+                                    <Grid container spacing={2} alignItems="center">
+                                        <Grid size={{ lg: 3 }}>
+                                            <Checkbox checked={telefonoSeleccionado === num.telefono ? true : false}
+                                                onClick={() => llenarTelefonoSelecconado(num.telefono)} />
+                                        </Grid>
+                                        <Grid size={{ lg: 3 }}>
+                                            {num.telefono}
+                                        </Grid>
+                                        <Grid size={{ lg: 3 }}>
+                                            <strong>{num.propietario}</strong>
+                                        </Grid>
+                                        <Grid size={{ lg: 3 }}>
+                                            <span style={{
+                                                color: num.esValido ? "green" : "red",
+                                                fontWeight: 'bold'
+                                            }}>
+                                                {num.esValido ? "Activo" : "Inactivo"}
+                                            </span>
+                                        </Grid>
+                                    </Grid>
                                 } />
                             </ListItem>
                         ))}

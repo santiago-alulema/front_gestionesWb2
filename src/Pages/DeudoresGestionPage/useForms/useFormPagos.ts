@@ -30,7 +30,7 @@ export const useFormPagos = () => {
     });
 
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes
+        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
     } = useGestionarDeudas();
 
     const rules = {
@@ -70,6 +70,16 @@ export const useFormPagos = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
+        if (!telefonoSeleccionado) {
+            const configAlert = {
+                title: "Correcto",
+                message: "Debe seleccionar un telefono antes de grabar",
+                type: 'warning',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+            return
+        }
         const enviagrabar: PagoGrabarOutDTO = {
             fechaPago: data.fechaPago,
             montoPagado: data.valorPago,
@@ -79,7 +89,8 @@ export const useFormPagos = () => {
             abonoLiquidacionId: data.abonoLiquidacion,
             numeroDocumento: data.numeroDocumento,
             idDeuda: deudaSeleccionada.idDeuda,
-            observaciones: data.observaciones
+            observaciones: data.observaciones,
+            telefono: telefonoSeleccionado
         }
         await grabarPagosServicioWeb(enviagrabar);
         const configAlert = {

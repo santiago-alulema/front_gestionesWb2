@@ -2,6 +2,7 @@ import PhoneNumbersInput from '@/components/PhoneNumbersInput';
 import GestionarDeudaComponents from '@/Pages/DeudoresGestionPage/components/GestionarDeudaComponents';
 import MovimientosDeuda from '@/Pages/DeudoresGestionPage/components/MovimientosDeuda';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
+import AccordionGestionesCompromiso from '@/Pages/GestionarCompromisosPagos/components/AccordionGestionesCompromiso';
 import GestionarCompromisoPago from '@/Pages/GestionarCompromisosPagos/components/GestionarCompromisoPago';
 import GestionarLlamada from '@/Pages/GestionarCompromisosPagos/components/GestionarLlamada';
 import { Box, Tab, Tabs } from '@mui/material'
@@ -57,8 +58,7 @@ const TabsGestionarTareas = () => {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-
-                    {deudaSeleccionada.tipoTarea === "VOLVER A LLAMAR" ? (<GestionarLlamada />) : <GestionarCompromisoPago />}
+                    <AccordionGestionesCompromiso />
                     {/* // <GestionarCompromisoPago /> */}
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>

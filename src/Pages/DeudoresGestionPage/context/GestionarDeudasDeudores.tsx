@@ -28,6 +28,7 @@ interface IGestionarDeudasContext {
     // Nuevos estados para filtrado
     empresaSeleccionada: string;
     sinGestionar: boolean;
+    telefonoSeleccionado: string;
 
     // Setters tipados correctamente
     setDeudaSeleccionada: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO | null>>;
@@ -38,12 +39,12 @@ interface IGestionarDeudasContext {
     setGrabarPago: React.Dispatch<React.SetStateAction<PagoGrabarOutDTO>>;
     setAbrirModalGestionarDeuda: React.Dispatch<React.SetStateAction<boolean>>;
     setAbrirModalInformacionDeuda: React.Dispatch<React.SetStateAction<boolean>>;
+    setTelefonoSeleccionado: React.Dispatch<React.SetStateAction<string>>;
     setEmpresaSeleccionada: React.Dispatch<React.SetStateAction<string>>;
     setSinGestionar: React.Dispatch<React.SetStateAction<boolean>>;
     setTelefonosActivos: React.Dispatch<React.SetStateAction<TelefonosClientesActivos[]>>;
     setTareasPendientes: React.Dispatch<React.SetStateAction<DebstByClientInfoInDTO[]>>;
 
-    // Métodos
     obtenerTelefonosCliente: (cedulaCliente: string) => Promise<void>;
     LlenarGestionesHijo: (gestionPadreId: string) => Promise<void>;
 }
@@ -69,6 +70,7 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
 
     const [abrirModalInformacionDeuda, setAbrirModalInformacionDeuda] = useState<boolean>(false);
     const [empresaSeleccionada, setEmpresaSeleccionada] = useState<string>("TODOS");
+    const [telefonoSeleccionado, setTelefonoSeleccionado] = useState<string>("");
     const [sinGestionar, setSinGestionar] = useState(false);
 
     // Estados de grabación
@@ -138,6 +140,8 @@ export const GestionarDeudasProvider: React.FC<{ children: React.ReactNode }> = 
                 setSinGestionar,
                 empresaSeleccionada,
                 sinGestionar,
+                telefonoSeleccionado,
+                setTelefonoSeleccionado
             }}
         >
             {children}

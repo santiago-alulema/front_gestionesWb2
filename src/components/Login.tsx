@@ -27,54 +27,73 @@ const Login = () => {
       password: password,
       rememberMe: true,
     });
-    login(loginUserToken.token)
+    login(loginUserToken.token);
   };
 
   return (
-    <Grid container sx={{ margin: 0, padding: 0 }}>
-      <Grid size={6} sx={{ padding: 0, margin: 0 }}>
+    <Grid
+      container
+      sx={{
+        margin: 0,
+        padding: 0,
+        height: "100vh" // ✅ ocupa toda la pantalla
+      }}
+    >
+      {/* Imagen izquierda */}
+      <Grid
+        size={{ lg: 6 }}
+        sx={{
+          padding: 0,
+          margin: 0,
+          height: "100%", // ✅ altura completa
+          display: { xs: "none", md: "block" } // ✅ ocultar en móviles
+        }}
+      >
         <img
           src={LoginImageLeft}
           alt="Login"
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
             margin: 0,
             padding: 0
           }}
         />
       </Grid>
 
-      <Grid size={6} sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0
-      }}>
-        <Container maxWidth="xs" >
+      {/* Formulario */}
+      <Grid size={{ lg: 6 }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 0,
+          height: "100%",
+        }}
+      >
+        <Container maxWidth="xs">
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%'
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
             }}
           >
             <img
               src={logo}
               alt="logo"
               style={{
-                width: '25%',
-                height: '50%',
-                objectFit: 'cover',
+                width: "25%",
+                objectFit: "cover",
                 margin: 0,
-                padding: 0
+                padding: 0,
               }}
             />
 
-            <Box component="form" sx={{ mt: 1, width: '100%' }}>
+            <Box component="form" sx={{ mt: 1, width: "100%" }}>
               <TextField
                 margin="normal"
                 required
@@ -96,7 +115,6 @@ const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
-
               />
 
               <Typography align="right" sx={{ mt: 1 }}>
@@ -116,7 +134,7 @@ const Login = () => {
               </Button>
 
               <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-                ¿No tienes una cuenta?{' '}
+                ¿No tienes una cuenta?{" "}
                 <Link href="#" variant="body2">
                   Sign up
                 </Link>

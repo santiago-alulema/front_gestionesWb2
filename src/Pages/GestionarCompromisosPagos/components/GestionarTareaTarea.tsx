@@ -6,11 +6,14 @@ import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/Gestiona
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO'
 import { tiposTareasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios'
 import { useFormCompromisoPago } from '@/Pages/DeudoresGestionPage/useForms/useFormCompromisoPago'
+import { useFormNuvaTarea } from '@/Pages/GestionarCompromisosPagos/hooks/useFormNuvaTarea'
 import { Box, Button, Grid } from '@mui/material'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { mt } from 'date-fns/locale';
 
-const CompromisosPagosComponents = () => {
+
+const GestionarTareaTarea = () => {
     const fechaActual = dayjs().format('YYYY-MM-DD')
     const [tiposTareas, setTiposTareas] = useState<TiposTareaInDTO[]>([]);
 
@@ -19,7 +22,7 @@ const CompromisosPagosComponents = () => {
         setTiposTareas(respuesta)
     }
 
-    const { control, errors, rules, onSubmit, seleccionTipoTarea, setSeleccionTipoTarea } = useFormCompromisoPago();
+    const { control, errors, rules, onSubmit, seleccionTipoTarea, setSeleccionTipoTarea } = useFormNuvaTarea();
     const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
 
     useEffect(() => {
@@ -41,9 +44,10 @@ const CompromisosPagosComponents = () => {
         { "id": "19:00 PM", "name": "7:00 PM" },
         { "id": "20:00 PM", "name": "8:00 PM" }
     ]
+
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} mt={2}>
                 <Grid size={{ lg: 6 }}>
                     <CustomDatePickerForm
                         name='fechaCompromiso'
@@ -118,4 +122,4 @@ const CompromisosPagosComponents = () => {
     )
 }
 
-export default CompromisosPagosComponents
+export default GestionarTareaTarea

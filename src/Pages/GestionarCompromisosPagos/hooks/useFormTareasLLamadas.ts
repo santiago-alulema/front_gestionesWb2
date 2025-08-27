@@ -28,8 +28,10 @@ export const useFormTareasLLamadas = () => {
     });
 
     const {
-        deudaSeleccionada, setTareasPendientes
+        deudaSeleccionada, setTareasPendientes,
+        telefonoSeleccionado
     } = useGestionarDeudas();
+
 
     const {
         compromisoPagoSeleccionado, setAbrirModalGestionarCompromiso, cargarCompromisos
@@ -67,6 +69,16 @@ export const useFormTareasLLamadas = () => {
     };
 
     const onSubmit = handleSubmit(async (data) => {
+        if (!telefonoSeleccionado) {
+            const configAlert = {
+                title: "Correcto",
+                message: "Debe seleccionar un telefono antes de grabar",
+                type: 'warning',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+            return
+        }
         const enviagrabar: IGestionInDTO = {
             idDeuda: deudaSeleccionada.idDeuda,
             idTipoGestion: '3',
@@ -74,7 +86,8 @@ export const useFormTareasLLamadas = () => {
             IdResultado: data.idResultado,
             idTipoContactoCliente: data.idTipoContactoCliente,
             IdRespuesta: data.idRespuesta,
-            email: data.email
+            email: data.email,
+            telefono: telefonoSeleccionado
         }
         await grabarGestionServicioWeb(enviagrabar);
         await DESACTIVAR_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId)
@@ -94,8 +107,6 @@ export const useFormTareasLLamadas = () => {
         const respuesta = await compromisoPagoServiceWeb(true)
         setTareasPendientes(respuesta)
     }
-
-
 
     return {
         control,

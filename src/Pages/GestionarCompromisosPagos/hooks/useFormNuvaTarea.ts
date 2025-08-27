@@ -8,8 +8,10 @@ import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
 import { useState } from 'react';
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO';
+import { useGestionarCompromisoPago } from '@/Pages/GestionarCompromisosPagos/contexts/GestionarCompromisoPagoContext';
+import { DESACTIVAR_COMPROMISO_PAGO } from '@/Pages/GestionarCompromisosPagos/services/GestionarCompromisosPagoServicioWeb';
 
-export const useFormCompromisoPago = () => {
+export const useFormNuvaTarea = () => {
 
     const {
         control,
@@ -43,7 +45,7 @@ export const useFormCompromisoPago = () => {
             required: 'La fecha de pago es obligatorio',
         },
         valorCompromiso: {
-            required: seleccionTipoTarea.nombre !== "VOLVER A LLAMAR"
+            required: seleccionTipoTarea?.nombre !== "VOLVER A LLAMAR"
                 ? 'El valor a pagar es obligatorio'
                 : false
         },
@@ -54,6 +56,11 @@ export const useFormCompromisoPago = () => {
             required: 'Las observaciones es obligatoria'
         }
     };
+
+
+    const {
+        compromisoPagoSeleccionado, setAbrirModalGestionarCompromiso, cargarCompromisos
+    } = useGestionarCompromisoPago();
 
 
     const handleAutocompleteChange = (field: keyof IGestionInDTO, value: any, returnObject = false) => {
@@ -86,6 +93,7 @@ export const useFormCompromisoPago = () => {
             telefono: telefonoSeleccionado
         }
         await grabarCompromisoPago(enviagrabar);
+        await DESACTIVAR_COMPROMISO_PAGO(compromisoPagoSeleccionado.compromisoPagoId)
         const configAlert = {
             title: "Correcto",
             message: "Se grabo correctamente el <strong >COMPROMISO DE PAGO </strong>",
@@ -94,7 +102,8 @@ export const useFormCompromisoPago = () => {
         };
         showAlert(configAlert);
         buscarTareasPendientes();
-        setAbrirModalGestionarDeuda(false)
+        cargarCompromisos();
+        setAbrirModalGestionarCompromiso(false)
     });
 
     const buscarTareasPendientes = async () => {
