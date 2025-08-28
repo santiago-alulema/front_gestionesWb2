@@ -99,9 +99,9 @@ const HeaderBasePage: React.FC<HeaderBasePageProps> = ({
                                     underline="none"
                                     sx={{ display: 'flex', alignItems: 'center', fontSize: 12 }}
                                     color={item.disabled ? 'inherit' : 'primary'}
-                                    href={item.link}
+                                    href={item.link ? String(item.link) : "#"}
                                     key={`path_${index}`}
-                                    onClick={e => handleClickLinkItem(e, item)}
+                                    onClick={(e) => handleClickLinkItem(e, item)}
                                 >
                                     {item.text}
                                 </Link>

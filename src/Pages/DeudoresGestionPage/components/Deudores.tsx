@@ -9,13 +9,18 @@ import ListaEmpresasInDto from '@/Pages/DeudoresGestionPage/models/ListaEmpresas
 import { empresasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios';
 import { allDeuodoresServiceWeb } from '@/services/Service';
 import { Box, Checkbox, FormControlLabel, Grid, Paper } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Deudores = () => {
     const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([{ id: "TODOS", nombre: "Todos" }]);
-    const { setDeudorSeleccionado, sinGestionar, setSinGestionar, empresaSeleccionada, setEmpresaSeleccionada } = useGestionarDeudas();
+    const {
+        setDeudorSeleccionado,
+        empresaSeleccionada,
+        setEmpresaSeleccionada,
+        opcionGestion,
+        setOpcionGestion } = useGestionarDeudas();
     const navigate = useNavigate();
     const { startLoading, stopLoading } = useLoading();
 
@@ -26,8 +31,8 @@ const Deudores = () => {
     const onInit = async () => {
         startLoading()
         const listaEmpresaRespuesta = await empresasServicioWeb();
-        setEmpresas(prev => [...prev, ...listaEmpresaRespuesta]);
-        const response = await allDeuodoresServiceWeb(empresaSeleccionada, sinGestionar)
+        setEmpresas(listaEmpresaRespuesta);
+        const response = await allDeuodoresServiceWeb(empresaSeleccionada, opcionGestion)
         setClientDebt(response)
         stopLoading();
     }
@@ -49,21 +54,37 @@ const Deudores = () => {
         }
     ];
 
-    const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setClientDebt([]);
-        setSinGestionar(event.target.checked);
-    };
-
-    const consultarDeudasPorEmpresa = async (value: string) => {
+    const consultarDeudasPorEmpresa = useCallback(async (value: string) => {
+        startLoading();
         setEmpresaSeleccionada(value);
         setClientDebt([]);
-        const response = await allDeuodoresServiceWeb(value, sinGestionar);
+        const response = await allDeuodoresServiceWeb(value, opcionGestion);
         setClientDebt(response);
-    }
+        stopLoading();
+    }, [setEmpresaSeleccionada, opcionGestion]);
 
     useEffect(() => {
         consultarDeudasPorEmpresa(empresaSeleccionada);
-    }, [empresaSeleccionada, sinGestionar]);
+    }, [empresaSeleccionada, opcionGestion, consultarDeudasPorEmpresa]);
+
+    const opcionesFiltro = [
+        {
+            id: 'G',
+            name: 'GESTIONADOS'
+        },
+        {
+            id: 'SG',
+            name: 'SIN GESTIONAR'
+        },
+        {
+            id: 'IN',
+            name: 'INCUMPLIDOS'
+        }
+    ]
+
+    const consultarPorFiltro = (value: any) => {
+        setOpcionGestion(!value?.id ? "" : value?.id)
+    }
 
     return (
         <>
@@ -75,30 +96,22 @@ const Deudores = () => {
                         labelFullField='Empresa'
                         optionLabel='nombre'
                         defaultValue={empresas.find(e => e.id === empresaSeleccionada) || null}
-                        handleChange={(e, value) => consultarDeudasPorEmpresa(value.id.toString())}
+                        handleChange={(e, value) => consultarDeudasPorEmpresa(!value?.id ? "TODOS" : value.id.toString())}
                     />
                 </Grid>
                 <Grid size={{ lg: 6 }}>
-                    <div className={`sin-gestionar-container ${sinGestionar ? 'active' : ''}`}>
-                        <FormControlLabel
-                            className="sin-gestionar-label"
-                            control={
-                                <Checkbox
-                                    className="sin-gestionar-checkbox"
-                                    checked={sinGestionar}
-                                    onChange={handleFilterChange}
-                                    name="sinGestionar"
-                                    color="primary"
-                                />
-                            }
-                            label="Sin gestionar"
-                        />
-                    </div>
+                    <CustomAutocompleteTs
+                        options={opcionesFiltro}
+                        label='Seleccione Filtro'
+                        labelFullField='Filtro'
+                        handleChange={(e, value: any) => consultarPorFiltro(value)}
+                    />
                 </Grid>
             </Grid>
             <Paper elevation={3} >
                 <CustomDataGridTs
-                    key={`grid-${empresaSeleccionada}-${sinGestionar}`}
+                    getRowId={(row) => row.cedula}
+                    key={`grid-${empresaSeleccionada}`}
                     rows={clientDebt}
                     columns={ConfigurarColumnaDeudores()}
                     gridId="gidChartOfAccounts"
@@ -108,9 +121,8 @@ const Deudores = () => {
                     titleEmptyTable='Tabla sin datos'
                 />
             </Paper>
-
         </>
     )
 }
 
-export default Deudores
+export default Deudores;

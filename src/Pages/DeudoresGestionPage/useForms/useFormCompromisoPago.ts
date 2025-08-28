@@ -8,6 +8,7 @@ import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
 import { useState } from 'react';
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO';
+import { useNavigate, useSearchParams } from 'react-router';
 
 export const useFormCompromisoPago = () => {
 
@@ -33,6 +34,10 @@ export const useFormCompromisoPago = () => {
         id: '',
         nombre: ''
     });
+    const [searchParams] = useSearchParams();
+    const deudaId = searchParams.get("deudaId");
+    const navigate = useNavigate();
+
 
     const {
         deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
@@ -95,6 +100,9 @@ export const useFormCompromisoPago = () => {
         showAlert(configAlert);
         buscarTareasPendientes();
         setAbrirModalGestionarDeuda(false)
+        if (!!deudaId) {
+            navigate("/gestion/dudas-por-clientes")
+        }
     });
 
     const buscarTareasPendientes = async () => {

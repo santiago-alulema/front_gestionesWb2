@@ -12,7 +12,11 @@ const GestionarDeudaComponents = () => {
 
     const { control, errors, onSubmit, rules } = useFormGestionarDeuda();
 
-    const { deudorSeleccionado, telefonosActivos, setTelefonosActivos, obtenerTelefonosCliente, setGrabarGestion, grabarGestion, setAbrirModalGestionarDeuda } = useGestionarDeudas();
+
+    const {
+        deudorSeleccionado,
+        obtenerTelefonosCliente,
+        setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [formasContactoCliente, setFormasContactoCliente] = useState<TipoContactoGestionInDTO[]>([])
     const [resultados, setResultados] = useState<SeleccionGeneral[]>([])
     const [tiposContacto, setTiposContacto] = useState<SeleccionGeneral[]>([])

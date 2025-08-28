@@ -48,10 +48,10 @@ export const uploadDeudasServiceWeb = (dataDeudas: any) =>
     dataDeudas
   );
 
-export const allDeuodoresServiceWeb = (empresa: string, sinGestionar: boolean) =>
+export const allDeuodoresServiceWeb = (empresa: string, tipoFiltro: string) =>
   request<ClientInfo[]>(
     'get',
-    `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&sinGestionar=${sinGestionar}`,
+    `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&tipoFiltro=${tipoFiltro}`,
   );
 
 
@@ -175,10 +175,10 @@ export const desactivarTelefonoCliente = (desactivarTelefono: DesactivarTelefono
     desactivarTelefono
   );
 
-export const deudasPorClienteServiceWeb = (codigoCliente: String, empresa: string, sinGestionar: boolean) =>
+export const deudasPorClienteServiceWeb = (codigoCliente: String, empresa: string, opcionFiltro: string) =>
   request<DebstByClientInfoInDTO[]>(
     'get',
-    `${END_POINT.LISTAR_DEUDAS_POR_CLIENTE}/${codigoCliente}?empresa=${empresa}&sinGestionar=${sinGestionar}`,
+    `${END_POINT.LISTAR_DEUDAS_POR_CLIENTE}/${codigoCliente}?empresa=${empresa}&opcionFiltro=${opcionFiltro}`,
   );
 
 export const buscarDeudaPorIdServicioWeb = (codigoDeuda: string) =>

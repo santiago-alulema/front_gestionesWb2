@@ -331,6 +331,7 @@ const CustomDataGridTs = <T,>({
     }
   }, [rows]);
 
+
   const FilterCellComponent = useMemo(() => {
     return (props: any) => {
       const { column } = props;

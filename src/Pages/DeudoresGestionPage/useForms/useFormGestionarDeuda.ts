@@ -3,6 +3,7 @@ import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
 import { compromisoPagoServiceWeb, grabarGestionServicioWeb } from '@/services/Service';
+import { useNavigate, useSearchParams } from 'react-router';
 
 export const useFormGestionarDeuda = () => {
 
@@ -25,9 +26,14 @@ export const useFormGestionarDeuda = () => {
         }
     });
 
+    const [searchParams] = useSearchParams();
+    const deudaId = searchParams.get("deudaId");
+    const navigate = useNavigate();
+
     const {
         deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
     } = useGestionarDeudas();
+
 
     const rules = {
         email: {
@@ -50,7 +56,6 @@ export const useFormGestionarDeuda = () => {
             required: 'La observacion es obligatorio'
         }
     };
-
 
     const handleAutocompleteChange = (field: keyof IGestionInDTO, value: any, returnObject = false) => {
         const val = returnObject ? value : value?.id || '';
@@ -90,6 +95,9 @@ export const useFormGestionarDeuda = () => {
         };
         showAlert(configAlert);
         buscarTareasPendientes();
+        if (!!deudaId) {
+            navigate("/gestion/dudas-por-clientes")
+        }
         setAbrirModalGestionarDeuda(false)
     });
 

@@ -5,6 +5,7 @@ import { showAlert } from '@/utils/modalAlerts';
 import { compromisoPagoServiceWeb, grabarPagosServicioWeb } from '@/services/Service';
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
+import { useNavigate, useSearchParams } from 'react-router';
 
 export const useFormPagos = () => {
 
@@ -32,6 +33,11 @@ export const useFormPagos = () => {
     const {
         deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
     } = useGestionarDeudas();
+
+    const [searchParams] = useSearchParams();
+    const deudaId = searchParams.get("deudaId");
+    const navigate = useNavigate();
+
 
     const rules = {
         fechaPago: {
@@ -101,6 +107,9 @@ export const useFormPagos = () => {
         };
         showAlert(configAlert);
         setAbrirModalGestionarDeuda(false);
+        if (!!deudaId) {
+            navigate("/gestion/dudas-por-clientes")
+        }
     });
 
     const buscarTareasPendientes = async () => {

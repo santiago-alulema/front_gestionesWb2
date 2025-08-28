@@ -27,7 +27,8 @@ const Deudas = () => {
         setAbrirModalGestionarDeuda,
         setAbrirModalInformacionDeuda,
         abrirModalInformacionDeuda,
-        sinGestionar, empresaSeleccionada, } = useGestionarDeudas();
+        opcionGestion,
+        empresaSeleccionada } = useGestionarDeudas();
     const [deudasDeudor, setDeudasDeudor] = useState<DebstByClientInfoInDTO[]>([]);
 
     useEffect(() => {
@@ -48,19 +49,7 @@ const Deudas = () => {
     }
 
     const abrirNuevaVentanaDeuda = (item: DebstByClientInfoInDTO) => {
-        console.log(item)
-        //  const queryParams = new URLSearchParams({
-        //     idDeuda: item.id.toString(),
-        //     idDeudor: deudorSeleccionado?.cedula || idDeudor || '',
-        //     empresaId: empresaSeleccionada || empresaId || ''
-        // }).toString();
-
-        //      const deudaId = searchParams.get("deudaId");
-        // const deudorId = searchParams.get("deudorId");
-        // Abrir nueva pestaña
         const nuevaVentana = window.open(`/gestionar-deuda-nuevo?deudaId=${item.idDeuda}&deudorId=${item.idDeudor}`, '_blank');
-
-        // Opcional: enfocar la nueva ventana
         if (nuevaVentana) {
             nuevaVentana.focus();
         }
@@ -93,7 +82,7 @@ const Deudas = () => {
 
     const onInit = async () => {
         if (!deudorSeleccionado) return;
-        const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula, empresaSeleccionada, sinGestionar);
+        const response = await deudasPorClienteServiceWeb(deudorSeleccionado.cedula, empresaSeleccionada, opcionGestion);
         setDeudasDeudor(response)
     }
 
