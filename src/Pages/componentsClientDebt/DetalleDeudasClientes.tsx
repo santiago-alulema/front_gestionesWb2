@@ -22,7 +22,7 @@ export const DetalleDeudasClientes = ({ client }: Props) => {
     const [isVisible, setIsVisible] = useState<boolean>(false)
 
     const onInit = async () => {
-        const response = await deudasPorClienteServiceWeb(client.cedula, "TODOS", false);
+        const response = await deudasPorClienteServiceWeb(client.cedula, "TODOS", "");
         setDebts(response)
     }
     useEffect(() => {
