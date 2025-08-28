@@ -17,7 +17,7 @@ const ClientDebtPage = () => {
     }, [])
 
     const onInit = async () => {
-        const response = await allDeuodoresServiceWeb("TODOS", false)
+        const response = await allDeuodoresServiceWeb("TODOS", "")
         setClientDebt(response)
     }
     const viewDebtsClient = (row: ClientInfo) => {

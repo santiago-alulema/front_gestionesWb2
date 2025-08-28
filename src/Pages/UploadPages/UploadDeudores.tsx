@@ -27,7 +27,6 @@ const UploadDeudores = () => {
                 callBackFunction: false
             };
             showAlert(configAlert);
-            console.error("Error en handleFileProcessed:", error);
         } finally {
             stopLoading();
         }
