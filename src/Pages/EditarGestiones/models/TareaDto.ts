@@ -4,6 +4,7 @@ export interface TareaDto {
     fechaCompromiso: string;
     fechaRegistro: Date;
     montoComprometido: number;
+    montoComprometidoString: string;
     estado: boolean | null;
     incumplioCompromisoPago: boolean | null;
     fechaCumplimientoReal: string | null;

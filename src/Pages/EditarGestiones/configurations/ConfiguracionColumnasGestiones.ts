@@ -8,13 +8,19 @@ export const ConfiguracionColumnasGestiones = () => {
             {
                 name: 'cedula',
                 title: 'Cedula',
-                width: '13%',
+                width: '9%',
                 align: 'center'
             },
             {
                 name: 'nombre',
                 title: 'Deudor',
                 width: '13%',
+                align: 'left'
+            },
+            {
+                name: 'fechaGestion',
+                title: 'Fecha Gestion',
+                width: '8%',
                 align: 'left'
             },
             {
@@ -25,7 +31,7 @@ export const ConfiguracionColumnasGestiones = () => {
             },
             {
                 name: 'tipoContactoResultado',
-                title: 'Gestor',
+                title: 'Tipo Contacto',
                 width: '12%',
                 align: 'left'
             },
@@ -35,12 +41,12 @@ export const ConfiguracionColumnasGestiones = () => {
                 width: '12%',
                 align: 'left'
             },
-            {
-                name: 'email',
-                title: 'email',
-                width: '12%',
-                align: 'left'
-            },
+            // {
+            //     name: 'email',
+            //     title: 'email',
+            //     width: '9%',
+            //     align: 'left'
+            // },
             {
                 name: 'descripcion',
                 title: 'Observacion',
@@ -48,10 +54,16 @@ export const ConfiguracionColumnasGestiones = () => {
                 align: 'left'
             },
             {
+                name: 'usuarioGestiona',
+                title: 'Gestor',
+                width: '12%',
+                align: 'left'
+            },
+            {
                 name: 'actions',
                 title: '',
                 getCellValue: (row: any) => row,
-                width: '12%',
+                width: '8%',
                 align: 'center',
                 hiddenFilterColumn: true
 

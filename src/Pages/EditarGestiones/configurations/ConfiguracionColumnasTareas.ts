@@ -8,7 +8,7 @@ export const ConfiguracionColumnasTareas = () => {
             {
                 name: 'cedula',
                 title: 'Cedula',
-                width: '14%',
+                width: '11%',
                 align: 'center'
             },
             {
@@ -20,26 +20,32 @@ export const ConfiguracionColumnasTareas = () => {
             {
                 name: 'fechaCompromiso',
                 title: 'Fecha Recordatorio',
-                width: '14%',
+                width: '11%',
                 align: 'center'
             },
             {
-                name: 'montoComprometido',
+                name: 'montoComprometidoString',
                 title: 'Valor',
-                width: '14%',
-                align: 'left'
+                width: '10%',
+                align: 'right'
             },
             {
                 name: 'tipoTarea',
                 title: 'Tipo Tarea',
                 width: '14%',
-                align: 'left'
+                align: 'center'
             },
             {
                 name: 'observaciones',
                 title: 'Observacion',
                 width: '14%',
                 align: 'left'
+            },
+            {
+                name: 'fechaRegistroString',
+                title: 'Fecha Registro',
+                width: '10%',
+                align: 'center'
             },
             {
                 name: 'actions',
