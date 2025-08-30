@@ -104,6 +104,7 @@ const Deudores = () => {
                         options={opcionesFiltro}
                         label='Seleccione Filtro'
                         labelFullField='Filtro'
+                        defaultValue={opcionesFiltro.find(x => x.id == opcionGestion) || null}
                         handleChange={(e, value: any) => consultarPorFiltro(value)}
                     />
                 </Grid>

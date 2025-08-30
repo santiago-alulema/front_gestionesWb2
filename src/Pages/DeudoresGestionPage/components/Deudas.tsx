@@ -152,6 +152,7 @@ const Deudas = () => {
                         </CardContent>
                     </Card>
                     <CustomDataGridTs
+                        getRowId={(row) => row.numeroFactura}
                         rows={deudasDeudor}
                         columns={ConfigurarColumnasDeudas()}
                         gridId="gidChartOfAccounts"
