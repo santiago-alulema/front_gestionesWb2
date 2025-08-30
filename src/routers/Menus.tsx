@@ -37,7 +37,7 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Migraciones",
-    roles: ["admin", "user"],
+    roles: ["admin"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
