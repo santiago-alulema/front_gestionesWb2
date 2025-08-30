@@ -8,7 +8,7 @@ export const ConfiguraracionColumnasPagos = () => {
             {
                 name: 'cedula',
                 title: 'Cedula',
-                width: '10%',
+                width: '9%',
                 align: 'center'
             },
             {
@@ -20,7 +20,7 @@ export const ConfiguraracionColumnasPagos = () => {
             {
                 name: 'fechaPago',
                 title: 'Fecha',
-                width: '10%',
+                width: '8%',
                 align: 'center'
             },
             {
@@ -32,7 +32,7 @@ export const ConfiguraracionColumnasPagos = () => {
             {
                 name: 'cuenta',
                 title: 'Cuenta',
-                width: '10%',
+                width: '7%',
                 align: 'left'
             },
             {
@@ -43,8 +43,8 @@ export const ConfiguraracionColumnasPagos = () => {
             },
             {
                 name: 'abonoLiquidacion',
-                title: 'Abono/Liquidacion',
-                width: '10%',
+                title: 'Abono Liquidacion',
+                width: '8%',
                 align: 'left'
             },
             {
@@ -60,10 +60,16 @@ export const ConfiguraracionColumnasPagos = () => {
                 align: 'left'
             },
             {
+                name: 'gestor',
+                title: 'Gestor',
+                width: '10%',
+                align: 'left'
+            },
+            {
                 name: 'actions',
                 title: '',
                 getCellValue: (row: any) => row,
-                width: '10%',
+                width: '8%',
                 align: 'center',
                 hiddenFilterColumn: true
 

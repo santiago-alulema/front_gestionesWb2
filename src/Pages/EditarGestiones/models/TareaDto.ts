@@ -15,4 +15,5 @@ export interface TareaDto {
     tipoTarea: string;
     cedula: string;
     nombre: string;
+    gestor: string;
 }

@@ -20,20 +20,20 @@ export const ConfiguracionColumnasTareas = () => {
             {
                 name: 'fechaCompromiso',
                 title: 'Fecha Recordatorio',
-                width: '11%',
+                width: '9%',
                 align: 'center'
             },
             {
                 name: 'montoComprometidoString',
                 title: 'Valor',
-                width: '10%',
+                width: '8%',
                 align: 'right'
             },
             {
                 name: 'tipoTarea',
                 title: 'Tipo Tarea',
-                width: '14%',
-                align: 'center'
+                width: '10%',
+                align: 'left'
             },
             {
                 name: 'observaciones',
@@ -48,10 +48,16 @@ export const ConfiguracionColumnasTareas = () => {
                 align: 'center'
             },
             {
+                name: 'gestor',
+                title: 'Gestor',
+                width: '10%',
+                align: 'left'
+            },
+            {
                 name: 'actions',
                 title: '',
                 getCellValue: (row: any) => row,
-                width: '14%',
+                width: '12%',
                 align: 'center',
                 hiddenFilterColumn: true
 
