@@ -20,6 +20,8 @@ import { DashboardGestiones } from "@/components/Graficos/DashboardGestiones";
 import EditarGestionesIndex from "@/Pages/EditarGestiones/EditarGestionesIndex";
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import NuevaVentanaGestionarDeuda from "@/Pages/EditarGestiones/Pages/NuevaVentanaGestionarDeuda";
+import IndexMigraciones from "@/Pages/MigracionesPages/IndexMigraciones";
+import MigrarPagosPage from "@/Pages/MigracionesPages/pages/MigrarPagosPage";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -32,6 +34,25 @@ const Menus: MenuItem[] = [
     route: "/dashboard",
     component: <DashboardGestiones />,
     icon: WhiteIcon(HomeIcon),
+  },
+  {
+    name: "Migraciones",
+    roles: ["admin", "user"],
+    icon: WhiteIcon(ChecklistRtlIcon),
+    children: [
+      {
+        name: "Compromisos y Gestiones",
+        roles: ["admin"],
+        route: "/gestion/subir-migaciones-compromisos-gestiones",
+        component: <IndexMigraciones />
+      },
+      {
+        name: "Pagos",
+        roles: ["admin"],
+        route: "/gestion/subir-migaciones-Pagos",
+        component: <MigrarPagosPage />
+      }
+    ]
   },
   {
     name: "Home",
