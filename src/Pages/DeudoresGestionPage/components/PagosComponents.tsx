@@ -3,6 +3,7 @@ import CustomTextFieldMoney from "@/components/CustomTextFieldMoney"
 import CustomTextFieldMoneyForm from "@/components/CustomTextFieldMoneyForm"
 import CustomAutocompleteFormTs from "@/components/DataGridCommon/CustomAutocompleteFormTs"
 import CustomTextFieldFormTs from "@/components/DataGridCommon/CustomTextFieldFormTs"
+import ImageDropzone from "@/components/DataGridCommon/ImageDropzone"
 import { FormaPagoInDTO } from "@/model/Dtos/In/FormaPagoInDTO"
 import { SeleccionGeneral } from "@/model/Dtos/In/SeleccionGeneral"
 import { PagoGrabarOutDTO } from "@/model/Dtos/Out/PagoGrabarOutDTO"
@@ -22,7 +23,13 @@ const PagosComponents = () => {
     const [tiposTransaccion, setTiposTransaccion] = useState<SeleccionGeneral[]>([])
     const [abonosLiquidaciones, setAbonosLiquidaciones] = useState<SeleccionGeneral[]>([])
 
-    const { control, errors, rules, onSubmit } = useFormPagos();
+    const {
+        control,
+        errors,
+        rules,
+        onSubmit,
+        imageFile,
+        setImageFile } = useFormPagos();
     const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
 
     useEffect(() => {
@@ -142,6 +149,15 @@ const PagosComponents = () => {
                         label="Numero de Documento"
                         labelFullField="Numero de Documento"
                         requiredField={true}
+
+                    />
+                </Grid>
+                <Grid size={{ lg: 12 }} >
+                    <ImageDropzone
+                        value={imageFile}
+                        onChange={setImageFile}
+                        maxSizeMb={5}
+                        helperText="PNG, JPG o JPEG"
                     />
                 </Grid>
                 <Grid size={{ lg: 12 }} >

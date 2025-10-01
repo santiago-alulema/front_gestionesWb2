@@ -45,13 +45,13 @@ const MigrarPagosPage = () => {
                         'cxc?': 'string',
                         'nombreDeudor?': 'string',
                         'cedulaDeudor?': 'string',
-                        'fecha_Pago?': 'string',
+                        'fecha_Pago?': 'date',
                         'monto?': 'number',
                         'nroControl?': 'string',
                         'nro_Documento?': 'string',
                         'banco?': 'string',
                         'abonoLiquidacion?': 'string',
-                        'verificado?': 'string'
+                        'verificado?': 'boolean'
                     }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}

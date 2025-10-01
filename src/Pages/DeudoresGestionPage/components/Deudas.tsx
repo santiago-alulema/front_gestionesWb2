@@ -164,7 +164,7 @@ const Deudas = () => {
                     />
                 </Box >
             </BasePage>
-            <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda} height={'70%'}
+            <CustomModalTs positionTop="2px" open={abrirModalGestionarDeuda} height={'80%'}
                 handleClose={() => setAbrirModalGestionarDeuda(!abrirModalGestionarDeuda)} width={800}>
                 <GestionarDeuda />
             </CustomModalTs>

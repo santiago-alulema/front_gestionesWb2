@@ -11,10 +11,6 @@ import {
     Tooltip,
     styled,
     Avatar,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Button,
     Table,
     TableBody,
@@ -27,15 +23,19 @@ import {
     InsertDriveFile as FileIcon,
     Close as CloseIcon,
     CloudUpload as UploadIcon,
-    CheckCircle as CheckCircleIcon,
     Error as ErrorIcon,
     Info as InfoIcon
 } from '@mui/icons-material';
 
+type BaseType = 'string' | 'number' | 'boolean' | 'date' | 'percent';
+type OptType =
+    | `${BaseType}?`
+    | BaseType;
+
 interface ExcelUploaderProps {
     legend?: string;
     acceptedFileTypes?: string[];
-    requiredColumns?: { [columnName: string]: 'string' | 'number' | 'boolean' | 'string?' | 'number?' | 'boolean?' };
+    requiredColumns?: { [columnName: string]: OptType };
     onFileProcessed?: (data: any[]) => void;
     maxFileSize?: number;
 }
@@ -68,6 +68,114 @@ const normalizeColumnName = (name: string) => {
         .replace(/\s+/g, ' ')
         .trim();
 };
+
+// ---------- Helpers: fechas y porcentajes ----------
+const toISODateString = (d: Date): string => {
+    // Usamos campos UTC para evitar desfases por timezone
+    const year = d.getUTCFullYear();
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const excelSerialToISODate = (n: number): string => {
+    // Base Excel (con bug del 1900) corregida con 1899-12-30
+    // 1 día = 86400000 ms
+    const excelEpochUTC = Date.UTC(1899, 11, 30); // 1899-12-30
+    const dateUTCms = excelEpochUTC + n * 86400000;
+    const d = new Date(dateUTCms);
+    return toISODateString(d);
+};
+
+const parseAnyDateToISO = (value: any): string => {
+    if (value == null || value === '') {
+        throw new Error('Fecha vacía');
+    }
+
+    // 1) Si viene como Date (cuando cellDates:true y la celda tiene formato fecha)
+    if (value instanceof Date && !isNaN(value.getTime())) {
+        return toISODateString(value);
+    }
+
+    // 2) Si viene como número serial de Excel
+    if (typeof value === 'number' && isFinite(value)) {
+        return excelSerialToISODate(value);
+    }
+
+    // 3) Si viene como string
+    if (typeof value === 'string') {
+        const s = value.trim();
+
+        // Intento ISO directo (YYYY-MM-DD)
+        const isoMatch = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s);
+        if (isoMatch) {
+            const d = new Date(Date.UTC(+isoMatch[1], +isoMatch[2] - 1, +isoMatch[3]));
+            if (!isNaN(d.getTime())) return toISODateString(d);
+        }
+
+        // Intento DD/MM/YYYY o D/M/YYYY
+        const dmyMatch = /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/.exec(s);
+        if (dmyMatch) {
+            const d = new Date(Date.UTC(+dmyMatch[3], +dmyMatch[2] - 1, +dmyMatch[1]));
+            if (!isNaN(d.getTime())) return toISODateString(d);
+        }
+
+        // Intento MM/DD/YYYY (menos común en LATAM pero lo contemplamos)
+        const mdyMatch = /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/.exec(s);
+        if (mdyMatch) {
+            const first = +mdyMatch[1];
+            const second = +mdyMatch[2];
+            // Heurística: si el primer número > 12, asumimos D/M/Y ya capturado arriba
+            if (first <= 12 && second <= 31) {
+                const d = new Date(Date.UTC(+mdyMatch[3], first - 1, second));
+                if (!isNaN(d.getTime())) return toISODateString(d);
+            }
+        }
+
+        // Último intento con Date.parse (puede depender del navegador)
+        const parsed = Date.parse(s);
+        if (!isNaN(parsed)) {
+            return toISODateString(new Date(parsed));
+        }
+    }
+
+    throw new Error('Formato de fecha no reconocido');
+};
+
+const sanitizeNumberString = (s: string) => {
+    // Soporta coma decimal "50,5" → "50.5"
+    return s.replace(/\s+/g, '').replace(',', '.');
+};
+
+const parsePercentToNumber = (value: any): number => {
+    if (value == null || value === '') {
+        // Para percent vacío, devolvemos 0 (coherente con number)
+        return 0;
+    }
+
+    if (typeof value === 'number') {
+        // Si viene como 0.5 desde Excel, convertir a 50
+        if (value >= 0 && value <= 1) return value * 100;
+        return value; // Ya sería 50, 12.3, etc.
+    }
+
+    if (typeof value === 'string') {
+        const raw = sanitizeNumberString(value.trim());
+        // "50%", "50 %", "-10.5%"
+        const pctMatch = /^-?\d+(\.\d+)?%$/.test(raw);
+        if (pctMatch) {
+            return parseFloat(raw.replace('%', ''));
+        }
+        // "0.5", "0,5", "50"
+        const num = parseFloat(raw);
+        if (!isNaN(num)) {
+            return (num >= 0 && num <= 1) ? num * 100 : num;
+        }
+    }
+
+    throw new Error('Porcentaje inválido');
+};
+// ---------------------------------------------------
 
 const UploadExcel: React.FC<ExcelUploaderProps> = ({
     legend = "Arrastra y suelta un archivo Excel aquí, o haz clic para seleccionarlo",
@@ -130,13 +238,15 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                 }
 
                 const data = new Uint8Array(e.target.result as ArrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
+                // Activamos cellDates para que XLSX detecte fechas cuando sea posible
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true });
                 setProgress(60);
 
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
 
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                // Usamos header:1 para obtener AOA (array of arrays)
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: true });
 
                 if (jsonData.length < 2) {
                     throw new Error('El archivo Excel está vacío o no tiene datos.');
@@ -154,11 +264,12 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
 
                 const requiredCols = Object.keys(requiredColumns).map(col => {
                     const cleanCol = col.replace(/\?$/, '');
+                    const rawType = requiredColumns[col]!.replace(/\?$/, '') as BaseType;
                     return {
                         original: cleanCol,
                         normalized: normalizeColumnName(cleanCol),
                         isOptional: col.endsWith('?'),
-                        type: requiredColumns[col].replace(/\?$/, '')
+                        type: rawType
                     };
                 });
 
@@ -173,7 +284,7 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
 
                 const rows = (jsonData.slice(1) as any[]).reduce<ExcelRow[]>((acc, row, index) => {
                     const isEmptyRow = row.every((cell: any) =>
-                        cell === undefined || cell === null || cell === '' || cell === ' ');
+                        cell === undefined || cell === null || String(cell).trim() === '');
                     if (isEmptyRow) return acc;
 
                     const rowObj: ExcelRow = { __rowNumber: index + 2 };
@@ -194,26 +305,30 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                     for (const { original, normalized, isOptional, type } of requiredCols) {
                         const value = normalizedValues[normalized];
                         const displayName = headerMap[normalized] || original;
-                        const cleanType = type.replace(/\?$/, ''); // Remover el ? de tipos opcionales
+                        const cleanType = type; // ya viene sin '?'
 
                         // Manejo de valores vacíos
                         if (value === null || value === undefined || value === '' || value === ' ') {
-                            // Asignar valor por defecto según el tipo
                             switch (cleanType) {
                                 case 'string':
-                                    rowObj[displayName] = ""; // String vacío por defecto
+                                    rowObj[displayName] = "";
                                     break;
                                 case 'number':
-                                    rowObj[displayName] = 0; // Cero por defecto para números
+                                    rowObj[displayName] = 0;
                                     break;
                                 case 'boolean':
-                                    rowObj[displayName] = false; // Falso por defecto para booleanos
+                                    rowObj[displayName] = false;
+                                    break;
+                                case 'date':
+                                    rowObj[displayName] = null; // fecha vacía
+                                    break;
+                                case 'percent':
+                                    rowObj[displayName] = 0;
                                     break;
                                 default:
                                     rowObj[displayName] = null;
                             }
 
-                            // Registrar advertencia si no es opcional
                             if (!isOptional) {
                                 warningsInRow.push(`${displayName} estaba vacío - valor por defecto asignado (${cleanType})`);
                             }
@@ -226,20 +341,32 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                                 case 'string':
                                     rowObj[displayName] = String(value);
                                     break;
-                                case 'number':
-                                    const num = Number(value);
+                                case 'number': {
+                                    const num = typeof value === 'string' ? parseFloat(sanitizeNumberString(value)) : Number(value);
                                     if (isNaN(num)) throw new Error(`${displayName} debe ser un número válido`);
                                     rowObj[displayName] = num;
                                     break;
-                                case 'boolean':
-                                    if (value === 1 || value === '1' || value === true || value === 'true') {
+                                }
+                                case 'boolean': {
+                                    if (value === 1 || value === '1' || value === true || String(value).toLowerCase() === 'true') {
                                         rowObj[displayName] = true;
-                                    } else if (value === 0 || value === '0' || value === false || value === 'false') {
+                                    } else if (value === 0 || value === '0' || value === false || String(value).toLowerCase() === 'false') {
                                         rowObj[displayName] = false;
                                     } else {
                                         throw new Error(`${displayName} debe ser booleano (1/0 o true/false)`);
                                     }
                                     break;
+                                }
+                                case 'date': {
+                                    const iso = parseAnyDateToISO(value);
+                                    rowObj[displayName] = iso; // estándar YYYY-MM-DD
+                                    break;
+                                }
+                                case 'percent': {
+                                    const p = parsePercentToNumber(value);
+                                    rowObj[displayName] = p; // 50% → 50
+                                    break;
+                                }
                                 default:
                                     rowObj[displayName] = value;
                             }
@@ -248,35 +375,27 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                         }
                     }
 
-                    // Mostrar advertencias si existen (pero no son errores fatales)
                     if (warningsInRow.length > 0) {
+                        // Solo advertencias en consola, no bloquean
                         console.warn(`Fila ${index + 2}: ${warningsInRow.join(', ')}`);
                     }
 
-                    // Manejar errores de validación
                     if (errorsInRow.length > 0) {
                         throw new Error(`Fila ${index + 2}: ${errorsInRow.join(', ')}`);
                     }
 
-                    // Procesar columnas no requeridas
+                    // Procesar columnas no requeridas (se copian como vienen, normalizando vacíos a null)
                     headers.forEach(header => {
-                        if (!rowObj[header]) {
+                        if (!(header in rowObj)) {
                             const normalizedHeader = normalizeColumnName(header);
                             const value = normalizedValues[normalizedHeader];
-
-                            // Asignar valor por defecto para columnas no requeridas si están vacías
-                            if (value === null || value === undefined || value === '' || value === ' ') {
-                                rowObj[header] = null; // o podrías asignar un valor por defecto genérico aquí
-                            } else {
-                                rowObj[header] = value;
-                            }
+                            rowObj[header] = (value === null || value === undefined || String(value).trim() === '') ? null : value;
                         }
                     });
 
                     acc.push(rowObj);
                     return acc;
                 }, []);
-
 
                 setFileData(rows);
                 setProgress(100);
@@ -345,7 +464,7 @@ const UploadExcel: React.FC<ExcelUploaderProps> = ({
                                 return (
                                     <Tooltip key={col} title={isOptional ? "Columna opcional" : "Columna requerida"}>
                                         <Chip
-                                            label={`${cleanCol} (${type.replace(/\?$/, '')}${isOptional ? '?' : ''}`}
+                                            label={`${cleanCol} (${type.replace(/\?$/, '')}${isOptional ? '?' : ''})`}
                                             size="small"
                                             color={isError ? 'error' : 'default'}
                                             icon={isError ? <ErrorIcon fontSize="small" /> :

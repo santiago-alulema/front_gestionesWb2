@@ -35,7 +35,13 @@ const UploadPhonesPage = () => {
                 title="Subir Excel Deudores">
                 <UploadExcel
                     legend="Subir telefonos en formato Excel"
-                    requiredColumns={{ 'cedula': 'string', 'telefono': 'string', 'valido': 'boolean', 'origen': 'string' }}
+                    requiredColumns={{
+                        'cedula': 'string',
+                        'telefono': 'string',
+                        'valido': 'boolean',
+                        'origen': 'string',
+                        'propietario': 'string'
+                    }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}
                 />

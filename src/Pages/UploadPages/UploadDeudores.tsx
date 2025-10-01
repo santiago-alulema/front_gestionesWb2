@@ -49,8 +49,7 @@ const UploadDeudores = () => {
                         'Direccion?': 'string?',
                         'Telefono?': 'string?',
                         'Correo?': 'string?',
-                        'Descripcion?': 'string?',
-                        'Usuario': 'string'
+                        'Descripcion?': 'string?'
                     }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}

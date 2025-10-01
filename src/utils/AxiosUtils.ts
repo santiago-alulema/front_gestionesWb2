@@ -1,31 +1,28 @@
-import { BASE_URL } from '@/utils/EnvUrl';
+import { BASE_URL, BASE_URL_WHATSAPP_WEB } from '@/utils/EnvUrl';
 import { showAlert } from '@/utils/modalAlerts';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-
-const api = (prefix = '') => {
-  //   const { showAlert } = useAlert();
-
+const api = (prefix = '', isUrlWhatApp = false) => {
   const instance = axios.create({
-    baseURL: BASE_URL + `${prefix}`,
+    baseURL: (isUrlWhatApp ? BASE_URL_WHATSAPP_WEB : BASE_URL) + `${prefix}`,
+    // ⛔️ Quitamos Content-Type fijo para permitir FormData
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('tokenApp')}`
-    }
+      Authorization: `Bearer ${localStorage.getItem('tokenApp')}`,
+    },
   });
 
   instance.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
-      const msg = error.response?.headers.message
-        ? `${error.response?.headers.message}`
+      const msg = (error.response?.headers as any)?.message
+        ? `${(error.response?.headers as any).message}`
         : `${error.response?.data || error.message}`;
 
       const configAlert = {
-        title: "Error",
+        title: 'Error',
         message: msg,
         type: 'error',
-        callBackFunction: false
+        callBackFunction: false,
       };
       showAlert(configAlert);
 
@@ -40,23 +37,29 @@ export const request = async <T>(
   url: string,
   data?: unknown,
   params?: Record<string, unknown>,
-  isDownload?: boolean
+  isDownload?: boolean,
+  isUrlWhatApp?: boolean
 ): Promise<T> => {
   const config: AxiosRequestConfig = {
     method,
     url,
     data,
     params,
-    responseType: isDownload ? 'blob' : 'json'
+    responseType: isDownload ? 'blob' : 'json',
+    headers: {},
   };
 
-  const response = await api().request<T>(config);
+  // ✅ Solo forzamos JSON si NO es FormData (para que axios ponga boundary automáticamente)
+  if (!(data instanceof FormData)) {
+    (config.headers as any)['Content-Type'] = 'application/json';
+  }
+
+  const response = await api('', isUrlWhatApp).request<T>(config);
 
   if (isDownload && response.data instanceof Blob) {
     const contentType = response.headers['content-type'];
     const contentDisposition = response.headers['content-disposition'];
 
-    // Extraer el nombre del archivo
     let filename = 'documento_descargado';
     if (contentDisposition) {
       const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
@@ -65,21 +68,18 @@ export const request = async <T>(
       }
     }
 
-    // Crear el blob con el tipo MIME correcto
     const blob = new Blob([response.data], { type: contentType });
 
-    // Crear enlace y descargar
     const link = document.createElement('a');
-    const url = window.URL.createObjectURL(blob);
-    link.href = url;
+    const urlObj = window.URL.createObjectURL(blob);
+    link.href = urlObj;
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
 
-    // Limpiar
     setTimeout(() => {
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(urlObj);
     }, 100);
   }
 

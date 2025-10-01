@@ -2,10 +2,12 @@ import { useForm } from 'react-hook-form';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
-import { compromisoPagoServiceWeb, grabarPagosServicioWeb } from '@/services/Service';
+import { compromisoPagoServiceWeb, grabarImagenPagosServicioWeb, grabarPagosServicioWeb } from '@/services/Service';
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { useNavigate, useSearchParams } from 'react-router';
+import { useState } from 'react';
+import { SubirImagenOutDto } from '@/Pages/DeudoresGestionPage/models/SubirImagenOutDto';
 
 export const useFormPagos = () => {
 
@@ -29,6 +31,9 @@ export const useFormPagos = () => {
             observaciones: ''
         }
     });
+
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
 
     const {
         deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
@@ -66,7 +71,6 @@ export const useFormPagos = () => {
         }
     };
 
-
     const handleAutocompleteChange = (field: keyof IGestionInDTO, value: any, returnObject = false) => {
         const val = returnObject ? value : value?.id || '';
         return value;
@@ -98,7 +102,13 @@ export const useFormPagos = () => {
             observaciones: data.observaciones,
             telefono: telefonoSeleccionado
         }
-        await grabarPagosServicioWeb(enviagrabar);
+
+        const formData = new FormData();
+        formData.append("File", imageFile);            // 👈 nombre debe coincidir con tu DTO: IFormFile File
+        formData.append("Category", "comprobante");
+        formData.append("FileName", imageFile.name);
+        const pagoGrabado: any = await grabarPagosServicioWeb(enviagrabar);
+        await grabarImagenPagosServicioWeb(pagoGrabado?.idPago, formData);
         const configAlert = {
             title: "Correcto",
             message: "Se grabo correctamente el PAGO",
@@ -127,6 +137,8 @@ export const useFormPagos = () => {
         handleTextChange,
         onSubmit,
         formValues: watch(),
-        rules
+        rules,
+        imageFile,
+        setImageFile
     };
 };

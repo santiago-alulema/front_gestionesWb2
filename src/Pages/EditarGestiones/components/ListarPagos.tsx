@@ -10,6 +10,8 @@ import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import VizualizarImagen from '@/components/VizualizarImagen';
 
 const ListarPagos = () => {
     const { setAbrirModalEditarPagos,
@@ -17,6 +19,7 @@ const ListarPagos = () => {
         setPagosSeleccionadoEditar,
         pagosAEditar,
         obtenerPagosAEditar } = useEditarGestiones();
+    const [urlImagen, setUrlImagen] = useState<string>("");
 
     const seleccionarPago = (item: PagoDto) => {
         setPagosSeleccionadoEditar(item);
@@ -48,6 +51,20 @@ const ListarPagos = () => {
         }
     }
 
+    const verImagen = (item: PagoDto) => {
+        console.log("first", item)
+        if (!item.imagenUrl) {
+            const configAlert = {
+                title: "Error",
+                message: "El <strong>PAGO</strong> no tiene imagen",
+                type: 'warning',
+                callBackFunction: false,
+            };
+            showAlert(configAlert)
+            return;
+        }
+        setUrlImagen(item.imagenUrl)
+    }
     const actionsConfig: IActionConfig[] = [
         {
             tooltip: "Ver",
@@ -63,6 +80,15 @@ const ListarPagos = () => {
             onClick: eliminarGestion,
             icon: <DeleteIcon />,
             hidden: false,
+            sizeIcon: 'small',
+            typeInput: 'icon',
+            inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
+        },
+        {
+            tooltip: "Ver Imagen",
+            label: "ss",
+            onClick: verImagen,
+            icon: <ImageSearchIcon />,
             sizeIcon: 'small',
             typeInput: 'icon',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
@@ -84,6 +110,7 @@ const ListarPagos = () => {
             <CustomModalTs open={abrirModalEditarPagos} handleClose={() => setAbrirModalEditarPagos(false)} >
                 <ModalEditarPagos />
             </CustomModalTs>
+            <VizualizarImagen previewUrl={urlImagen} onClose={() => setUrlImagen("")} />
         </>
     )
 }

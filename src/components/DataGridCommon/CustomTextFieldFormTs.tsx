@@ -84,7 +84,7 @@ const CustomTextFieldFormTs = ({
             style={{
               ...style,
               width: width,
-              minHeight: '56px'
+              minHeight: '6px'
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
@@ -126,7 +126,7 @@ const CustomTextFieldFormTs = ({
               sx: {
                 color: error ? 'error.main' : undefined,
                 marginLeft: 0,
-                height: '20px', // Espacio fijo para el mensaje
+                height: '0px', // Espacio fijo para el mensaje
               }
             }}
           />

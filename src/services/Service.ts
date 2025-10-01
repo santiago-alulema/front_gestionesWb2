@@ -16,6 +16,7 @@ import { IGestionInDTO } from "@/model/Dtos/Out/IGestionOutDTO";
 import { PagoGrabarOutDTO } from "@/model/Dtos/Out/PagoGrabarOutDTO";
 import PhonesClientsOutDTO from "@/model/Dtos/Out/PhonesClientsOutDTO";
 import UserLogin from "@/model/Dtos/Out/UserLogin";
+import { SubirImagenOutDto } from "@/Pages/DeudoresGestionPage/models/SubirImagenOutDto";
 import { ActualizarEstadoCompromisoDTO } from "@/Pages/GestionarCompromisosPagos/models/ActualizarEstadoCompromisoDTO";
 import END_POINT from "@/services/EndPoint";
 import { request } from "@/utils/AxiosUtils";
@@ -221,6 +222,12 @@ export const grabarPagosServicioWeb = (compromisoPago: PagoGrabarOutDTO) =>
     compromisoPago
   );
 
+export const grabarImagenPagosServicioWeb = (IdPago: String, imagenPago: FormData) =>
+  request<string>(
+    'post',
+    `${END_POINT.GRABAR_IMAGEN_PAGO}/${IdPago}`,
+    imagenPago
+  );
 
 export const grabarGestionServicioWeb = (gestion: IGestionInDTO) =>
   request<string>(

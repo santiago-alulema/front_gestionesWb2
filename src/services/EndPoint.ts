@@ -19,6 +19,8 @@ const END_POINT = {
     DESACTIVAR_TELEFONO: 'cliente/desactivar-telefono',
     GRABAR_COMPROMISO_PAGO: 'Gestiones/grabar-compromiso-pago',
     GRABAR_PAGO: 'Gestiones/grabar-pago',
+    GRABAR_IMAGEN_PAGO: 'Images/upload',
+
     GRABAR_GESTION: 'Gestiones/grabar-gestion',
     GESTIONES_REPORTE: 'Gestiones/gestiones-reporte',
     COMPROMISOS_REPORTE: 'Gestiones/compromiso-reporte',

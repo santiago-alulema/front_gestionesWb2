@@ -9,6 +9,7 @@ interface UserData {
     jti: string;
     iss: string;
     aud: string;
+    telefono: string;
     // Puedes añadir otros campos que estén en tu token aquí
 }
 
@@ -58,7 +59,8 @@ const decodeJWT = (token: string): UserData | null => {
             jti: payload.jti,
             iss: payload.iss,
             aud: payload.aud,
-            fullName: payload.fullName
+            fullName: payload.fullName,
+            telefono: payload.telefono
         };
     } catch (error) {
         console.error("Error decoding JWT:", error);

@@ -42,10 +42,10 @@ const UploadDeudasPage = () => {
                         'interes?': 'number',
                         'gastosCobranza?': 'number',
                         'saldoDeuda': 'number',
-                        'descuento': 'string',
+                        'descuento': 'percent?',
                         'montoCobrar': 'number',
-                        'fechaVenta': 'string',
-                        'fechaUltimoPago?': 'string',
+                        'fechaVenta': 'date?',
+                        'fechaUltimoPago?': 'date?',
                         'estado?': 'string',
                         'diasMora?': 'number',
                         'numeroFactura?': 'string',
@@ -59,7 +59,8 @@ const UploadDeudasPage = () => {
                         'empresa': 'string',
                         'productoDescripcion': 'string',
                         'agencia': 'string',
-                        'ciudad': 'string'
+                        'ciudad': 'string',
+                        'usuario': 'string'
                     }}
                     onFileProcessed={handleFileProcessed}
                     maxFileSize={10}

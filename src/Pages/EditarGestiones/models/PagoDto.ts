@@ -17,4 +17,5 @@ export interface PagoDto {
     idTipoTransaccion?: string;
     idAbonoLiquidacion?: string;
     gestor: string;
+    imagenUrl: string;
 }
