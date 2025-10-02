@@ -76,7 +76,7 @@ const InformacionCompletaDeuda = () => {
                     </Box>
 
                     <Divider sx={{ mb: 1 }} />
-                    <Grid container spacing={0}>
+                    <Grid container spacing={1}>
                         <Grid size={{ xs: 12, md: 12 }} >
                             <Paper elevation={0} sx={{ bgcolor: "background.paper" }}>
                                 <Typography variant="subtitle2" sx={titleStyle}>
@@ -88,6 +88,7 @@ const InformacionCompletaDeuda = () => {
                             <DetailItem
                                 title="Producto"
                                 value={deudaSeleccionada.productoDescripcion}
+
                             />
 
                         </Grid>
@@ -212,12 +213,12 @@ const InformacionCompletaDeuda = () => {
     );
 };
 
-const DetailItem = ({ title, value }: { title: string; value?: string }) => (
+const DetailItem = ({ title, value, fontsize = '13px' }: { title: string; value?: string; fontsize?: string }) => (
     <Box sx={{ mb: 2 }}>
         <Typography variant="caption" color="textSecondary">
             {title}
         </Typography>
-        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+        <Typography variant="body1" sx={{ fontWeight: 500, fontSize: fontsize, textAlign: 'justify', marginRight: 2 }}>
             {value || "N/A"}
         </Typography>
     </Box>

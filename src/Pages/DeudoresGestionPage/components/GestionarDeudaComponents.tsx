@@ -1,4 +1,4 @@
-import { Box, Button, Grid, InputAdornment, Stack, TextField } from '@mui/material'
+import { Box, Button, Grid, IconButton, InputAdornment, Stack, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { TipoContactoGestionInDTO } from '@/model/Dtos/In/TipoContactoGestionInDTO';
@@ -7,11 +7,21 @@ import { SeleccionGeneral } from '@/model/Dtos/In/SeleccionGeneral';
 import CustomAutocompleteFormTs from '@/components/DataGridCommon/CustomAutocompleteFormTs';
 import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFormTs';
 import { useFormGestionarDeuda } from '@/Pages/DeudoresGestionPage/useForms/useFormGestionarDeuda';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import EmailIcon from '@mui/icons-material/Email';
+import { MensajeriaInDto } from '@/Pages/DeudoresGestionPage/models/MensajeriaInDto';
+import { mensajesGestionesServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios';
+import { enviarMensajeWhatsapp } from '@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp';
 
 const GestionarDeudaComponents = () => {
 
-    const { control, errors, onSubmit, rules } = useFormGestionarDeuda();
-
+    const { control,
+        errors,
+        onSubmit,
+        rules,
+        enviarMensajeWhatsappServicioWeb,
+        enviarCorreoCliente,
+        setMensajeGestion } = useFormGestionarDeuda();
 
     const {
         deudorSeleccionado,
@@ -21,7 +31,6 @@ const GestionarDeudaComponents = () => {
     const [resultados, setResultados] = useState<SeleccionGeneral[]>([])
     const [tiposContacto, setTiposContacto] = useState<SeleccionGeneral[]>([])
     const [respuestas, setRespuestas] = useState<SeleccionGeneral[]>([])
-
     const [tipoContactoSeleccionado, setTipoContactoSeleccionado] = useState<any>(null); // nuevo estado
 
     const onInit = async () => {
@@ -31,6 +40,7 @@ const GestionarDeudaComponents = () => {
 
     useEffect(() => {
         onInit();
+        cargarMensaje();
         obtenerTelefonosCliente(deudorSeleccionado.cedula);
         cargarResultado()
     }, []);
@@ -38,6 +48,11 @@ const GestionarDeudaComponents = () => {
     const cargarResultado = async () => {
         const respuesta = await resultadosServicioWeb();
         setResultados(respuesta)
+    }
+
+    const cargarMensaje = async () => {
+        const respuesta = await mensajesGestionesServicioWeb();
+        setMensajeGestion(respuesta);
     }
 
     const cargarTipoContacto = async (value: any) => {
@@ -127,6 +142,40 @@ const GestionarDeudaComponents = () => {
                         labelFullField="Email"
                     />
                 </Grid>
+
+                <Grid size={{ lg: 6 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
+                        <Typography variant='body2'>Envia Mensaje por:</Typography>
+                        <IconButton onClick={enviarMensajeWhatsappServicioWeb}
+                            sx={{
+                                backgroundColor: '#25D366',
+                                color: 'white',
+                                width: 32,
+                                height: 32,
+                                ml: 1,
+                                '&:hover': {
+                                    backgroundColor: '#1EBE5C'
+                                }
+                            }}
+                        >
+                            <WhatsAppIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={enviarCorreoCliente} sx={{
+                            backgroundColor: '#0078d4',
+                            color: 'white',
+                            width: 32,
+                            height: 32,
+                            ml: 1,
+                            '&:hover': {
+                                backgroundColor: '#006bb3'
+                            }
+                        }}
+                        >
+                            <EmailIcon fontSize="small" />
+                        </IconButton>
+                    </Box>
+                </Grid>
+
                 <Grid size={{ lg: 12 }} alignContent='center'>
                     <CustomTextFieldFormTs
                         name='observaciones'

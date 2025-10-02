@@ -57,7 +57,6 @@ const TabsGestionarDeudas = () => {
                     <Tab label="Pagos" {...a11yProps(1)} />
                     <Tab label="Tareas" {...a11yProps(2)} />
                     <Tab label="Telefonos Deudor" {...a11yProps(3)} />
-                    <Tab label="Enviar Mensajeria" {...a11yProps(4)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -71,9 +70,6 @@ const TabsGestionarDeudas = () => {
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 <PhoneNumbersInput cedula={deudorSeleccionado.cedula} phones={telefonosActivos} setPhones={setTelefonosActivos} />
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={4}>
-                "Enviar mensajeria"
             </CustomTabPanel>
         </Box>
     )

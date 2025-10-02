@@ -11,6 +11,7 @@ import TelefonosClientesActivos from "@/model/Dtos/In/TelefonosClientesActivos";
 import { TipoContactoGestionInDTO } from "@/model/Dtos/In/TipoContactoGestionInDTO";
 import TipoGestioneOutDTO from "@/model/Dtos/In/TipoGestioneOutDTO";
 import VerificarEstadoTelefonoCliente from "@/model/Dtos/In/VerificarEstadoTelefonoCliente";
+import { EnviarCorreoOutDto } from "@/model/Dtos/Out/EnviarCorreoOutDto";
 import { ICompromisoPagoOutDTO } from "@/model/Dtos/Out/ICompromisoPagoOutDTO";
 import { IGestionInDTO } from "@/model/Dtos/Out/IGestionOutDTO";
 import { PagoGrabarOutDTO } from "@/model/Dtos/Out/PagoGrabarOutDTO";
@@ -26,6 +27,13 @@ export const LoginUser = (userLogin: UserLogin) =>
     'post',
     END_POINT.LOGIN,
     userLogin
+  );
+
+export const EnviarCorreoClienteServicioWeb = (EnviarCorreoOutDto: EnviarCorreoOutDto) =>
+  request<any>(
+    'post',
+    END_POINT.ENVIAR_CORREO_ELECTRONICO,
+    EnviarCorreoOutDto
   );
 
 export const uploadDeudoresServiceWeb = (dataDeudores: any) =>

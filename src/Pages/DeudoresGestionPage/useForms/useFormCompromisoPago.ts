@@ -2,13 +2,20 @@ import { useForm } from 'react-hook-form';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
-import { compromisoPagoServiceWeb, grabarCompromisoPago, grabarGestionServicioWeb, grabarPagosServicioWeb } from '@/services/Service';
+import { compromisoPagoServiceWeb, EnviarCorreoClienteServicioWeb, grabarCompromisoPago, grabarGestionServicioWeb, grabarPagosServicioWeb } from '@/services/Service';
 import dayjs from "dayjs"
 import { PagoGrabarOutDTO } from '@/model/Dtos/Out/PagoGrabarOutDTO';
 import { ICompromisoPagoOutDTO } from '@/model/Dtos/Out/ICompromisoPagoOutDTO';
 import { useState } from 'react';
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO';
 import { useNavigate, useSearchParams } from 'react-router';
+import { MensajeriaInDto } from '@/Pages/DeudoresGestionPage/models/MensajeriaInDto';
+import { mensajesTareasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios';
+import { enviarMensajeWhatsapp } from '@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp';
+import { useLogin } from '@/context/LoginContext';
+import { normalizarTelefono } from '@/utils/MetodosAuxiliares';
+import { useLoading } from '@/components/LoadingContext';
+import { EnviarCorreoOutDto } from '@/model/Dtos/Out/EnviarCorreoOutDto';
 
 export const useFormCompromisoPago = () => {
 
@@ -37,10 +44,16 @@ export const useFormCompromisoPago = () => {
     const [searchParams] = useSearchParams();
     const deudaId = searchParams.get("deudaId");
     const navigate = useNavigate();
-
-
+    const [mensajesTarea, setMensajesTarea] = useState<MensajeriaInDto[]>([])
+    const [mensaje, setMensaje] = useState<MensajeriaInDto>(null)
+    const { userData } = useLogin();
+    const { startLoading, stopLoading } = useLoading();
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
+        deudaSeleccionada,
+        setAbrirModalGestionarDeuda,
+        setTareasPendientes,
+        telefonoSeleccionado,
+        deudorSeleccionado
     } = useGestionarDeudas();
 
     const rules = {
@@ -110,6 +123,162 @@ export const useFormCompromisoPago = () => {
         setTareasPendientes(respuesta)
     }
 
+    const cargarMensajesTareas = async () => {
+        const respuesta = await mensajesTareasServicioWeb();
+        setMensajesTarea(respuesta);
+    }
+
+    const seleccionarMensaje = (item: any) => {
+        setMensaje(item)
+    }
+
+    const valorPago = watch("valorCompromiso");
+    const fechaCompromiso = watch("fechaCompromiso");
+
+    const enviarMensajeWhatsappTareas = async () => {
+        try {
+            startLoading();
+            if (!valorPago) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "El valor del <strong>COMPROMISO NO PUEDE SER CERO</strong>",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+            if (!mensaje) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "Debe seleccionar un <strong>TIPO DE MENSAJE</strong>",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+
+            if (!telefonoSeleccionado) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "Debe seleccionar un telefono antes de enviar el mensaje",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+            const telefonoNormalizado = normalizarTelefono(telefonoSeleccionado);
+            dayjs.locale("es"); // establecer idioma global
+            const fechaPago = dayjs(fechaCompromiso)
+                .add(1, "month")
+                .format("D [de] MMMM [del] YYYY");
+
+            const mensajeEnviar = mensaje.mensaje
+                .replace("{{cedula}}", ` - *${deudorSeleccionado.cedula}*`)
+                .replace("{{nombre}}", `*${deudorSeleccionado.nombre}*`)
+                .replace("{{cliente}}", `*${deudorSeleccionado.nombre}*`)
+                .replace("{{recordatorio}}", ` *${deudaSeleccionada.numeroFactura}*`)
+                .replace("{{contrato}}", ` *${deudaSeleccionada.numeroFactura}*`)
+                .replace("{{valorDeuda}}", `*${deudaSeleccionada.saldoDeuda}*`)
+                .replace("{{empresa}}", `*${deudaSeleccionada.empresa}*`)
+                .replace("{{valorPago}}", `*${valorPago}*`)
+                .replace("{{fechaAbono}}", ` *${fechaPago}*`);
+
+            await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            const configAlert = {
+                title: "Correcto",
+                message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } catch (error) {
+            const configAlert = {
+                title: "Error",
+                message: ` <strong>${error}</strong> `,
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
+    }
+
+
+    const enviarCorreoCliente = async () => {
+        try {
+            startLoading();
+            if (!valorPago) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "El valor del <strong>COMPROMISO NO PUEDE SER CERO</strong>",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+            if (!mensaje) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "Debe seleccionar un <strong>TIPO DE MENSAJE</strong>",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+
+
+            dayjs.locale("es"); // establecer idioma global
+            const fechaPago = dayjs(fechaCompromiso)
+                .add(1, "month")
+                .format("D [de] MMMM [del] YYYY");
+
+            const mensajeEnviar = mensaje.mensajeCorreo
+                .replace("{{cedula}}", ` - ${deudorSeleccionado.cedula}`)
+                .replace("{{nombre}}", `${deudorSeleccionado.nombre}`)
+                .replace("{{cliente}}", `${deudorSeleccionado.nombre}`)
+                .replace("{{recordatorio}}", ` ${deudaSeleccionada.numeroFactura} `)
+                .replaceAll("{{contrato}}", ` ${deudaSeleccionada.numeroFactura} `)
+                .replaceAll("{{valorDeuda}}", ` ${deudaSeleccionada.saldoDeuda} `)
+                .replaceAll("{{empresa}}", ` ${deudaSeleccionada.empresa}* `)
+                .replace("{{valorPago}}", `${valorPago}`)
+                .replace("{{fechaAbono}}", `${fechaPago}`)
+                .replace("{{contrato}}", `${fechaPago}`)
+                .replace("{{telefonoGestor}}", `${userData.telefono}`);
+
+
+            const htmlBody: EnviarCorreoOutDto = {
+                htmlBody: mensajeEnviar,
+                subject: mensaje.tipoMensaje,
+                to: deudorSeleccionado.correo
+            }
+            await EnviarCorreoClienteServicioWeb(htmlBody);
+
+            const configAlert = {
+                title: "Correcto",
+                message: `El correo fue enviado correctamente <strong>${deudorSeleccionado.correo}</strong> `,
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } catch (error) {
+            const configAlert = {
+                title: "Error",
+                message: ` <strong>${error}</strong> `,
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
+
+    }
     return {
         control,
         errors,
@@ -122,6 +291,11 @@ export const useFormCompromisoPago = () => {
         formValues: watch(),
         rules,
         seleccionTipoTarea,
-        setSeleccionTipoTarea
+        setSeleccionTipoTarea,
+        cargarMensajesTareas,
+        mensajesTarea,
+        seleccionarMensaje,
+        enviarMensajeWhatsappTareas,
+        enviarCorreoCliente
     };
 };

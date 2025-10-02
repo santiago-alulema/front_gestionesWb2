@@ -9,7 +9,7 @@ const END_POINT = {
     BUCAR_DEUDA_POR_ID: 'Cliente/buscar-deuda-por-id',
     BUCAR_DEUDOR_POR_ID: 'Cliente/buscar-cliente-por-id',
 
-
+    ENVIAR_CORREO_ELECTRONICO: 'Email/send',
 
     TIPO_GESTIONES_PADRE: 'TipoGestion/tipo-gestion-padre',
     TIPO_GESTIONES_HIJO_POR_PADRE_ID: 'TipoGestion/tipo-gestion-por-padre',

@@ -23,6 +23,7 @@ import NuevaVentanaGestionarDeuda from "@/Pages/EditarGestiones/Pages/NuevaVenta
 import IndexMigraciones from "@/Pages/MigracionesPages/IndexMigraciones";
 import MigrarPagosPage from "@/Pages/MigracionesPages/pages/MigrarPagosPage";
 import WhatsappConfiguraionIndex from "@/Pages/WhatsappConfiguracion/WhatsappConfiguraionIndex";
+import ReporteDeudasSubidas from "@/Pages/Reportes/pages/ReporteDeudasSubidas";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -148,14 +149,20 @@ const Menus: MenuItem[] = [
       {
         name: "Reporte General",
         roles: ["admin", "user"],
-        route: "/gestion/reporte-general",
+        route: "/reporte/reporte-general",
         component: <InformacionGeneralGestionesIndex />
       },
       {
         name: "Ver Reportes",
         roles: ["admin"],
-        route: "/gestion/reporteria-deudas",
+        route: "/reporte/reporteria-deudas",
         component: <PrincipalReportes />
+      },
+      {
+        name: "Ver Reportes Deudas",
+        roles: ["admin"],
+        route: "/reporte/reporteria-deudas-subidas",
+        component: <ReporteDeudasSubidas />
       }
     ]
   }

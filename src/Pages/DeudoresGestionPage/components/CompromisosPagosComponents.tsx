@@ -1,14 +1,17 @@
 import CustomDatePickerForm from '@/components/CustomDatePickerForm'
 import CustomTextFieldMoneyForm from '@/components/CustomTextFieldMoneyForm'
 import CustomAutocompleteFormTs from '@/components/DataGridCommon/CustomAutocompleteFormTs'
+import CustomAutocompleteTs from '@/components/DataGridCommon/CustomAutocompleteTs'
 import CustomTextFieldFormTs from '@/components/DataGridCommon/CustomTextFieldFormTs'
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores'
 import TiposTareaInDTO from '@/Pages/DeudoresGestionPage/models/TiposTareaInDTO'
 import { tiposTareasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios'
 import { useFormCompromisoPago } from '@/Pages/DeudoresGestionPage/useForms/useFormCompromisoPago'
-import { Box, Button, Grid } from '@mui/material'
+import { Box, Button, Grid, IconButton } from '@mui/material'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import EmailIcon from '@mui/icons-material/Email';
 
 const CompromisosPagosComponents = () => {
     const fechaActual = dayjs().format('YYYY-MM-DD')
@@ -19,11 +22,22 @@ const CompromisosPagosComponents = () => {
         setTiposTareas(respuesta)
     }
 
-    const { control, errors, rules, onSubmit, seleccionTipoTarea, setSeleccionTipoTarea } = useFormCompromisoPago();
+    const { control,
+        errors,
+        rules,
+        onSubmit,
+        seleccionTipoTarea,
+        setSeleccionTipoTarea,
+        cargarMensajesTareas,
+        seleccionarMensaje,
+        enviarMensajeWhatsappTareas,
+        enviarCorreoCliente,
+        mensajesTarea } = useFormCompromisoPago();
     const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
 
     useEffect(() => {
-        onInit()
+        onInit();
+        cargarMensajesTareas();
     }, [])
 
     const horarioRecordatorio = [
@@ -93,6 +107,45 @@ const CompromisosPagosComponents = () => {
                             />
                         </Grid>
                     )}
+                </Grid>
+                <Grid size={{ lg: 6 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
+                        <CustomAutocompleteTs
+                            label="Tipo de mensaje"
+                            options={mensajesTarea}
+                            optionLabel='tipoMensaje'
+                            optionValue='id'
+                            labelFullField='Seleccione de mensaje'
+                            handleChange={(e, value: any) => seleccionarMensaje(value)}
+                        />
+                        <IconButton onClick={enviarMensajeWhatsappTareas}
+                            sx={{
+                                backgroundColor: '#25D366',
+                                color: 'white',
+                                width: 32,
+                                height: 32,
+                                ml: 1,
+                                '&:hover': {
+                                    backgroundColor: '#1EBE5C'
+                                }
+                            }}
+                        >
+                            <WhatsAppIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={enviarCorreoCliente} sx={{
+                            backgroundColor: '#0078d4',
+                            color: 'white',
+                            width: 32,
+                            height: 32,
+                            ml: 1,
+                            '&:hover': {
+                                backgroundColor: '#006bb3'
+                            }
+                        }}
+                        >
+                            <EmailIcon fontSize="small" />
+                        </IconButton>
+                    </Box>
                 </Grid>
                 <Grid size={{ lg: 12 }} >
                     <CustomTextFieldFormTs

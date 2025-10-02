@@ -2,8 +2,16 @@ import { useForm } from 'react-hook-form';
 import { IGestionInDTO } from '@/model/Dtos/Out/IGestionOutDTO';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { showAlert } from '@/utils/modalAlerts';
-import { compromisoPagoServiceWeb, grabarGestionServicioWeb } from '@/services/Service';
+import { compromisoPagoServiceWeb, EnviarCorreoClienteServicioWeb, grabarGestionServicioWeb } from '@/services/Service';
 import { useNavigate, useSearchParams } from 'react-router';
+import { normalizarTelefono } from '@/utils/MetodosAuxiliares';
+import { enviarMensajeWhatsapp } from '@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp';
+import { useLogin } from '@/context/LoginContext';
+import { useState } from 'react';
+import { MensajeriaInDto } from '@/Pages/DeudoresGestionPage/models/MensajeriaInDto';
+import { useLoading } from '@/components/LoadingContext';
+import dayjs from 'dayjs';
+import { EnviarCorreoOutDto } from '@/model/Dtos/Out/EnviarCorreoOutDto';
 
 export const useFormGestionarDeuda = () => {
 
@@ -29,9 +37,15 @@ export const useFormGestionarDeuda = () => {
     const [searchParams] = useSearchParams();
     const deudaId = searchParams.get("deudaId");
     const navigate = useNavigate();
-
+    const { userData } = useLogin();
+    const [mensajeGestion, setMensajeGestion] = useState<MensajeriaInDto>(null)
+    const { startLoading, stopLoading } = useLoading();
     const {
-        deudaSeleccionada, setAbrirModalGestionarDeuda, setTareasPendientes, telefonoSeleccionado
+        deudaSeleccionada,
+        setAbrirModalGestionarDeuda,
+        setTareasPendientes,
+        telefonoSeleccionado,
+        deudorSeleccionado
     } = useGestionarDeudas();
 
 
@@ -106,6 +120,147 @@ export const useFormGestionarDeuda = () => {
         setTareasPendientes(respuesta)
     }
 
+    const enviarMensajeWhatsappServicioWeb = async () => {
+        try {
+            startLoading();
+            if (!telefonoSeleccionado) {
+                const configAlert = {
+                    title: "Advertencia",
+                    message: "Debe seleccionar un telefono antes de enviar el mensaje",
+                    type: 'warning',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
+            const telefonoNormalizado = normalizarTelefono(telefonoSeleccionado);
+            dayjs.locale("es"); // establecer idioma global
+            const fechaPago = dayjs(deudaSeleccionada.fechaUltimoPago)
+                .add(1, "month")
+                .format("D [de] MMMM [del] YYYY");
+            const fechaActual = dayjs().format("D [de] MMMM [del] YYYY");
+            const productoFormateado = deudaSeleccionada.productoDescripcion.replaceAll("||", "\n-");
+            const mensajeEnviar = mensajeGestion.mensaje.replace("{{cedula}}", `*${deudorSeleccionado.cedula}*`)
+                .replace("{{nombre}}", `*${deudorSeleccionado.nombre}*`)
+                .replace("{{producto}}", `*${productoFormateado}*`)
+                .replace("{{telefono}}", `*${userData.telefono}*`)
+                .replace("{{fecha}}", `*${fechaActual}*`)
+                .replace("{{empresa}}", `*${deudaSeleccionada.empresa}*`)
+                .replace("{{deuda}}", `*${deudaSeleccionada.saldoDeuda}*`)
+                .replace("{{fechaPago}}", `*${fechaPago}*`)
+                .replace("{{pagoUnico}}", `*${deudaSeleccionada.montoCobrar}*`)
+
+            await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            const configAlert = {
+                title: "Correcto",
+                message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } catch (error) {
+            const configAlert = {
+                title: "Error",
+                message: ` <strong>${error}</strong> `,
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
+    }
+
+    const enviarCorreoCliente = async () => {
+        try {
+            startLoading();
+
+            const telefonoNormalizado = normalizarTelefono(telefonoSeleccionado);
+            dayjs.locale("es"); // establecer idioma global
+            const fechaPago = dayjs(deudaSeleccionada.fechaUltimoPago)
+                .add(1, "month")
+                .format("D [de] MMMM [del] YYYY");
+            const fechaActual = dayjs().format("D [de] MMMM [del] YYYY");
+            const productoFormateado = productosToTableHtml(deudaSeleccionada.productoDescripcion);
+            const mensajeEnviar = mensajeGestion.mensajeCorreo.replace("{{cedula}}", `${deudorSeleccionado.cedula}`)
+                .replaceAll("{{nombre}}", `${deudorSeleccionado.nombre}*`)
+                .replaceAll("{{producto}}", `${productoFormateado}`)
+                .replaceAll("{{telefono}}", `${telefonoNormalizado}`)
+                .replaceAll("{{fecha}}", `${fechaActual}*`)
+                .replaceAll("{{empresa}}", `${deudaSeleccionada.empresa}`)
+                .replaceAll("{{deuda}}", `*${deudaSeleccionada.saldoDeuda}`)
+                .replaceAll("{{fechaPago}}", `${fechaPago}*`)
+                .replaceAll("{{telefonoGestor}}", `${userData.telefono}*`)
+                .replaceAll("{{pagoUnico}}", `${deudaSeleccionada.montoCobrar}`)
+
+            const htmlBody: EnviarCorreoOutDto = {
+                htmlBody: mensajeEnviar,
+                subject: mensajeGestion.tipoMensaje,
+                to: deudorSeleccionado.correo
+            }
+            await EnviarCorreoClienteServicioWeb(htmlBody);
+            const configAlert = {
+                title: "Correcto",
+                message: `Mensaje al correo <strong>${deudorSeleccionado.correo}</strong> enviado correctamente  `,
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } catch (error) {
+            const configAlert = {
+                title: "Error",
+                message: ` <strong>${error}</strong> `,
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
+    }
+
+    function escapeHtml(s: string = ""): string {
+        return s
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
+    function productosToTableHtml(productoDescripcion: string): string {
+        const items = (productoDescripcion ?? "")
+            .split("||")
+            .map(s => s.trim())
+            .filter(Boolean);
+
+        if (items.length === 0) return "";
+
+        const rows = items
+            .map(p => `
+                <tr>
+                    <td style="padding:8px; border:1px solid #e5e7eb; font-size:14px;">
+                    ${escapeHtml(p)}
+                    </td>
+                </tr>`)
+            .join("");
+
+        return `
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                    style="width:100%; border-collapse:collapse; margin:0px 0 0px; border:1px solid #e5e7eb;">
+                <thead>
+                    <tr>
+                    <th style="text-align:left; padding:8px; background:#f9fafb; border:1px solid #e5e7eb; font-size:14px;">
+                        Producto
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+                </table>`;
+    }
+
+
 
     return {
         control,
@@ -117,6 +272,9 @@ export const useFormGestionarDeuda = () => {
         handleTextChange,
         onSubmit,
         formValues: watch(),
-        rules
+        rules,
+        enviarMensajeWhatsappServicioWeb,
+        setMensajeGestion,
+        enviarCorreoCliente
     };
 };
