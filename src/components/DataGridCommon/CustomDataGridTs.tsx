@@ -334,29 +334,34 @@ const CustomDataGridTs = <T,>({
     onChangeFilters?.(nextFilters);
     setFilters(nextFilters);
     setCurrentPage(nextPage);
-
-    writeStateToStorage(storageKey, { filters: nextFilters, pageSize, currentPage: nextPage });
+    if (maintainFilter) {
+      writeStateToStorage(storageKey, { filters: nextFilters, pageSize, currentPage: nextPage });
+    }
     updateFilteredRows(rows);
   }, [pageSize, rows, storageKey, onChangeFilters]);
 
 
   const guardarPaginacion = useCallback((page: number) => {
-    writeStateToStorage(storageKey, { filters, pageSize, currentPage: page });
+    if (maintainFilter) {
+      writeStateToStorage(storageKey, { filters, pageSize, currentPage: page });
+    }
     setCurrentPage(page);
   }, [filters, pageSize, storageKey]);
 
   const onPageSizeChange = useCallback((size: number) => {
     setPageSize(size);
-    writeStateToStorage(storageKey, { filters, pageSize: size, currentPage });
+    if (maintainFilter) {
+      writeStateToStorage(storageKey, { filters, pageSize: size, currentPage });
+    }
   }, [filters, currentPage, storageKey]);
 
 
   useEffect(() => {
-    if (rows.length > 0) {
+    if (rows.length > 0 && maintainFilter) {
       type Persisted = { filters?: any[]; pageSize?: number; currentPage?: number };
       const restored = readStateFromStorage<Persisted>(storageKey);
       setCurrentPage(restored?.currentPage ?? 0);
-      setFilters(restored.filters)
+      setFilters(restored?.filters ?? [])
       setPageSize(restored?.pageSize ?? 5);
     }
   }, [rows]);
