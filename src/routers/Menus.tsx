@@ -58,12 +58,12 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Configuracion",
-    roles: ["admin"],
+    roles: ["admin", "user"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
         name: "Configuracion Whatsapp",
-        roles: ["admin"],
+        roles: ["admin", "user"],
         route: "/configuracion/configurar-whatsapp",
         component: <WhatsappConfiguraionIndex />
       }
