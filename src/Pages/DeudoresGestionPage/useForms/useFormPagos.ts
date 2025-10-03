@@ -103,12 +103,17 @@ export const useFormPagos = () => {
             telefono: telefonoSeleccionado
         }
 
-        const formData = new FormData();
-        formData.append("File", imageFile);            // 👈 nombre debe coincidir con tu DTO: IFormFile File
-        formData.append("Category", "comprobante");
-        formData.append("FileName", imageFile.name);
+
+
         const pagoGrabado: any = await grabarPagosServicioWeb(enviagrabar);
-        await grabarImagenPagosServicioWeb(pagoGrabado?.idPago, formData);
+        if (imageFile != null) {
+            const formData = new FormData();
+            formData.append("File", imageFile);            // 👈 nombre debe coincidir con tu DTO: IFormFile File
+            formData.append("Category", "comprobante");
+            formData.append("FileName", imageFile?.name);
+            await grabarImagenPagosServicioWeb(pagoGrabado?.idPago, formData);
+        }
+
         const configAlert = {
             title: "Correcto",
             message: "Se grabo correctamente el PAGO",
