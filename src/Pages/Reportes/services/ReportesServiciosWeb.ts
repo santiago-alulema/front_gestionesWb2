@@ -13,3 +13,16 @@ export const descargarReporteServicioWeb = (fechaInicio: string,
         null,
         true
     );
+
+
+export const descargarReporteDeudasSubidasServicioWeb = (
+    fechaInicio: string,
+    fechaFin: string
+) =>
+    request<Blob>(
+        'get',
+        `${END_POINT_REPORTES.DESCARGAR_REPORTE_EXCEL_DEUDAS_SUBIDAS}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`,
+        null,
+        null,
+        true
+    );

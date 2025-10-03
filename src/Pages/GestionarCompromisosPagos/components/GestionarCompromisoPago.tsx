@@ -29,7 +29,6 @@ const GestionarCompromisoPago = () => {
         incumplioCompromisoPago } = useFormGestionarCompromisoPago();
 
     useEffect(() => {
-        console.log("deudaSeleccionada", deudaSeleccionada)
         cargarBancos();
         cargarCuentas();
         cargarTransacciones();

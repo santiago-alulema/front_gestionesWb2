@@ -20,6 +20,7 @@ const TextFieldCustomDataGrid = (props: TextFieldCustomDataGridProps) => {
   return (
     <TextField
       variant="outlined"
+      value={filter?.value ?? ''}
       size="small"
       label={searchLabel}
       onChange={({ target }) => {

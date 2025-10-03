@@ -1,6 +1,7 @@
 import CustomDatePicker from "@/components/DataGridCommon/CustomDatePicker";
 import { useLoading } from "@/components/LoadingContext";
 import { descargarReporteServicioWeb } from "@/Pages/Reportes/services/ReportesServiciosWeb";
+import { showAlert } from "@/utils/modalAlerts";
 import { Button, Grid, MenuItem, Select, TextField } from "@mui/material"
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -13,9 +14,27 @@ const ConsultaReportes = () => {
     const [clienteParametroBuscar, setClienteParametroBuscar] = useState<string>("")
     const { startLoading, stopLoading } = useLoading();
     const descargarReporte = async () => {
-        startLoading();
-        await descargarReporteServicioWeb(startDate, endDate, reportType, !clienteParametroBuscar ? "-SP-" : clienteParametroBuscar);
-        stopLoading();
+        try {
+            startLoading()
+            await descargarReporteServicioWeb(startDate, endDate, reportType, !clienteParametroBuscar ? "-SP-" : clienteParametroBuscar);
+            const configAlert = {
+                title: "Infomacion",
+                message: "El reporte <strong>REPORTE GENERAL</strong> descargado exitosamente.",
+                type: 'info',
+                callBackFunction: false,
+            };
+            showAlert(configAlert)
+        } catch (error) {
+            const configAlert = {
+                title: "Error",
+                message: error,
+                type: 'error',
+                callBackFunction: false,
+            };
+            showAlert(configAlert)
+        } finally {
+            stopLoading();
+        }
     }
 
     return (

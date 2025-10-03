@@ -52,7 +52,6 @@ const ListarPagos = () => {
     }
 
     const verImagen = (item: PagoDto) => {
-        console.log("first", item)
         if (!item.imagenUrl) {
             const configAlert = {
                 title: "Error",

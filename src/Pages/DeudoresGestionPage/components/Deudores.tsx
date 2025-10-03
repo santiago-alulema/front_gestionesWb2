@@ -8,83 +8,130 @@ import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/Gestiona
 import ListaEmpresasInDto from '@/Pages/DeudoresGestionPage/models/ListaEmpresasInDto';
 import { empresasServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios';
 import { allDeuodoresServiceWeb } from '@/services/Service';
-import { Box, Checkbox, FormControlLabel, Grid, Paper } from '@mui/material';
-import { useEffect, useState, useCallback } from 'react';
+import { readStateFromStorage, writeStateToStorage } from '@/utils/MetodosAuxiliares';
+import { Grid, Paper } from '@mui/material';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Deudores = () => {
     const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([{ id: "TODOS", nombre: "Todos" }]);
+
+    const keyStorageEmpresa = "EmpresaDeudorFiltro";
+    const keyStorageFiltro = "FiltroEstadoCliente";
+
     const {
         setDeudorSeleccionado,
         empresaSeleccionada,
         setEmpresaSeleccionada,
         opcionGestion,
-        setOpcionGestion } = useGestionarDeudas();
+        setOpcionGestion
+    } = useGestionarDeudas();
+
     const navigate = useNavigate();
     const { startLoading, stopLoading } = useLoading();
 
-    useEffect(() => {
-        onInit();
-    }, [])
+    const initialEmpresa = useMemo(
+        () => readStateFromStorage<string>(keyStorageEmpresa) || "TODOS",
+        []
+    );
+    const initialFiltro = useMemo(
+        () => readStateFromStorage<{ id?: string }>(keyStorageFiltro)?.id || "",
+        []
+    );
 
-    const onInit = async () => {
-        startLoading()
-        const listaEmpresaRespuesta = await empresasServicioWeb();
-        setEmpresas(listaEmpresaRespuesta);
-        const response = await allDeuodoresServiceWeb(empresaSeleccionada, opcionGestion)
-        setClientDebt(response)
-        stopLoading();
-    }
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            startLoading();
+            try {
+                const listaEmpresaRespuesta = await empresasServicioWeb();
+                if (!alive) return;
+                const lista = [{ id: "TODOS", nombre: "Todos" }, ...listaEmpresaRespuesta.filter(e => e.id !== "TODOS")];
+                setEmpresas(lista);
+
+                setEmpresaSeleccionada(prev => prev || initialEmpresa);
+                setOpcionGestion(prev => (prev ?? "") || initialFiltro);
+            } finally {
+                if (alive) stopLoading();
+            }
+        })();
+        return () => { alive = false; };
+    }, []);
 
     const viewDebtsClient = (row: ClientInfo) => {
-        setDeudorSeleccionado(row)
+        setDeudorSeleccionado(row);
         navigate("/gestion/dudas-por-clientes");
-    }
+    };
 
     const actionsConfig: IActionConfig[] = [
         {
-            tooltip: "Ver",
-            onClick: viewDebtsClient,
-            hidden: false,
-            sizeIcon: 'small',
-            typeInput: 'button',
-            label: 'Ver',
+            tooltip: "Ver", onClick: viewDebtsClient, hidden: false, sizeIcon: 'small', typeInput: 'button', label: 'Ver',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
     ];
 
-    const consultarDeudasPorEmpresa = useCallback(async (value: string) => {
-        startLoading();
-        setEmpresaSeleccionada(value);
-        setClientDebt([]);
-        const response = await allDeuodoresServiceWeb(value, opcionGestion);
-        setClientDebt(response);
-        stopLoading();
-    }, [setEmpresaSeleccionada, opcionGestion]);
+    const lastQueryRef = useRef<string>("");
 
     useEffect(() => {
-        consultarDeudasPorEmpresa(empresaSeleccionada);
-    }, [empresaSeleccionada, opcionGestion, consultarDeudasPorEmpresa]);
+        const empresa = empresaSeleccionada || "TODOS";
+        const gestion = opcionGestion || "";
+
+        if (!empresa) return;
+
+        const signature = `${empresa}|||${gestion}`;
+        if (lastQueryRef.current === signature) return;
+        lastQueryRef.current = signature;
+
+        const ac = new AbortController();
+        let alive = true;
+
+        (async () => {
+            startLoading();
+            try {
+                setClientDebt([]);
+                const resp = await allDeuodoresServiceWeb(empresa, gestion);
+                setClientDebt(resp);
+            } finally {
+                if (alive && !ac.signal.aborted) stopLoading();
+            }
+        })();
+
+        return () => { alive = false; ac.abort(); };
+    }, [empresaSeleccionada, opcionGestion]);
 
     const opcionesFiltro = [
-        {
-            id: 'G',
-            name: 'GESTIONADOS'
-        },
-        {
-            id: 'SG',
-            name: 'SIN GESTIONAR'
-        },
-        {
-            id: 'IN',
-            name: 'INCUMPLIDOS'
-        }
-    ]
+        { id: 'G', name: 'GESTIONADOS' },
+        { id: 'SG', name: 'SIN GESTIONAR' },
+        { id: 'IN', name: 'INCUMPLIDOS' }
+    ];
 
-    const consultarPorFiltro = (value: any) => {
-        setOpcionGestion(!value?.id ? "" : value?.id)
-    }
+    const handleEmpresaChange = (_: any, value: ListaEmpresasInDto | null) => {
+        const next = value?.id || "TODOS";
+        if (next !== empresaSeleccionada) {
+            setEmpresaSeleccionada(next);
+            writeStateToStorage(keyStorageEmpresa, next);
+            lastQueryRef.current = "";
+        }
+    };
+
+    const handleFiltroChange = (_: any, value: { id?: string; name?: string } | null) => {
+        const next = value?.id || "";
+        if (next !== opcionGestion) {
+            setOpcionGestion(next);
+            writeStateToStorage(keyStorageFiltro, { id: next, name: value?.name || "" });
+            lastQueryRef.current = "";
+        }
+    };
+
+    const empresaValue = useMemo(
+        () => empresas.find(e => e.id === (empresaSeleccionada || "TODOS")) || null,
+        [empresas, empresaSeleccionada]
+    );
+    const filtroValue = useMemo(
+        () => opcionesFiltro.find(x => x.id === (opcionGestion || "")) || null,
+        [opcionesFiltro, opcionGestion]
+    );
 
     return (
         <>
@@ -95,8 +142,8 @@ const Deudores = () => {
                         label='Seleccione Empresa'
                         labelFullField='Empresa'
                         optionLabel='nombre'
-                        defaultValue={empresas.find(e => e.id === empresaSeleccionada) || null}
-                        handleChange={(e, value) => consultarDeudasPorEmpresa(!value?.id ? "TODOS" : value.id.toString())}
+                        defaultValue={empresaValue}
+                        handleChange={handleEmpresaChange}
                     />
                 </Grid>
                 <Grid size={{ lg: 6 }}>
@@ -104,26 +151,29 @@ const Deudores = () => {
                         options={opcionesFiltro}
                         label='Seleccione Filtro'
                         labelFullField='Filtro'
-                        defaultValue={opcionesFiltro.find(x => x.id == opcionGestion) || null}
-                        handleChange={(e, value: any) => consultarPorFiltro(value)}
+                        defaultValue={filtroValue}
+                        handleChange={handleFiltroChange}
                     />
                 </Grid>
             </Grid>
-            <Paper elevation={3} >
+
+            <Paper elevation={3}>
                 <CustomDataGridTs
                     getRowId={(row) => row.cedula}
-                    key={`grid-${empresaSeleccionada}`}
+                    /* quita este key para evitar remontar el grid */
+                    /* key={`grid-${empresaSeleccionada}`} */
                     rows={clientDebt}
                     columns={ConfigurarColumnaDeudores()}
-                    gridId="gidChartOfAccounts"
+                    gridId="gidDeudoresPrincipal"
                     actions={actionsConfig}
                     iconDirectionFilter="end"
                     searchLabel={"Buscar"}
                     titleEmptyTable='Tabla sin datos'
+                    maintainFilter={true}
                 />
             </Paper>
         </>
-    )
-}
+    );
+};
 
 export default Deudores;

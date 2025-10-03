@@ -2,6 +2,7 @@ import { ActionColumn } from '@/components/DataGridCommon/ActionConfig';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import RenderHTML from '@/components/DataGridCommon/RenderHTML';
 import TextFieldCustomDataGrid from '@/components/DataGridCommon/TextFieldCustomDataGrid';
+import { readStateFromStorage, STORAGE_NAMESPACE, writeStateToStorage } from '@/utils/MetodosAuxiliares';
 
 import {
   Column,
@@ -19,7 +20,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import Paper from '@mui/material/Paper';
 import { styled, ThemeProvider, useTheme } from '@mui/material/styles';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface ColumnExtension {
   width?: string | number;
@@ -50,6 +51,7 @@ interface Props<T = any> {
   hasFilters?: Boolean;
   searchLabel?: String;
   widthNumeration?: string;
+  maintainFilter?: boolean;
 }
 
 const StyledTableHeaderCell = styled(
@@ -148,7 +150,9 @@ const CustomDataGridTs = <T,>({
   addNumeration = false,
   hasFilters = true,
   searchLabel = '',
-  widthNumeration = '65px'
+  widthNumeration = '65px',
+  maintainFilter = false,
+  gridId = ""
 }: Props<T>) => {
   const [pageSizes] = useState([5, 10, 15]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -217,12 +221,7 @@ const CustomDataGridTs = <T,>({
     });
   }, [columnVisible]);
 
-  const handleFilterChange = (values: any) => {
-    const changedFilters = values?.filter((item: any) => !!item?.value);
-    onChangeFilters(values);
-    setFilters(changedFilters);
-    updateFilteredRows(rows);
-  };
+
 
   const CustomHeaderCell = (props: any) => {
     const { column } = props;
@@ -324,22 +323,53 @@ const CustomDataGridTs = <T,>({
       }
     }
   };
+
+
+  const storageKey = useMemo(() => `${STORAGE_NAMESPACE}:${gridId}`, [gridId]);
+
+  const handleFilterChange = useCallback((values: any[]) => {
+    const nextFilters = (values ?? []).filter(f => f && f.value != null && String(f.value).trim() !== "");
+    const nextPage = 0;
+
+    onChangeFilters?.(nextFilters);
+    setFilters(nextFilters);
+    setCurrentPage(nextPage);
+
+    writeStateToStorage(storageKey, { filters: nextFilters, pageSize, currentPage: nextPage });
+    updateFilteredRows(rows);
+  }, [pageSize, rows, storageKey, onChangeFilters]);
+
+
+  const guardarPaginacion = useCallback((page: number) => {
+    writeStateToStorage(storageKey, { filters, pageSize, currentPage: page });
+    setCurrentPage(page);
+  }, [filters, pageSize, storageKey]);
+
+  const onPageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    writeStateToStorage(storageKey, { filters, pageSize: size, currentPage });
+  }, [filters, currentPage, storageKey]);
+
+
   useEffect(() => {
-    if (!rows || rows.length === 0) {
-      setFilteredRowsNumber([]);
-      setCurrentPage(0); // reset paginación también
+    if (rows.length > 0) {
+      type Persisted = { filters?: any[]; pageSize?: number; currentPage?: number };
+      const restored = readStateFromStorage<Persisted>(storageKey);
+      setCurrentPage(restored?.currentPage ?? 0);
+      setFilters(restored.filters)
+      setPageSize(restored?.pageSize ?? 5);
     }
   }, [rows]);
 
 
   const FilterCellComponent = useMemo(() => {
     return (props: any) => {
-      const { column } = props;
+      const { column, value, filter } = props;
 
       if (column?.hiddenFilterColumn) {
         return (
           <Table.Cell
-            value={null}
+            value={filter?.value ?? ''}
             row={props.row}
             column={props.column}
             tableRow={props.tableRow}
@@ -381,9 +411,9 @@ const CustomDataGridTs = <T,>({
           {hasPagination && (
             <PagingState
               currentPage={currentPage}
-              onCurrentPageChange={setCurrentPage}
+              onCurrentPageChange={guardarPaginacion}
               pageSize={pageSize}
-              onPageSizeChange={setPageSize}
+              onPageSizeChange={onPageSizeChange}
             />
           )}
           {hasPagination && <IntegratedPaging />}
