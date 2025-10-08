@@ -135,6 +135,11 @@ const InformacionCompletaDeuda = () => {
                                     value={deudaSeleccionada.diasMora?.toString()}
                                 />
 
+                                <DetailItem
+                                    title="Estado de Deuda"
+                                    value={deudaSeleccionada.estado?.toString()}
+                                />
+
                             </Paper>
                         </Grid>
 
