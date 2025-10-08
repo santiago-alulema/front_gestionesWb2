@@ -139,7 +139,6 @@ const InformacionCompletaDeuda = () => {
                                     title="Estado de Deuda"
                                     value={deudaSeleccionada.estado?.toString()}
                                 />
-
                             </Paper>
                         </Grid>
 
