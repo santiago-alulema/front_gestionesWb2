@@ -149,32 +149,32 @@ const sanitizeNumberString = (s: string) => {
 
 const parsePercentToNumber = (value: any): number => {
     if (value == null || value === '') {
-        // Para percent vacío, devolvemos 0 (coherente con number)
+        // Para percent vacío, devolvemos 0
         return 0;
     }
 
+    let num: number;
+
     if (typeof value === 'number') {
         // Si viene como 0.5 desde Excel, convertir a 50
-        if (value >= 0 && value <= 1) return value * 100;
-        return value; // Ya sería 50, 12.3, etc.
-    }
-
-    if (typeof value === 'string') {
+        num = (value >= 0 && value <= 1) ? value * 100 : value;
+    } else if (typeof value === 'string') {
         const raw = sanitizeNumberString(value.trim());
-        // "50%", "50 %", "-10.5%"
-        const pctMatch = /^-?\d+(\.\d+)?%$/.test(raw);
-        if (pctMatch) {
-            return parseFloat(raw.replace('%', ''));
+        if (/^-?\d+(\.\d+)?%$/.test(raw)) {
+            num = parseFloat(raw.replace('%', ''));
+        } else {
+            const parsed = parseFloat(raw);
+            if (isNaN(parsed)) throw new Error('Porcentaje inválido');
+            num = (parsed >= 0 && parsed <= 1) ? parsed * 100 : parsed;
         }
-        // "0.5", "0,5", "50"
-        const num = parseFloat(raw);
-        if (!isNaN(num)) {
-            return (num >= 0 && num <= 1) ? num * 100 : num;
-        }
+    } else {
+        throw new Error('Porcentaje inválido');
     }
 
-    throw new Error('Porcentaje inválido');
+    // 🔸 Aquí se aplica el redondeo sin decimales
+    return Math.round(num);
 };
+
 // ---------------------------------------------------
 
 const UploadExcel: React.FC<ExcelUploaderProps> = ({
