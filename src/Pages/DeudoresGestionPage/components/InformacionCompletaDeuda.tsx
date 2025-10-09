@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale"; // Opcional: para formato en español
 import { useSearchParams } from "react-router";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { DetailItem } from "@/components/DataGridCommon/DetailItem";
 const InformacionCompletaDeuda = () => {
     const { deudaSeleccionada, setAbrirModalInformacionDeuda, setAbrirModalGestionarDeuda } = useGestionarDeudas();
     const [searchParams] = useSearchParams();
@@ -50,6 +51,10 @@ const InformacionCompletaDeuda = () => {
 
     const seleccionarDeudaFuncion = () => {
         setAbrirModalGestionarDeuda(true)
+    }
+
+    const CamposOcultosEmpresa = {
+        "CRECOSCORP": true
     }
 
     return (
@@ -90,7 +95,6 @@ const InformacionCompletaDeuda = () => {
                                 value={deudaSeleccionada.productoDescripcion}
 
                             />
-
                         </Grid>
                         <Grid size={{ lg: 3 }}>
                             <DetailItem
@@ -152,14 +156,18 @@ const InformacionCompletaDeuda = () => {
                                     title="Saldo Actual"
                                     value={`$${deudaSeleccionada.saldoDeuda?.toLocaleString() || "N/A"}`}
                                 />
-                                <DetailItem
-                                    title="Intereses"
-                                    value={`$${deudaSeleccionada.interes?.toLocaleString() || "N/A"}`}
-                                />
-                                <DetailItem
-                                    title="Gastos de Cobranza"
-                                    value={`$${deudaSeleccionada.gastosCobranzas?.toLocaleString() || "N/A"}`}
-                                />
+                                {!CamposOcultosEmpresa.CRECOSCORP ? null : (
+                                    <>
+                                        <DetailItem
+                                            title="Intereses"
+                                            value={`$${deudaSeleccionada.interes?.toLocaleString() || "N/A"}`}
+                                        />
+                                        <DetailItem
+                                            title="Gastos de Cobranza"
+                                            value={`$${deudaSeleccionada.gastosCobranzas?.toLocaleString() || "N/A"}`}
+                                        />
+                                    </>
+                                )}
                                 <DetailItem
                                     title="Descuento"
                                     value={`${deudaSeleccionada.descuento}%`}
@@ -217,15 +225,15 @@ const InformacionCompletaDeuda = () => {
     );
 };
 
-const DetailItem = ({ title, value, fontsize = '13px' }: { title: string; value?: string; fontsize?: string }) => (
-    <Box sx={{ mb: 2 }}>
-        <Typography variant="caption" color="textSecondary">
-            {title}
-        </Typography>
-        <Typography variant="body1" sx={{ fontWeight: 500, fontSize: fontsize, textAlign: 'justify', marginRight: 2 }}>
-            {value || "N/A"}
-        </Typography>
-    </Box>
-);
+// const DetailItem = ({ title, value, fontsize = '13px' }: { title: string; value?: string; fontsize?: string }) => (
+//     <Box sx={{ mb: 2 }}>
+//         <Typography variant="caption" color="textSecondary">
+//             {title}
+//         </Typography>
+//         <Typography variant="body1" sx={{ fontWeight: 500, fontSize: fontsize, textAlign: 'justify', marginRight: 2 }}>
+//             {value || "N/A"}
+//         </Typography>
+//     </Box>
+// );
 
 export default InformacionCompletaDeuda;
