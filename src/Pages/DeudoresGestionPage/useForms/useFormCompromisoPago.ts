@@ -55,6 +55,7 @@ export const useFormCompromisoPago = () => {
         telefonoSeleccionado,
         deudorSeleccionado
     } = useGestionarDeudas();
+    const [endDate, setEndDate] = useState<string>(dayjs().format('YYYY-MM-DD'));
 
     const rules = {
         fechaCompromiso: {
@@ -184,12 +185,13 @@ export const useFormCompromisoPago = () => {
                 .replace("{{valorDeuda}}", `*${deudaSeleccionada.saldoDeuda}*`)
                 .replace("{{empresa}}", `*${deudaSeleccionada.empresa}*`)
                 .replace("{{valorPago}}", `*${valorPago}*`)
-                .replace("{{fechaAbono}}", ` *${fechaPago}*`);
+                .replace("{{fechaAbono}}", ` *${fechaPago}*`)
+                .replace("{{fechaLimite}}", ` *${endDate}*`);
 
             await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
             const configAlert = {
                 title: "Correcto",
-                message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
+                message: `Mensaje de whatsapp enviado correctamente < strong > ${telefonoNormalizado} </strong> `,
                 type: 'success',
                 callBackFunction: false
             };
@@ -249,7 +251,8 @@ export const useFormCompromisoPago = () => {
                 .replace("{{valorPago}}", `${valorPago}`)
                 .replace("{{fechaAbono}}", `${fechaPago}`)
                 .replace("{{contrato}}", `${fechaPago}`)
-                .replace("{{telefonoGestor}}", `${userData.telefono}`);
+                .replace("{{telefonoGestor}}", `${userData.telefono}`)
+                .replace("{{fechaLimite}}", ` *${endDate}*`);;
 
 
             const htmlBody: EnviarCorreoOutDto = {
@@ -296,6 +299,7 @@ export const useFormCompromisoPago = () => {
         mensajesTarea,
         seleccionarMensaje,
         enviarMensajeWhatsappTareas,
-        enviarCorreoCliente
+        enviarCorreoCliente,
+        endDate, setEndDate
     };
 };

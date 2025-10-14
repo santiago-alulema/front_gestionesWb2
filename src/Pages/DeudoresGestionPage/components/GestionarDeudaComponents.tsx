@@ -12,6 +12,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { MensajeriaInDto } from '@/Pages/DeudoresGestionPage/models/MensajeriaInDto';
 import { mensajesGestionesServicioWeb } from '@/Pages/DeudoresGestionPage/services/GestionDeudaServicios';
 import { enviarMensajeWhatsapp } from '@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp';
+import CustomDatePicker from '@/components/DataGridCommon/CustomDatePicker';
 
 const GestionarDeudaComponents = () => {
 
@@ -21,6 +22,8 @@ const GestionarDeudaComponents = () => {
         rules,
         enviarMensajeWhatsappServicioWeb,
         enviarCorreoCliente,
+        endDate,
+        setEndDate,
         setMensajeGestion } = useFormGestionarDeuda();
 
     const {
@@ -146,6 +149,11 @@ const GestionarDeudaComponents = () => {
                 <Grid size={{ lg: 6 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
                         <Typography variant='body2'>Envia Mensaje por:</Typography>
+                        <CustomDatePicker
+                            label="Fecha maxima de pago"
+                            defaultValue={endDate}
+                            onChangeValue={(value) => setEndDate(value || '')}
+                        />
                         <IconButton onClick={enviarMensajeWhatsappServicioWeb}
                             sx={{
                                 backgroundColor: '#25D366',

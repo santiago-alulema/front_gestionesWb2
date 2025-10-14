@@ -34,6 +34,7 @@ export const useFormGestionarDeuda = () => {
         }
     });
 
+    const [endDate, setEndDate] = useState<string>(dayjs().format('YYYY-MM-DD'));
     const [searchParams] = useSearchParams();
     const deudaId = searchParams.get("deudaId");
     const navigate = useNavigate();
@@ -149,6 +150,7 @@ export const useFormGestionarDeuda = () => {
                 .replace("{{deuda}}", `*${deudaSeleccionada.saldoDeuda}*`)
                 .replace("{{fechaPago}}", `*${fechaPago}*`)
                 .replace("{{pagoUnico}}", `*${deudaSeleccionada.montoCobrar}*`)
+                .replaceAll("{{fechaLimite}}", `${endDate}`)
 
             await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
             const configAlert = {
@@ -192,6 +194,7 @@ export const useFormGestionarDeuda = () => {
                 .replaceAll("{{fechaPago}}", `${fechaPago}*`)
                 .replaceAll("{{telefonoGestor}}", `${userData.telefono}*`)
                 .replaceAll("{{pagoUnico}}", `${deudaSeleccionada.montoCobrar}`)
+                .replaceAll("{{fechaLimite}}", `${endDate}`)
 
             const htmlBody: EnviarCorreoOutDto = {
                 htmlBody: mensajeEnviar,
@@ -275,6 +278,8 @@ export const useFormGestionarDeuda = () => {
         rules,
         enviarMensajeWhatsappServicioWeb,
         setMensajeGestion,
-        enviarCorreoCliente
+        enviarCorreoCliente,
+        endDate,
+        setEndDate
     };
 };

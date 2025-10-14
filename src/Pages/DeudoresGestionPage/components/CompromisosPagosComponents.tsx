@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
+import CustomDatePicker from '@/components/DataGridCommon/CustomDatePicker'
 
 const CompromisosPagosComponents = () => {
     const fechaActual = dayjs().format('YYYY-MM-DD')
@@ -32,9 +33,10 @@ const CompromisosPagosComponents = () => {
         seleccionarMensaje,
         enviarMensajeWhatsappTareas,
         enviarCorreoCliente,
+        endDate,
+        setEndDate,
         mensajesTarea } = useFormCompromisoPago();
     const { setAbrirModalGestionarDeuda } = useGestionarDeudas();
-
     useEffect(() => {
         onInit();
         cargarMensajesTareas();
@@ -108,8 +110,8 @@ const CompromisosPagosComponents = () => {
                         </Grid>
                     )}
                 </Grid>
-                <Grid size={{ lg: 6 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
+                <Grid size={{ lg: 12 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
                         <CustomAutocompleteTs
                             label="Tipo de mensaje"
                             options={mensajesTarea}
@@ -117,6 +119,12 @@ const CompromisosPagosComponents = () => {
                             optionValue='id'
                             labelFullField='Seleccione de mensaje'
                             handleChange={(e, value: any) => seleccionarMensaje(value)}
+                        />
+                        <div style={{ marginLeft: 8 }}></div>
+                        <CustomDatePicker
+                            label="Fecha maxima de pago"
+                            defaultValue={endDate}
+                            onChangeValue={(value) => setEndDate(value || '')}
                         />
                         <IconButton onClick={enviarMensajeWhatsappTareas}
                             sx={{

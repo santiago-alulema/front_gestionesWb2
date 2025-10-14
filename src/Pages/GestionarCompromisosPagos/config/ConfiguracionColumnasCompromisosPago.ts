@@ -20,19 +20,19 @@ export const ConfiguracionColumnasCompromisosPago = () => {
             {
                 name: 'numeroFactura',
                 title: 'º Factura',
-                width: '10%',
+                width: '9%',
                 align: 'left'
             },
             {
                 name: 'tipoTarea',
                 title: 'Tipo Tarea',
-                width: '15%',
+                width: '12%',
                 align: 'left'
             },
             {
                 name: 'valorCompromisoPago',
                 title: 'Valor del Compromiso',
-                width: '12%',
+                width: '8%',
                 align: 'left'
             },
             {
@@ -44,12 +44,18 @@ export const ConfiguracionColumnasCompromisosPago = () => {
             {
                 name: 'montoCobrar',
                 title: 'Monto a Cobrar',
-                width: '10%',
+                width: '8%',
                 align: 'left'
             },
             {
                 name: 'tramo',
                 title: 'Tramo',
+                width: '10%',
+                align: 'center'
+            },
+            {
+                name: 'gestor',
+                title: 'Gestor',
                 width: '10%',
                 align: 'center'
             },
