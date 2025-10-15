@@ -1,7 +1,7 @@
 import { request } from "@/utils/AxiosUtils";
 import EndPointCambiarGestor from './EndPointCambiarGestor';
-import { ListasGenericas } from "@/Pages/ActualizarGestorPorDeuda/models/ListasGenericas";
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
+import ListasGenericas from "@/Pages/ActualizarGestorPorDeuda/models/ListasGenericas";
 
 export const usuariosVigentesGestiones = () =>
     request<ListasGenericas[]>(

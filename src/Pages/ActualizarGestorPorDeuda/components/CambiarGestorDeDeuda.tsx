@@ -19,7 +19,6 @@ import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CustomAutocompleteTs from "@/components/DataGridCommon/CustomAutocompleteTs";
 import CustomDataGridTs from "@/components/DataGridCommon/CustomDataGridTs";
 import { ConfigColumnasCambioGestorDeuda } from "@/Pages/ActualizarGestorPorDeuda/configs/ConfigColumnasCambioGestorDeuda";
-import { ListasGenericas } from "@/Pages/ActualizarGestorPorDeuda/models/ListasGenericas";
 import {
     actualizarNuevoGestorServiceWeb,
     deudasPorClienteBuscardorServiceWeb,
@@ -32,6 +31,7 @@ import DebstByClientInfoInDTO from "@/model/Dtos/In/DeudasInDTO";
 import { IActionConfig } from "@/components/DataGridCommon/IActionConfig";
 import { useLoading } from "@/components/LoadingContext";
 import { showAlert, showAlertConfirm } from "@/utils/modalAlerts";
+import ListasGenericas from "@/Pages/ActualizarGestorPorDeuda/models/ListasGenericas";
 
 const CambiarGestorDeDeuda = () => {
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([]);
