@@ -77,7 +77,6 @@ const Deudas = () => {
             typeInput: 'button',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
-
     ];
 
     const onInit = async () => {

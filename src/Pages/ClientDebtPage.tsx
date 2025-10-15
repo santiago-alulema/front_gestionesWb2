@@ -2,6 +2,7 @@ import BasePage from "@/components/BasePage"
 import CustomModalTs from "@/components/CustomModalTs"
 import CustomDataGridTs from "@/components/DataGridCommon/CustomDataGridTs"
 import { IActionConfig } from "@/components/DataGridCommon/IActionConfig"
+import { useLoading } from "@/components/LoadingContext"
 import ClientInfo from "@/model/Dtos/In/ClientInfo"
 import { DetalleDeudasClientes } from "@/Pages/componentsClientDebt/DetalleDeudasClientes"
 import { useConfigClientDebt } from "@/Pages/ConfigColums/useConfigClientDebt"
@@ -12,13 +13,17 @@ const ClientDebtPage = () => {
     const [open, setOpen] = useState(false)
     const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
     const [clientSelected, setClientSelected] = useState<ClientInfo>(null);
+    const { startLoading, stopLoading } = useLoading();
+
     useEffect(() => {
         onInit();
     }, [])
 
     const onInit = async () => {
+        startLoading();
         const response = await allDeuodoresServiceWeb("TODOS", "")
         setClientDebt(response)
+        stopLoading();
     }
     const viewDebtsClient = (row: ClientInfo) => {
         setClientSelected(row)

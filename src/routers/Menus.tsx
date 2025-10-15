@@ -24,6 +24,7 @@ import IndexMigraciones from "@/Pages/MigracionesPages/IndexMigraciones";
 import MigrarPagosPage from "@/Pages/MigracionesPages/pages/MigrarPagosPage";
 import WhatsappConfiguraionIndex from "@/Pages/WhatsappConfiguracion/WhatsappConfiguraionIndex";
 import ReporteDeudasSubidas from "@/Pages/Reportes/pages/ReporteDeudasSubidas";
+import CambiarGestorDeudaIndex from "@/Pages/ActualizarGestorPorDeuda/CambiarGestorDeudaIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -32,25 +33,25 @@ const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
 const Menus: MenuItem[] = [
   {
     name: "Home",
-    roles: ["admin"],
+    roles: ["admin", "superadmin"],
     route: "/dashboard",
     component: <DashboardGestiones />,
     icon: WhiteIcon(HomeIcon),
   },
   {
     name: "Migraciones",
-    roles: ["admin"],
+    roles: ["admin", "superadmin"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
         name: "Compromisos y Gestiones",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/gestion/subir-migaciones-compromisos-gestiones",
         component: <IndexMigraciones />
       },
       {
         name: "Pagos",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/gestion/subir-migaciones-Pagos",
         component: <MigrarPagosPage />
       }
@@ -58,12 +59,12 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Configuracion",
-    roles: ["admin", "user"],
+    roles: ["admin", "user", "superadmin"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
         name: "Configuracion Whatsapp",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/configuracion/configurar-whatsapp",
         component: <WhatsappConfiguraionIndex />
       }
@@ -71,7 +72,7 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Home",
-    roles: ["admin", "user"],
+    roles: ["admin", "user", "superadmin"],
     route: "/gestionar-deuda-nuevo",
     component: <NuevaVentanaGestionarDeuda />,
     icon: WhiteIcon(HomeIcon),
@@ -79,37 +80,43 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Administracion",
-    roles: ["admin", "user"],
+    roles: ["admin", "user", "superadmin"],
     icon: WhiteIcon(SupervisorAccountIcon),
     children: [
       {
         name: "Editar Gestiones",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/mantenimiento/editar-gestiones",
         component: <EditarGestionesIndex />
+      },
+      {
+        name: "Cambiar el gestor por deuda",
+        roles: ["admin", "superadmin"],
+        route: "/mantenimiento/cambiar-gestor-deuda",
+        component: <CambiarGestorDeudaIndex />
       }
     ],
   },
   {
     name: "Subir Archivos",
-    roles: ["admin"],
+    roles: ["admin", "superadmin"],
     icon: WhiteIcon(CloudUploadIcon),
     children: [
       {
         name: "Deudas",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/gestion/subir-Deudas",
         component: <UploadDeudasPage />
       },
       {
         name: "Deudores",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/gestion/subir-deudores",
         component: <UploadDeudores />
       },
       {
         name: "Telefonos",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/gestion/subir-telefonos",
         component: <UploadPhonesPage />
       },
@@ -117,25 +124,25 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Gestiones",
-    roles: ["admin", "user"],
+    roles: ["admin", "user", "superadmin"],
     icon: WhiteIcon(ChecklistRtlIcon),
     children: [
       {
         name: "Ver Deudores",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/gestion/ver-deudores",
         component: <Deudores />
       },
       {
         name: "Ver Deudas por clientes",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/gestion/dudas-por-clientes",
         component: <Deudas />,
         hidden: true
       },
       {
         name: "Gestionar Tareas",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/gestion/compromisos-pagos",
         component: <PrincipalCompromisosPagos />
       }
@@ -143,24 +150,24 @@ const Menus: MenuItem[] = [
   },
   {
     name: "Reportes",
-    roles: ["admin", "user"],
+    roles: ["admin", "user", "superadmin"],
     icon: WhiteIcon(SummarizeIcon),
     children: [
       {
         name: "Reporte General",
-        roles: ["admin", "user"],
+        roles: ["admin", "user", "superadmin"],
         route: "/reporte/reporte-general",
         component: <InformacionGeneralGestionesIndex />
       },
       {
         name: "Ver Reportes",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/reporte/reporteria-deudas",
         component: <PrincipalReportes />
       },
       {
         name: "Ver Reportes Deudas",
-        roles: ["admin"],
+        roles: ["admin", "superadmin"],
         route: "/reporte/reporteria-deudas-subidas",
         component: <ReporteDeudasSubidas />
       }

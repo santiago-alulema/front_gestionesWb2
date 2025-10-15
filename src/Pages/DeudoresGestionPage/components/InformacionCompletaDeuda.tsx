@@ -141,7 +141,7 @@ const InformacionCompletaDeuda = () => {
 
                                 <DetailItem
                                     title="Estado de Deuda"
-                                    value={deudaSeleccionada.estado?.toString()}
+                                    value={!deudaSeleccionada?.estado ? 'NA' : deudaSeleccionada?.estado}
                                 />
                             </Paper>
                         </Grid>
@@ -209,6 +209,12 @@ const InformacionCompletaDeuda = () => {
                                         <DetailItem
                                             title="Valor por Cuota"
                                             value={`$${deudaSeleccionada.valorCuota?.toLocaleString()}`}
+                                        />
+                                    </Grid>
+                                    <Grid size={{ xs: 12 }}>
+                                        <DetailItem
+                                            title="Monto cobrar por partes"
+                                            value={`$${deudaSeleccionada?.montoCobrarPartes ?? "0.0"}`}
                                         />
                                     </Grid>
                                 </Grid>

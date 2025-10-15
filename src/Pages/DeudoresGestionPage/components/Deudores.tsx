@@ -45,19 +45,34 @@ const Deudores = () => {
         (async () => {
             startLoading();
             try {
+                // 1) Cargar empresas
                 const listaEmpresaRespuesta = await empresasServicioWeb();
                 if (!alive) return;
+
                 const lista = [{ id: "TODOS", nombre: "Todos" }, ...listaEmpresaRespuesta.filter(e => e.id !== "TODOS")];
                 setEmpresas(lista);
 
-                setEmpresaSeleccionada(prev => prev || initialEmpresa);
-                setOpcionGestion(prev => (prev ?? "") || initialFiltro);
+                // 2) Resolver valores iniciales
+                const empresaInit = initialEmpresa || "TODOS";
+                const filtroInit = initialFiltro || "";
+                setEmpresaSeleccionada(empresaInit);
+                setOpcionGestion(filtroInit);
+
+                // 3) Cargar deudores iniciales
+                setClientDebt([]);
+                const resp = await allDeuodoresServiceWeb(empresaInit, filtroInit);
+                if (!alive) return;
+                setClientDebt(resp);
+
+                // Evita que el siguiente useEffect repita la consulta inicial
+                lastQueryRef.current = `${empresaInit}|||${filtroInit}`;
             } finally {
                 if (alive) stopLoading();
             }
         })();
         return () => { alive = false; };
     }, []);
+
 
     const viewDebtsClient = (row: ClientInfo) => {
         setDeudorSeleccionado(row);
@@ -76,7 +91,6 @@ const Deudores = () => {
     useEffect(() => {
         const empresa = empresaSeleccionada || "TODOS";
         const gestion = opcionGestion || "";
-
         if (!empresa) return;
 
         const signature = `${empresa}|||${gestion}`;
@@ -90,7 +104,8 @@ const Deudores = () => {
             startLoading();
             try {
                 setClientDebt([]);
-                const resp = await allDeuodoresServiceWeb(empresa, gestion);
+                const resp = await allDeuodoresServiceWeb(empresa, gestion /* , { signal: ac.signal } si tu servicio lo soporta */);
+                if (!alive || ac.signal.aborted) return;
                 setClientDebt(resp);
             } finally {
                 if (alive && !ac.signal.aborted) stopLoading();
@@ -169,7 +184,7 @@ const Deudores = () => {
                     iconDirectionFilter="end"
                     searchLabel={"Buscar"}
                     titleEmptyTable='Tabla sin datos'
-                    maintainFilter={true}
+                    maintainFilter={false}
                 />
             </Paper>
         </>

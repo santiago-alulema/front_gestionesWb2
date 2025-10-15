@@ -8,6 +8,7 @@ export interface DeudasInDTO {
   numeroFactura: string;
   numeroCouta: number;
   totalCuotas: number;
+  montoCobrarPartes?: number;
   saldoDeuda: number;
   compromisoPagoId: string;
   empresa: string;
@@ -30,7 +31,10 @@ export interface DeudasInDTO {
   idDeudor?: string,
   ciudad?: string
   agencia?: string
-  productoDescripcion?: string
+  productoDescripcion?: string,
+  nombre?: string,
+  nombreCompleto?: string
+
 
 }
 export default DeudasInDTO;
