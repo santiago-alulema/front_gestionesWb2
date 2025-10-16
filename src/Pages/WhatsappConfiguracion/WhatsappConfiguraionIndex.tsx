@@ -3,6 +3,7 @@ import { useLoading } from "@/components/LoadingContext";
 import { useLogin } from "@/context/LoginContext";
 import { StatusWhatsapp } from "@/Pages/WhatsappConfiguracion/models/StatusWhatsapp";
 import { enviarMensajeWhatsapp, statusWhatsappServicioWeb } from "@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp";
+import { request } from "@/utils/AxiosUtils";
 import { showAlert } from "@/utils/modalAlerts";
 import { useInterval } from "@/utils/useInterval";
 import { Button, Card, CardContent, CardMedia, Grid, TextField, Typography, Stack } from "@mui/material";
@@ -27,10 +28,26 @@ const WhatsappConfiguraionIndex = () => {
         }
     };
 
+    async function ensureAndPoll(user: string) {
+        // 1) Dispara ensure (no-bloqueante)
+        await request('get', `session/${user}/ensure`, null, null, null, true);
+
+        // 2) Polling del QR
+        const timer = setInterval(async () => {
+            const res = await request<any>('get', `api/session/${user}/qr`, null, null, null, true);
+            if (res.status === 204) {
+                clearInterval(timer);
+                // ya autenticado
+            } else if (res.ok && res.data?.qrDataUrl) {
+                setStatusWhatsapp(res);
+            }
+        }, 2000);
+    }
+
     useInterval(statusWhatsappInit, 600000, true);
 
     useEffect(() => {
-        statusWhatsappInit();
+        ensureAndPoll(userData.name);
     }, []);
 
     const enviarMensajePrueba = async () => {

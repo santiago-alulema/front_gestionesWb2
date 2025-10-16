@@ -45,7 +45,6 @@ const Deudores = () => {
         (async () => {
             startLoading();
             try {
-                // 1) Cargar empresas
                 const listaEmpresaRespuesta = await empresasServicioWeb();
                 if (!alive) return;
 
@@ -184,7 +183,7 @@ const Deudores = () => {
                     iconDirectionFilter="end"
                     searchLabel={"Buscar"}
                     titleEmptyTable='Tabla sin datos'
-                    maintainFilter={false}
+                    maintainFilter={true}
                 />
             </Paper>
         </>
