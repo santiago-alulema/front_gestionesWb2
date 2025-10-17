@@ -28,27 +28,27 @@ const WhatsappConfiguraionIndex = () => {
         }
     };
 
-    // async function ensureAndPoll(user: string) {
-    //     // 1) Dispara ensure (no-bloqueante)
-    //     await request('get', `session/${user}/ensure`, null, null, null, true);
+    async function ensureAndPoll(user: string) {
+        // 1) Dispara ensure (no-bloqueante)
+        await request('get', `session/${user}/ensure`, null, null, null, true);
 
-    //     // 2) Polling del QR
-    //     const timer = setInterval(async () => {
-    //         const res = await request<any>('get', `session/${user}/qr`, null, null, null, true);
-    //         if (res.status === 204) {
-    //             clearInterval(timer);
-    //             // ya autenticado
-    //         } else if (res.ok && res.data?.qrDataUrl) {
-    //             setStatusWhatsapp(res);
-    //         }
-    //     }, 2000);
-    // }
+        // 2) Polling del QR
+        // const timer = setInterval(async () => {
+        //     const res = await request<any>('get', `session/${user}/qr`, null, null, null, true);
+        //     if (res.status === 204) {
+        //         clearInterval(timer);
+        //         // ya autenticado
+        //     } else if (res.ok && res.data?.qrDataUrl) {
+        //         setStatusWhatsapp(res);
+        //         return
+        //     }
+        // }, 2000);
+    }
 
     useInterval(statusWhatsappInit, 600000, true);
 
     useEffect(() => {
-        statusWhatsappInit()
-        // ensureAndPoll(userData.name);
+        ensureAndPoll(userData.name);
     }, []);
 
     const enviarMensajePrueba = async () => {
