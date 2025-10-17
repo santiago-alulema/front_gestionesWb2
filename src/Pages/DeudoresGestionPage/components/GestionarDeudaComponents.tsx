@@ -146,7 +146,7 @@ const GestionarDeudaComponents = () => {
                     />
                 </Grid>
 
-                <Grid size={{ lg: 6 }}>
+                <Grid size={{ lg: 12 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
                         <Typography variant='body2'>Envia Mensaje por:</Typography>
                         <CustomDatePicker
