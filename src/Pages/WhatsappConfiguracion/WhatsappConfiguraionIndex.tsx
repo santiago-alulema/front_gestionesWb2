@@ -31,14 +31,13 @@ const WhatsappConfiguraionIndex = () => {
     async function ensureAndPoll(user: string) {
         statusWhatsappInit();
         statusWhatsappInit();
-        statusWhatsappInit();
         // 1) Dispara ensure (no-bloqueante)
         // const respuesta = await request('get', `session/${user}/ensure`, null, null, null, true);
         // setStatusWhatsapp(respuesta);
         //2) Polling del QR
-        const timer = setInterval(async () => {
-            statusWhatsappInit();
-        }, 2000);
+        // const timer = setInterval(async () => {
+        //     statusWhatsappInit();
+        // }, 2000);
     }
 
     // useInterval(statusWhatsappInit, 600000, true);
