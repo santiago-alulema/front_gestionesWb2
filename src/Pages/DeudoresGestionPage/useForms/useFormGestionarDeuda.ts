@@ -195,7 +195,16 @@ export const useFormGestionarDeuda = () => {
                 .replaceAll("{{telefonoGestor}}", `${userData.telefono}*`)
                 .replaceAll("{{pagoUnico}}", `${deudaSeleccionada.montoCobrar}`)
                 .replaceAll("{{fechaLimite}}", `${endDate}`)
-
+            if (!deudorSeleccionado.correo) {
+                const configAlert = {
+                    title: "Error",
+                    message: `${deudorSeleccionado.nombre} <strong>NO TIENE CORREO ELECTRONICO</strong> `,
+                    type: 'error',
+                    callBackFunction: false
+                };
+                showAlert(configAlert);
+                return
+            }
             const htmlBody: EnviarCorreoOutDto = {
                 htmlBody: mensajeEnviar,
                 subject: mensajeGestion.tipoMensaje,
