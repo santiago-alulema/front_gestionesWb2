@@ -2,6 +2,7 @@ import PhoneNumbersInput from '@/components/PhoneNumbersInput';
 import CompromisosPagosComponents from '@/Pages/DeudoresGestionPage/components/CompromisosPagosComponents';
 import GestionarDeudaComponents from '@/Pages/DeudoresGestionPage/components/GestionarDeudaComponents';
 import PagosComponents from '@/Pages/DeudoresGestionPage/components/PagosComponents';
+import ReferenciaPersonalesDeudor from '@/Pages/DeudoresGestionPage/components/ReferenciaPersonalesDeudor';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
 import { Box, Tab, Tabs } from '@mui/material'
 import { useEffect, useState } from 'react';
@@ -57,6 +58,7 @@ const TabsGestionarDeudas = () => {
                     <Tab label="Pagos" {...a11yProps(1)} />
                     <Tab label="Tareas" {...a11yProps(2)} />
                     <Tab label="Telefonos Deudor" {...a11yProps(3)} />
+                    <Tab label="Referecias deudor" {...a11yProps(4)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -70,6 +72,9 @@ const TabsGestionarDeudas = () => {
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 <PhoneNumbersInput cedula={deudorSeleccionado.cedula} phones={telefonosActivos} setPhones={setTelefonosActivos} />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={4}>
+                <ReferenciaPersonalesDeudor />
             </CustomTabPanel>
         </Box>
     )

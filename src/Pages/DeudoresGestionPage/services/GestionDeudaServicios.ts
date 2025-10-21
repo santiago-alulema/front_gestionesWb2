@@ -1,3 +1,4 @@
+import { IReferenciaDeudor } from "@/Pages/DeudoresGestionPage/models/IReferenciasDeudor";
 import ListaEmpresasInDto from "@/Pages/DeudoresGestionPage/models/ListaEmpresasInDto";
 import { MensajeriaInDto } from "@/Pages/DeudoresGestionPage/models/MensajeriaInDto";
 import TiposTareaInDTO from "@/Pages/DeudoresGestionPage/models/TiposTareaInDTO";
@@ -8,6 +9,12 @@ export const movimientoDeudasPorDeuda = (deudaId: string) =>
     request<MovimientosDeudaInDTO[]>(
         'get',
         `${EndpointGestionDeuda.MOVIMIENTOS_DEUDA}/${deudaId}`
+    );
+
+export const refereciasDeudorServicioWeb = (deudaId: string) =>
+    request<IReferenciaDeudor[]>(
+        'get',
+        `${EndpointGestionDeuda.REFERENCIAS_DEUDOR}/${deudaId}`
     );
 
 

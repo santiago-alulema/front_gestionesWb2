@@ -1,3 +1,4 @@
+import { useLoading } from "@/components/LoadingContext";
 import { GestionDto } from "@/Pages/EditarGestiones/models/GestionDto";
 import { PagoDto } from "@/Pages/EditarGestiones/models/PagoDto";
 import { TareaDto } from "@/Pages/EditarGestiones/models/TareaDto";
@@ -46,15 +47,20 @@ export const EditarGestionesProvider: React.FC<{ children: ReactNode }> = ({ chi
 
     const [tareasAEditar, setTareasAEditar] = useState<TareaDto[]>([])
     const [tareaSeleccionada, setTareaSeleccionada] = useState<TareaDto>(null)
+    const { startLoading, stopLoading } = useLoading();
 
     const obtenerPagosAEditar = async () => {
+        startLoading();
         const response = await obtenerPagosServicioWeb();
         setPagosAEditar(response)
+        stopLoading();
     }
 
     const obtenerTareasAEditar = async () => {
+        startLoading();
         const response = await obtenerTareasServicioWeb();
         setTareasAEditar(response)
+        stopLoading();
     }
 
     return (

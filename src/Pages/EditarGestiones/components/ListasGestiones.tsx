@@ -1,6 +1,7 @@
 import CustomModalTs from '@/components/CustomModalTs';
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs';
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
+import { useLoading } from '@/components/LoadingContext';
 import ModalEditarGestiones from '@/Pages/EditarGestiones/components/ModalEditarGestiones';
 import { ConfiguracionColumnasGestiones } from '@/Pages/EditarGestiones/configurations/ConfiguracionColumnasGestiones';
 import { useEditarGestiones } from '@/Pages/EditarGestiones/contexts/EditarGestionesContext';
@@ -14,6 +15,7 @@ import { useEffect } from 'react';
 
 const ListasGestiones = () => {
 
+    const { startLoading, stopLoading } = useLoading();
     const {
         setAbrirModalEditarGestiones,
         abrirModalEditarGestiones,
@@ -22,8 +24,10 @@ const ListasGestiones = () => {
         setgestionSeleccionada } = useEditarGestiones();
 
     const obtenerTodasLasGestiones = async () => {
+        startLoading();
         const respuesta = await obtenerGestionesServicioWeb();
         setGestionesAEditar(respuesta);
+        stopLoading();
     }
 
     useEffect(() => {

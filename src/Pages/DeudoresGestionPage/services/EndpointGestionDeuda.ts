@@ -3,8 +3,8 @@ const EndpointGestionDeuda = {
     TIPOS_TAREA: "OpcionesGestion/obtener-tipos-tareas",
     LISTA_EMPRESAS: "OpcionesGestion/obtener-todas-empresas",
     MENSAJES_GESTIONES: "Mensajeria/obtener-mensajes-whatsapp-gestion",
-    MENSAJES_TAREAS: "Mensajeria/obtener-mensajes-whatsapp-tareas"
-
+    MENSAJES_TAREAS: "Mensajeria/obtener-mensajes-whatsapp-tareas",
+    REFERENCIAS_DEUDOR: "Cliente/referencias-peronales"
 }
 
 export default EndpointGestionDeuda;
