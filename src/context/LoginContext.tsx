@@ -95,6 +95,9 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         setToken(null);
         setUserData(null);
         localStorage.removeItem(LOCAL_STORAGE_KEY);
+        localStorage.removeItem("EmpresaDeudorFiltro");
+        localStorage.removeItem("FiltroEstadoCliente");
+        localStorage.removeItem("custom-dx-grid:gidDeudoresPrincipal");
     };
 
     return (
