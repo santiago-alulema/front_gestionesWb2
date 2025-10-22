@@ -217,6 +217,12 @@ const InformacionCompletaDeuda = () => {
                                             value={`$${deudaSeleccionada?.montoCobrarPartes ?? "0.0"}`}
                                         />
                                     </Grid>
+                                    <Grid size={{ xs: 12 }}>
+                                        <DetailItem
+                                            title="Ult. Gestor"
+                                            value={`${deudaSeleccionada?.gestorUltimaGestion ?? "sin ultimo gestor"}`}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Paper>
                         </Grid>

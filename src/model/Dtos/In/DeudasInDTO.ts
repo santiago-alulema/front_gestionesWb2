@@ -17,6 +17,7 @@ export interface DeudasInDTO {
   descuento?: number;
   montoCobrar?: number;
   fechaUltimoPago?: string;
+  gestorUltimaGestion?: string;
   estado?: string;
   diasMora?: number;
   clasificacion?: string;

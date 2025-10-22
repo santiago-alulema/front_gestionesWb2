@@ -8,44 +8,44 @@ export const ConfigurarColumnasDeudas = () => {
             {
                 name: 'numeroFactura',
                 title: 'Numero Factura',
-                width: '10%',
+                width: '13%',
                 align: 'center'
             },
             {
                 name: 'saldoDeuda',
                 title: 'Saldo Deuda',
-                width: '10%',
+                width: '9%',
                 align: 'center'
             },
 
             {
                 name: 'montoCobrar',
                 title: 'Monto Cobrar',
-                width: '15%',
+                width: '9%',
                 align: 'center'
             },
             {
                 name: 'creditos',
                 title: 'Creditos',
-                width: '10%',
+                width: '8%',
                 align: 'center'
             },
             {
                 name: 'numeroCuotas',
                 title: 'Numero Cuotas',
-                width: '10%',
+                width: '8%',
                 align: 'center'
             },
             {
                 name: 'diasMora',
                 title: 'Dias Mora',
-                width: '10%',
+                width: '7%',
                 align: 'left'
             },
             {
                 name: 'tramo',
                 title: 'Tramo',
-                width: '10%',
+                width: '8%',
                 align: 'left'
             },
             {
@@ -55,10 +55,16 @@ export const ConfigurarColumnasDeudas = () => {
                 align: 'center'
             },
             {
+                name: 'gestorUltimaGestion',
+                title: 'Ult. gestor',
+                width: '14%',
+                align: 'center'
+            },
+            {
                 name: 'actions',
                 title: 'Acciones',
                 getCellValue: (row: any) => row,
-                width: '15%',
+                width: '14%',
                 align: 'center',
                 hiddenFilterColumn: true
 

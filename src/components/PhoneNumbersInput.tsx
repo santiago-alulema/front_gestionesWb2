@@ -109,9 +109,9 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
         if (verificarTelefono.estado === 'Inactivo') {
             mensaje = `El telefono se encuentra inactivo por: <strong> ${verificarTelefono.observacion} </strong>`;
         }
-        if (verificarTelefono.estado === 'Existe') {
-            ; mensaje = "El telefono se encuentra registrado ";
-        }
+        // if (verificarTelefono.estado === 'Existe') {
+        //     mensaje = "El telefono se encuentra registrado ";
+        // }
         const configAlert = {
             title: "Advertencia",
             message: mensaje,
