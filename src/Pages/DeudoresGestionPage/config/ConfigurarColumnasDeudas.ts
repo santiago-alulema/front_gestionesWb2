@@ -8,65 +8,69 @@ export const ConfigurarColumnasDeudas = () => {
             {
                 name: 'numeroFactura',
                 title: 'Numero Factura',
-                width: '13%',
-                align: 'center'
+                width: '15%',
+                align: 'left',
+                alignHeader: 'center'
             },
             {
                 name: 'saldoDeuda',
                 title: 'Saldo Deuda',
                 width: '9%',
-                align: 'center'
+                align: 'center',
+                alignHeader: 'center'
+
             },
 
             {
                 name: 'montoCobrar',
                 title: 'Monto Cobrar',
-                width: '9%',
-                align: 'center'
+                width: '12%',
+                align: 'center',
+                alignHeader: 'center'
             },
             {
                 name: 'creditos',
                 title: 'Creditos',
                 width: '8%',
-                align: 'center'
+                align: 'center',
+                alignHeader: 'center'
             },
             {
                 name: 'numeroCuotas',
                 title: 'Numero Cuotas',
                 width: '8%',
-                align: 'center'
+                align: 'center',
+                alignHeader: 'center'
             },
             {
                 name: 'diasMora',
                 title: 'Dias Mora',
                 width: '7%',
-                align: 'left'
+                align: 'left',
+                alignHeader: 'center'
             },
             {
                 name: 'tramo',
                 title: 'Tramo',
-                width: '8%',
-                align: 'left'
+                width: '10%',
+                align: 'left',
+                alignHeader: 'center'
             },
             {
                 name: 'empresa',
                 title: 'Empresa',
-                width: '10%',
-                align: 'center'
-            },
-            {
-                name: 'gestorUltimaGestion',
-                title: 'Ult. gestor',
-                width: '14%',
-                align: 'center'
+                width: '15%',
+                align: 'center',
+                alignHeader: 'center'
             },
             {
                 name: 'actions',
                 title: 'Acciones',
                 getCellValue: (row: any) => row,
-                width: '14%',
+                width: '16%',
                 align: 'center',
-                hiddenFilterColumn: true
+                hiddenFilterColumn: true,
+                alignHeader: 'center'
 
             }
         ],

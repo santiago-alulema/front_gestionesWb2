@@ -100,25 +100,25 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             showAlert(configAlert);
             return
         }
-        const verificarTelefono = await verificarEstadoTelefonoCliente(phone);
-        let mensaje = '';
-        if (verificarTelefono.estado === 'NoExiste') {
-            setAbrirModalOrigenTelefono(true)
-            return
-        }
-        if (verificarTelefono.estado === 'Inactivo') {
-            mensaje = `El telefono se encuentra inactivo por: <strong> ${verificarTelefono.observacion} </strong>`;
-        }
-        // if (verificarTelefono.estado === 'Existe') {
-        //     mensaje = "El telefono se encuentra registrado ";
+        // const verificarTelefono = await verificarEstadoTelefonoCliente(phone);
+        // let mensaje = '';
+        // if (verificarTelefono.estado === 'NoExiste') {
+        //     setAbrirModalOrigenTelefono(true)
+        //     return
         // }
-        const configAlert = {
-            title: "Advertencia",
-            message: mensaje,
-            type: 'warning',
-            callBackFunction: false
-        };
-        showAlert(configAlert);
+        // if (verificarTelefono.estado === 'Inactivo') {
+        //     mensaje = `El telefono se encuentra inactivo por: <strong> ${verificarTelefono.observacion} </strong>`;
+        // }
+        // // if (verificarTelefono.estado === 'Existe') {
+        // //     mensaje = "El telefono se encuentra registrado ";
+        // // }
+        // const configAlert = {
+        //     title: "Advertencia",
+        //     message: mensaje,
+        //     type: 'warning',
+        //     callBackFunction: false
+        // };
+        // showAlert(configAlert);
     };
 
     const grabarTelefonoNuevo = async () => {

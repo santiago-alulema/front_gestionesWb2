@@ -25,6 +25,7 @@ import MigrarPagosPage from "@/Pages/MigracionesPages/pages/MigrarPagosPage";
 import WhatsappConfiguraionIndex from "@/Pages/WhatsappConfiguracion/WhatsappConfiguraionIndex";
 import ReporteDeudasSubidas from "@/Pages/Reportes/pages/ReporteDeudasSubidas";
 import CambiarGestorDeudaIndex from "@/Pages/ActualizarGestorPorDeuda/CambiarGestorDeudaIndex";
+import ConfiguracionMensajeriaIndex from "@/Pages/ConfigurarMensajeria/ConfiguracionMensajeriaIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -67,7 +68,14 @@ const Menus: MenuItem[] = [
         roles: ["admin", "user", "superadmin"],
         route: "/configuracion/configurar-whatsapp",
         component: <WhatsappConfiguraionIndex />
+      },
+      {
+        name: "Configuracion Mensajes de Whatsapp",
+        roles: ["admin", "superadmin"],
+        route: "/configuracion/mensajes-whatsapp",
+        component: <ConfiguracionMensajeriaIndex />
       }
+
     ]
   },
   {

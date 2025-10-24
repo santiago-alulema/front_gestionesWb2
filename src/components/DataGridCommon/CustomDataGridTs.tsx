@@ -216,7 +216,7 @@ const CustomDataGridTs = <T,>({
         columnName: column.name,
         width: columnWithExtension.width || 'auto',
         align: columnWithExtension.align || 'left',
-        wordWrapEnabled: true
+        wordWrapEnabled: true,
       };
     });
   }, [columnVisible]);
