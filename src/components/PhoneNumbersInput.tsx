@@ -100,6 +100,7 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
             showAlert(configAlert);
             return
         }
+        setAbrirModalOrigenTelefono(true)
         // const verificarTelefono = await verificarEstadoTelefonoCliente(phone);
         // let mensaje = '';
         // if (verificarTelefono.estado === 'NoExiste') {
