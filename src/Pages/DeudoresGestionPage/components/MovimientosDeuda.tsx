@@ -4,6 +4,7 @@ import { useGestionarDeudas } from "@/Pages/DeudoresGestionPage/context/Gestiona
 import { movimientoDeudasPorDeuda } from "@/Pages/DeudoresGestionPage/services/GestionDeudaServicios";
 import { Box, Button, Grid, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
+import DOMPurify from 'dompurify';
 
 const MovimientosDeuda = () => {
     const { deudaSeleccionada, setAbrirModalInformacionDeuda } = useGestionarDeudas();
@@ -16,12 +17,14 @@ const MovimientosDeuda = () => {
     useEffect(() => {
         onInit()
     }, [])
-
+    const html = `Historial de Deuda: <strong>${deudaSeleccionada?.numeroFactura ?? ''}</strong>`;
     return (
         <>
             <Grid container spacing={2}>
                 <Grid size={{ lg: 12 }}>
-                    <Typography>Historio de Deuda: {deudaSeleccionada.numeroFactura}</Typography>
+                    <Typography
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
+                    />
                 </Grid>
                 <Grid size={{ lg: 12 }}>
                     <CustomDataGridTs
@@ -35,7 +38,7 @@ const MovimientosDeuda = () => {
                         titleEmptyTable="No existen movimientos para la deuda"
                     />
                 </Grid>
-            </Grid>
+            </Grid >
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
                 <Button variant="contained" sx={{ borderRadius: 5, textAlign: 'left' }} onClick={() => setAbrirModalInformacionDeuda(false)} >Cerrar</Button>
             </Box>
