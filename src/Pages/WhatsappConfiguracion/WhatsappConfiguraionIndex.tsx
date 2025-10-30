@@ -2,6 +2,7 @@ import BasePage from "@/components/BasePage";
 import { useLoading } from "@/components/LoadingContext";
 import { useLogin } from "@/context/LoginContext";
 import { StatusWhatsapp } from "@/Pages/WhatsappConfiguracion/models/StatusWhatsapp";
+import WhatsappSessionsPage from "@/Pages/WhatsappConfiguracion/pages/WhatsappSessionsPage";
 import { enviarMensajeWhatsapp, statusWhatsappServicioWeb } from "@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp";
 import { request } from "@/utils/AxiosUtils";
 import { showAlert } from "@/utils/modalAlerts";
@@ -65,74 +66,7 @@ const WhatsappConfiguraionIndex = () => {
     };
 
     return (
-        <BasePage routers={routes} title="Configuracion de whatsapp">
-            {!statusWhatsapp && "OBTENIENDO DATOS DEL SERVIDOR"}
-
-            <Grid container spacing={2} alignItems="center">
-                {!statusWhatsapp?.ready ? (
-                    <>
-                        <Grid size={{ xs: 12, lg: 12 }}
-                            sx={{ display: "flex", justifyContent: "center" }}
-                        >
-                            <Card sx={{ width: 345 }}>
-                                <CardMedia
-                                    component="img"
-                                    image={statusWhatsapp?.qrDataUrl || ""}
-                                    alt="Imagen en base64"
-                                    sx={{ height: 300, objectFit: "cover" }}
-                                />
-                                <CardContent sx={{ textAlign: "center" }}>
-                                    <Typography fontWeight="bold" variant="h6">
-                                        ESCANEE EL CÓDIGO QR PARA ENLAZAR CON SU WHATSAPP
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </>
-                ) : (
-                    <Grid size={{ xs: 12, lg: 12 }} sx={{ display: "flex", justifyContent: "center" }}>
-                        <Card
-                            sx={{
-                                width: 345,
-                                textAlign: "center",
-                                bgcolor: "success.light",
-                                color: "white",
-                                boxShadow: 5,
-                                borderRadius: 3,
-                                p: 2,
-                            }}
-                        >
-                            <CardContent>
-                                <Typography variant="h5" fontWeight="bold">
-                                    ✅ WhatsApp conectado
-                                </Typography>
-                                <Typography variant="body1" sx={{ mt: 1 }}>
-                                    La sesión de <b>WhatsApp Web</b> está activa y lista para enviar mensajes.
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                )}
-
-                {/* <Grid size={{ xs: 12, lg: 6 }} >
-                    <TextField
-                        multiline
-                        rows={12}
-                        label="Configure el mensaje de whatsapp.."
-                        fullWidth
-                    />
-                </Grid> */}
-
-                <Grid size={{ xs: 12, lg: 12 }}>
-                    <Stack direction="column" spacing={1}>
-                        {/* <Button fullWidth variant="contained">Guardar configuracion</Button> */}
-                        <Button disabled={!statusWhatsapp?.ready} fullWidth onClick={enviarMensajePrueba} variant="contained">
-                            Enviar Mensaje de prueba
-                        </Button>
-                    </Stack>
-                </Grid>
-            </Grid>
-        </BasePage>
+        <WhatsappSessionsPage />
     );
 };
 

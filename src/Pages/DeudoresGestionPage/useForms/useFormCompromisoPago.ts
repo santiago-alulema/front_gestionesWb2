@@ -16,6 +16,7 @@ import { useLogin } from '@/context/LoginContext';
 import { normalizarTelefono } from '@/utils/MetodosAuxiliares';
 import { useLoading } from '@/components/LoadingContext';
 import { EnviarCorreoOutDto } from '@/model/Dtos/Out/EnviarCorreoOutDto';
+import { EnviarMensajeWhatasappRamdon } from '@/utils/EnvioMensajeWhatsapp';
 
 export const useFormCompromisoPago = () => {
 
@@ -188,7 +189,8 @@ export const useFormCompromisoPago = () => {
                 .replace("{{fechaAbono}}", ` *${fechaPago}*`)
                 .replace("{{fechaLimite}}", ` *${endDate}*`);
 
-            await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
             const configAlert = {
                 title: "Correcto",
                 message: `Mensaje de whatsapp enviado correctamente < strong > ${telefonoNormalizado} </strong> `,

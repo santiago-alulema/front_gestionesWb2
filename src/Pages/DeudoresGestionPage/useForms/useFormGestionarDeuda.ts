@@ -12,6 +12,7 @@ import { MensajeriaInDto } from '@/Pages/DeudoresGestionPage/models/MensajeriaIn
 import { useLoading } from '@/components/LoadingContext';
 import dayjs from 'dayjs';
 import { EnviarCorreoOutDto } from '@/model/Dtos/Out/EnviarCorreoOutDto';
+import { EnviarMensajeWhatasappRamdon } from '@/utils/EnvioMensajeWhatsapp';
 
 export const useFormGestionarDeuda = () => {
 
@@ -152,7 +153,8 @@ export const useFormGestionarDeuda = () => {
                 .replace("{{pagoUnico}}", `*${deudaSeleccionada.montoCobrar}*`)
                 .replaceAll("{{fechaLimite}}", `${endDate}`)
 
-            await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
             const configAlert = {
                 title: "Correcto",
                 message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
