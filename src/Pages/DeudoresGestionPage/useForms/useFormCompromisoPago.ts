@@ -191,7 +191,7 @@ export const useFormCompromisoPago = () => {
 
             // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
             startLoading();
-            EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
+            await EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
             stopLoading();
             // const configAlert = {
             //     title: "Correcto",
