@@ -120,7 +120,10 @@ const InformacionCompletaDeuda = () => {
 
                                 <DetailItem
                                     title="Número de Factura"
-                                    value={deudaSeleccionada.numeroFactura}
+                                    value={deudaSeleccionada.numeroFactura.replace("'margin-left:50px'", "'margin-left:5px;margin-top:0px'")
+                                        .replaceAll("<br>", "")
+                                        .replaceAll("Fact-", "<br>Fact-")
+                                    }
                                 />
                                 <DetailItem
                                     title="Empresa"

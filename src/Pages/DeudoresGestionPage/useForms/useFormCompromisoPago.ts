@@ -191,13 +191,13 @@ export const useFormCompromisoPago = () => {
 
             // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
             EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
-            const configAlert = {
-                title: "Correcto",
-                message: `Mensaje de whatsapp enviado correctamente < strong > ${telefonoNormalizado} </strong> `,
-                type: 'success',
-                callBackFunction: false
-            };
-            showAlert(configAlert);
+            // const configAlert = {
+            //     title: "Correcto",
+            //     message: `Mensaje de whatsapp enviado correctamente < strong > ${telefonoNormalizado} </strong> `,
+            //     type: 'success',
+            //     callBackFunction: false
+            // };
+            // showAlert(configAlert);
         } catch (error) {
             const configAlert = {
                 title: "Error",

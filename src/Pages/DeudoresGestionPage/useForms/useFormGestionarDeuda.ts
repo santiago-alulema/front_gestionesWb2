@@ -141,7 +141,9 @@ export const useFormGestionarDeuda = () => {
                 .add(1, "month")
                 .format("D [de] MMMM [del] YYYY");
             const fechaActual = dayjs().format("D [de] MMMM [del] YYYY");
-            const productoFormateado = deudaSeleccionada.productoDescripcion.replaceAll("||", "\n-");
+            const productoFormateado = deudaSeleccionada.productoDescripcion.replaceAll("||", "\n-")
+                .replaceAll("<strong>", "*")
+                .replaceAll("</strong>", "*");
             const mensajeEnviar = mensajeGestion.mensaje.replace("{{cedula}}", `*${deudorSeleccionado.cedula}*`)
                 .replace("{{nombre}}", `*${deudorSeleccionado.nombre}*`)
                 .replace("{{producto}}", `*${productoFormateado}*`)
@@ -155,13 +157,13 @@ export const useFormGestionarDeuda = () => {
 
             // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
             EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
-            const configAlert = {
-                title: "Correcto",
-                message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
-                type: 'success',
-                callBackFunction: false
-            };
-            showAlert(configAlert);
+            // const configAlert = {
+            //     title: "Correcto",
+            //     message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,
+            //     type: 'success',
+            //     callBackFunction: false
+            // };
+            // showAlert(configAlert);
         } catch (error) {
             const configAlert = {
                 title: "Error",

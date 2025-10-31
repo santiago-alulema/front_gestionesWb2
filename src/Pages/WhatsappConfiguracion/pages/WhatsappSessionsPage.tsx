@@ -7,6 +7,8 @@ import { apiEnsure, apiList, apiLogout, apiSend, apiStatus } from "@/Pages/Whats
 import SendToMobileIcon from '@mui/icons-material/SendToMobile';
 import { showAlert } from "@/utils/modalAlerts";
 import { enviarMensajeWhatsapp } from "@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp";
+import { mt } from 'date-fns/locale';
+import { useLoading } from "@/components/LoadingContext";
 type Row = {
     user: string;
     ready: boolean;
@@ -20,6 +22,7 @@ export default function WhatsappSessionsPage() {
     const [qr, setQr] = useState<string | null>(null);
     const [rows, setRows] = useState<Row[]>([]);
     const [loading, setLoading] = useState(false);
+    const { startLoading, stopLoading } = useLoading();
 
     async function loadTable() {
         const db = await apiList();
@@ -31,10 +34,15 @@ export default function WhatsappSessionsPage() {
         if (!user.trim()) return;
         setLoading(true); setQr(null);
         try {
+            startLoading();
+
             const ensure = await apiEnsure(user.trim()); // back → node
             if (ensure.qrDataUrl) setQr(ensure.qrDataUrl);
             await loadTable();
-        } finally { setLoading(false); }
+        } finally {
+            stopLoading();
+            setLoading(false);
+        }
     }
 
     const enviarMensajePrueba = async (u: string) => {
@@ -52,6 +60,7 @@ export default function WhatsappSessionsPage() {
         if (!user.trim()) return;
         setLoading(true);
         try {
+            startLoading();
             const st = await apiStatus(user.trim());     // back → node
             if (!st.ready && st.hasQr) {
                 const e2 = await apiEnsure(user.trim());   // renueva QR si aplica
@@ -60,7 +69,10 @@ export default function WhatsappSessionsPage() {
                 setQr(null);
             }
             await loadTable();
-        } finally { setLoading(false); }
+        } finally {
+            stopLoading();
+            setLoading(false);
+        }
     }
 
     async function handleLogout(u: string) {
@@ -73,8 +85,8 @@ export default function WhatsappSessionsPage() {
     }
 
     return (
-        <Stack spacing={2}>
-            <Typography variant="h5" fontWeight={700}>Sesiones de WhatsApp</Typography>
+        <Stack spacing={2} mt={2}>
+            {/* <Typography variant="h5" fontWeight={700}>Sesiones de WhatsApp</Typography> */}
 
             <Stack direction="row" spacing={1}>
                 <TextField
