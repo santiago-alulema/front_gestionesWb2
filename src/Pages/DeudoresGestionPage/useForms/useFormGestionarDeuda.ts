@@ -156,7 +156,9 @@ export const useFormGestionarDeuda = () => {
                 .replaceAll("{{fechaLimite}}", `${endDate}`)
 
             // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
-            EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
+            startLoading();
+            await EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
+            stopLoading();
             // const configAlert = {
             //     title: "Correcto",
             //     message: `Mensaje de whatsapp enviado correctamente <strong>${telefonoNormalizado}</strong> `,

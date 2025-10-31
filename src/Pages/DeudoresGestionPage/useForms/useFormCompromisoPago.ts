@@ -190,7 +190,9 @@ export const useFormCompromisoPago = () => {
                 .replace("{{fechaLimite}}", ` *${endDate}*`);
 
             // await enviarMensajeWhatsapp(userData.name, telefonoNormalizado, mensajeEnviar)
+            startLoading();
             EnviarMensajeWhatasappRamdon(telefonoNormalizado, mensajeEnviar);
+            stopLoading();
             // const configAlert = {
             //     title: "Correcto",
             //     message: `Mensaje de whatsapp enviado correctamente < strong > ${telefonoNormalizado} </strong> `,
