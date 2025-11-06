@@ -34,8 +34,8 @@ export interface DeudasInDTO {
   agencia?: string
   productoDescripcion?: string,
   nombre?: string,
+  telefono?: string,
+  correo?: string,
   nombreCompleto?: string
-
-
 }
 export default DeudasInDTO;

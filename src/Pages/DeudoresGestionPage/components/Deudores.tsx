@@ -50,20 +50,14 @@ const Deudores = () => {
 
                 const lista = [{ id: "TODOS", nombre: "Todos" }, ...listaEmpresaRespuesta.filter(e => e.id !== "TODOS")];
                 setEmpresas(lista);
-
-                // 2) Resolver valores iniciales
                 const empresaInit = initialEmpresa || "TODOS";
                 const filtroInit = initialFiltro || "";
                 setEmpresaSeleccionada(empresaInit);
                 setOpcionGestion(filtroInit);
-
-                // 3) Cargar deudores iniciales
                 setClientDebt([]);
                 const resp = await allDeuodoresServiceWeb(empresaInit, filtroInit);
                 if (!alive) return;
                 setClientDebt(resp);
-
-                // Evita que el siguiente useEffect repita la consulta inicial
                 lastQueryRef.current = `${empresaInit}|||${filtroInit}`;
             } finally {
                 if (alive) stopLoading();

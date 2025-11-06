@@ -7,16 +7,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { Box, Button, Grid, Paper, Typography, Divider } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { showAlert, showAlertConfirm } from "@/utils/modalAlerts";
 import { useLoading } from "@/components/LoadingContext";
 import { useMensajesWhatsapp } from "../Contexts/MensajesWhatsappContext";
 import CrearActualizarMensajeWhatsappComponente from "./CrearActualizarMensajeWhatsappComponente";
 import CustomTextFieldFormTs from "@/components/DataGridCommon/CustomTextFieldFormTs";
 import { MensajeWhatsappInOut } from "@/Pages/ConfigurarMensajeria/models/InOut/MensajeWhatsappInOut";
-import { eliminarMensajeWhatsappServicioWeb } from "@/Pages/ConfigurarMensajeria/services/MensajesWhatsappServiciosWeb";
+import { actualizarMensajeWhatsappServicioWeb, eliminarMensajeWhatsappServicioWeb, grabarMensajeWhatsappServicioWeb } from "@/Pages/ConfigurarMensajeria/services/MensajesWhatsappServiciosWeb";
 import { ConfiguracionColumnasMensajesWhatsapp } from "@/Pages/ConfigurarMensajeria/configs/ConfiguracionColumnasMensajesWhatsapp";
 import { useFormMensajesWhatsapp } from "@/Pages/ConfigurarMensajeria/Hooks/useFormMensajesWhatsapp";
+import WhatsappMessageEditor from "@/components/WhatsappMessageEditor";
+import { MensajeWhatsappCreateOutDto } from "@/Pages/ConfigurarMensajeria/models/Out/MensajeWhatsappCreateOutDto";
 
 const CrudMensajesWhatsappComponent = () => {
     const {
@@ -36,7 +38,7 @@ const CrudMensajesWhatsappComponent = () => {
 
     const { control } = useFormMensajesWhatsapp();
     const { startLoading, stopLoading } = useLoading();
-
+    const [mensajeNuevo, setMensajeNuevo] = useState("");
     const actualizar = (row: MensajeWhatsappInOut) => {
         setEsEditar(true);
         setSeleccionado(row);
@@ -109,6 +111,30 @@ const CrudMensajesWhatsappComponent = () => {
         [] // eslint-disable-line react-hooks/exhaustive-deps
     );
 
+    const actualizarMensajeWhatsapp = async (data: any) => {
+        const payload: MensajeWhatsappCreateOutDto = {
+            mensaje: mensajeNuevo.trim(),
+            tipoMensaje: data.tipoMensaje.trim(),
+            mensajeCorreo: data.mensajeCorreo?.trim() || null,
+        };
+
+        if (!esEditar) {
+            await grabarMensajeWhatsappServicioWeb(payload);
+        } else if (seleccionado) {
+            await actualizarMensajeWhatsappServicioWeb(seleccionado.id, payload);
+        }
+
+        showAlert({
+            title: "Correcto",
+            message: `Se <strong>${esEditar ? "actualizó" : "grabó"}</strong> correctamente el mensaje.`,
+            type: "success",
+            callBackFunction: true,
+            onCloseFunction: obtenerMensajes,
+        });
+
+        setAbrirModal(false);
+    }
+
     useEffect(() => {
         obtenerMensajes();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,11 +183,30 @@ const CrudMensajesWhatsappComponent = () => {
             {/* Modal: pasa el modo para bloquear todo excepto el mensaje */}
             <CustomModalTs
                 open={abrirModal}
-                positionTop="30%"
+                positionTop="10%"
+                width={1000}
+                height="90%"
                 handleClose={() => setAbrirModal(false)}
             >
-                <CrearActualizarMensajeWhatsappComponente
-                />
+                {/* <CrearActualizarMensajeWhatsappComponente
+                /> */}
+
+                <Grid>
+                    <Grid size={{ lg: 12 }}>
+                        {/* <TextField value={seleccionarMensaje ? seleccionarMensaje.mensaje : ""}
+                                          multiline
+                                          rows={8}
+                                          fullWidth /> */}
+                        <WhatsappMessageEditor
+                            initialText={seleccionado ? seleccionado.mensaje : ""}
+                            placeholders={["nombre", "empresa", "contrato", "valorDeuda"]}
+                            esActualizar
+                            onChange={setMensajeNuevo}
+                            onChangeText={(value: string) => { setMensajeNuevo(value) }}
+                            updateMensaje={() => actualizarMensajeWhatsapp(seleccionado)}
+                        />
+                    </Grid>
+                </Grid>
             </CustomModalTs>
         </>
     );

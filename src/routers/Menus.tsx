@@ -26,6 +26,7 @@ import WhatsappConfiguraionIndex from "@/Pages/WhatsappConfiguracion/WhatsappCon
 import ReporteDeudasSubidas from "@/Pages/Reportes/pages/ReporteDeudasSubidas";
 import CambiarGestorDeudaIndex from "@/Pages/ActualizarGestorPorDeuda/CambiarGestorDeudaIndex";
 import ConfiguracionMensajeriaIndex from "@/Pages/ConfigurarMensajeria/ConfiguracionMensajeriaIndex";
+import MensajeriaMasivaIndex from "@/Pages/MensajeriaMasiva/MensajeriaMasivaIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -55,6 +56,19 @@ const Menus: MenuItem[] = [
         roles: ["admin", "superadmin"],
         route: "/gestion/subir-migaciones-Pagos",
         component: <MigrarPagosPage />
+      }
+    ]
+  },
+  {
+    name: "Mensajeria",
+    roles: ["admin"],
+    icon: WhiteIcon(ChecklistRtlIcon),
+    children: [
+      {
+        name: "Enviar Mensajeria",
+        roles: ["admin"],
+        route: "/configuracion/Enviar Mensajeria",
+        component: <MensajeriaMasivaIndex />
       }
     ]
   },

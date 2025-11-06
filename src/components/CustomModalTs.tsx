@@ -12,10 +12,10 @@ interface Props {
     height?: string;
 }
 
-const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop = null, positionLeft = null, height = "900px" }: Props) => {
+const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop = "50%", positionLeft = null, height = "900px" }: Props) => {
     const style = {
         position: 'absolute' as const,
-        top: '50%',
+        top: positionTop,
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width,
