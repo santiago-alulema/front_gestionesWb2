@@ -259,7 +259,7 @@ const EnviarMensajeriaMasiva = () => {
 
     const enviarMensajeWhatsappSW = async (deudaSeleccionada: DebstByClientInfoInDTO) => {
         try {
-            const telefonoNormalizado = normalizarTelefono(checked ? "0986589078545" : deudaSeleccionada.telefono);
+            const telefonoNormalizado = normalizarTelefono(checked ? "0986078545" : deudaSeleccionada.telefono);
             dayjs.locale("es"); // establecer idioma global
             const fechaPago = dayjs(deudaSeleccionada.fechaUltimoPago)
                 .add(1, "month")
