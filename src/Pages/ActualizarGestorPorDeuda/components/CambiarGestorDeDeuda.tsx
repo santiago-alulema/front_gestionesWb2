@@ -56,13 +56,16 @@ const CambiarGestorDeDeuda = () => {
     }, []);
 
     const BuscarDeudaDelCliente = async () => {
-        startLoading();
-        const respuesta = await deudasPorClienteBuscardorServiceWeb(
-            clienteBusqueda,
-            empresaSeleccionada
-        );
-        setDeudasDeudor(respuesta);
-        stopLoading();
+        try {
+            startLoading();
+            const respuesta = await deudasPorClienteBuscardorServiceWeb(
+                clienteBusqueda,
+                empresaSeleccionada
+            );
+            setDeudasDeudor(respuesta);
+        } finally {
+            stopLoading();
+        }
     };
 
     const cambiarGestor = async (item: DebstByClientInfoInDTO) => {

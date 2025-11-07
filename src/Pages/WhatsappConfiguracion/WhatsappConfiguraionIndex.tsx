@@ -15,7 +15,6 @@ const WhatsappConfiguraionIndex = () => {
     return (
         <BasePage title="Sesiones de WhatsApp">
             <WhatsappSessionsPage />
-
         </BasePage>
     );
 };
