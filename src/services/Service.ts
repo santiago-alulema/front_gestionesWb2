@@ -50,10 +50,10 @@ export const uploadTelefonosDeudoresServiceWeb = (dataDeudores: any) =>
     dataDeudores
   );
 
-export const uploadDeudasServiceWeb = (dataDeudas: any) =>
+export const uploadDeudasServiceWeb = (dataDeudas: any, desactivarDeudas: boolean = true) =>
   request<string>(
     'post',
-    END_POINT.UPLOAD_DEUDAS_EXCEL,
+    `${END_POINT.UPLOAD_DEUDAS_EXCEL}?desactivarDeudas=${desactivarDeudas}`,
     dataDeudas
   );
 

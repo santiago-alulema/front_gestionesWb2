@@ -8,7 +8,7 @@ import WhatsappMessageEditor from "@/components/WhatsappMessageEditor";
 import { MensajeriaInDto } from "@/Pages/DeudoresGestionPage/models/MensajeriaInDto";
 import { mensajesGestionesServicioWeb, mensajesTareasServicioWeb } from "@/Pages/DeudoresGestionPage/services/GestionDeudaServicios";
 import { ConfiguracionColumnasMensajeriaMasica } from "@/Pages/MensajeriaMasiva/configs/ConfiguracionColumnasMensajeriaMasica";
-import { obtenerDeudasMensajeriaServicioWeb } from "@/Pages/MensajeriaMasiva/services/MensajeriaMasvaServiciosWeb";
+import { guardarMensajesEnviados, obtenerDeudasMensajeriaServicioWeb } from "@/Pages/MensajeriaMasiva/services/MensajeriaMasvaServiciosWeb";
 import {
     Button, Grid, TextField, Typography, Card, CardContent, CardHeader, Divider, Stack, Tooltip, Chip, Box, Alert,
     // NEW:
@@ -38,6 +38,7 @@ import { EnviarMensajeWhatasappRamdon } from "@/utils/EnvioMensajeWhatsapp";
 import { normalizarTelefono } from "@/utils/MetodosAuxiliares";
 import DownloadIcon from '@mui/icons-material/Download'
 import SimCardAlertIcon from '@mui/icons-material/SimCardAlert';
+import { useLogin } from "@/context/LoginContext";
 const EnviarMensajeriaMasiva = () => {
     const [mensajesTarea, setMensajesTarea] = useState<MensajeriaInDto[]>([])
     const [seleccionarMensaje, setSeleccionarMensaje] = useState<MensajeriaInDto>(null);
@@ -46,7 +47,7 @@ const EnviarMensajeriaMasiva = () => {
     const [filtro, setFiltro] = useState<string>("");
     const [plantilla, setPlantilla] = useState<string>("");
     const [checked, setChecked] = useState<boolean>(false);
-
+    const { userData } = useLogin();
 
     const [deudasClientes, setDeudasClientes] = useState<DebstByClientInfoInDTO[]>([]);
     const { startLoading, stopLoading } = useLoading();
@@ -178,7 +179,7 @@ const EnviarMensajeriaMasiva = () => {
             setFailedWhatsapps([]); // limpia reporte anterior
 
             const whatsappValidos = deudasClientes.filter(x => x.telefono !== "");
-            const mensajesAEnviar = checked ? 5 : whatsappValidos.length;
+            const mensajesAEnviar = checked ? 1 : whatsappValidos.length;
             setProgress({ current: 0, total: mensajesAEnviar });
 
             let enviados = 0;
@@ -187,6 +188,7 @@ const EnviarMensajeriaMasiva = () => {
                 const el = whatsappValidos[i];
                 try {
                     await enviarMensajeWhatsappSW(el); // Si falla, el helper ya llamó onFail y re-lanza
+                    await guardarMensajesEnviados(el.idDeudor, userData.name, el.telefono);
                     enviados++;
                 } catch {
                     // nada extra aquí; ya se registró en failedWhatsapps vía onFail

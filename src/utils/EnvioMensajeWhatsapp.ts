@@ -1,6 +1,8 @@
+import { enviarMensajeEncolado } from "@/Pages/MensajeriaMasiva/services/MensajeriaMasvaServiciosWeb";
 import { SessionRow } from "@/Pages/WhatsappConfiguracion/models/types";
 import { enviarMensajeWhatsapp } from "@/Pages/WhatsappConfiguracion/services/ServiciosWebWhatsapp";
 import { apiList, apiStatus } from "@/Pages/WhatsappConfiguracion/services/whatsappDb";
+import { aw } from "react-router/dist/development/routeModules-qBivMBjd";
 
 type FailReport = { telefono: string; nombre?: string; motivo?: string };
 
@@ -38,11 +40,18 @@ export const EnviarMensajeWhatasappRamdon = async (
             throw new Error(motivo);
         }
 
-        const resp = await enviarMensajeWhatsapp(
-            sesion.user,
-            normalizePhone(telefono),
-            mensaje
-        );
+        // const resp = await enviarMensajeWhatsapp(
+        //     sesion.user,
+        //     normalizePhone(telefono),
+        //     mensaje
+        // );
+        const usuarios = wsHabilitados.map(x => x.user).join(",");
+        const resp = await enviarMensajeEncolado({
+            "to": normalizePhone(telefono),
+            "message": mensaje,
+            "variables": { "nombre": "Juan", "monto": "$50" },
+            "preferSession": sesion.user
+        })
 
         if (resp && (resp.ok === false || resp.status === "error")) {
             const motivo = resp.message || resp.error || "Error en el servicio";

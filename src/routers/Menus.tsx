@@ -27,6 +27,8 @@ import ReporteDeudasSubidas from "@/Pages/Reportes/pages/ReporteDeudasSubidas";
 import CambiarGestorDeudaIndex from "@/Pages/ActualizarGestorPorDeuda/CambiarGestorDeudaIndex";
 import ConfiguracionMensajeriaIndex from "@/Pages/ConfigurarMensajeria/ConfiguracionMensajeriaIndex";
 import MensajeriaMasivaIndex from "@/Pages/MensajeriaMasiva/MensajeriaMasivaIndex";
+import SubirPorPartesCrecosIndex from "@/Pages/SubirPorPartesCrecos/SubirPorPartesCrecosIndex";
+import SubirDeudasSinInactivar from "@/Pages/UploadPages/SubirDeudasSinInactivar";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -131,6 +133,12 @@ const Menus: MenuItem[] = [
         component: <UploadDeudasPage />
       },
       {
+        name: "Subir Deudas sin Desactivar",
+        roles: ["admin", "superadmin"],
+        route: "/gestion/subir-Deudas-sin-desactivar",
+        component: <SubirDeudasSinInactivar />
+      },
+      {
         name: "Deudores",
         roles: ["admin", "superadmin"],
         route: "/gestion/subir-deudores",
@@ -141,6 +149,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "superadmin"],
         route: "/gestion/subir-telefonos",
         component: <UploadPhonesPage />
+      },
+      {
+        name: "Campañia Crecos",
+        roles: ["admin", "superadmin"],
+        route: "/campania-crecos",
+        component: <SubirPorPartesCrecosIndex />
       },
     ],
   },
