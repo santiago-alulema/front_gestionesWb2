@@ -9,9 +9,6 @@ export const usuariosVigentesGestiones = () =>
         EndPointCambiarGestor.OBTENER_USUARIOS,
     );
 
-
-
-
 export const deudasPorClienteBuscardorServiceWeb = (codigoCliente: String, empresa: string) =>
     request<DebstByClientInfoInDTO[]>(
         'get',

@@ -29,6 +29,8 @@ import ConfiguracionMensajeriaIndex from "@/Pages/ConfigurarMensajeria/Configura
 import MensajeriaMasivaIndex from "@/Pages/MensajeriaMasiva/MensajeriaMasivaIndex";
 import SubirPorPartesCrecosIndex from "@/Pages/SubirPorPartesCrecos/SubirPorPartesCrecosIndex";
 import SubirDeudasSinInactivar from "@/Pages/UploadPages/SubirDeudasSinInactivar";
+import AdministracionUsuarioIndex from "@/Pages/AdministracionUsuario/AdministracionUsuarioIndex";
+import InformacionCrecosIndex from "@/Pages/InformacionCrecos/InformacionCrecosIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -118,6 +120,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "superadmin"],
         route: "/mantenimiento/cambiar-gestor-deuda",
         component: <CambiarGestorDeudaIndex />
+      },
+      {
+        name: "Administracion de usuarios",
+        roles: ["admin", "superadmin"],
+        route: "/crud/administracion-ususarios",
+        component: <AdministracionUsuarioIndex />
       }
     ],
   },
@@ -194,6 +202,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "user", "superadmin"],
         route: "/reporte/reporte-general",
         component: <InformacionGeneralGestionesIndex />
+      },
+      {
+        name: "Informacion Crecos",
+        roles: ["admin", "superadmin"],
+        route: "/reporte/informacion-crecos",
+        component: <InformacionCrecosIndex />
       },
       {
         name: "Ver Reportes",

@@ -222,8 +222,8 @@ const InformacionCompletaDeuda = () => {
                                     </Grid>
                                     <Grid size={{ xs: 12 }}>
                                         <DetailItem
-                                            title="Ult. Gestor"
-                                            value={`${deudaSeleccionada?.gestorUltimaGestion ?? "sin ultimo gestor"}`}
+                                            title="Valor ponte al dia"
+                                            value={`${deudaSeleccionada?.montoPonteAlDia ?? "0"}`}
                                         />
                                     </Grid>
                                 </Grid>

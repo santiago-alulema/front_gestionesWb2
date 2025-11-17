@@ -32,6 +32,10 @@ import PhonesClientsOutDTO from '@/model/Dtos/Out/PhonesClientsOutDTO';
 import { showAlert, showAlertConfirm } from '@/utils/modalAlerts';
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
+import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
+import { useLogin } from '@/context/LoginContext';
+import { llamarCliente } from '@/components/TelefonosServices';
+import { useLoading } from '@/components/LoadingContext';
 
 interface phoneNumbersProps {
     phones: TelefonosClientesActivos[],
@@ -56,6 +60,8 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
     const [filtrarActivos, setFiltrarActivos] = useState<boolean>(false);
     const { telefonoSeleccionado, setTelefonoSeleccionado } = useGestionarDeudas();
     const [seleccionarPropietario, setSeleccionarPropietario] = useState('');
+    const { userData } = useLogin();
+    const { startLoading, stopLoading } = useLoading();
 
     const seleccionarPropietarioTelefono = (event: SelectChangeEvent) => {
         setSeleccionarPropietario(event.target.value);
@@ -63,6 +69,32 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
 
     const llenarTelefonoSelecconado = (value: string) => {
         setTelefonoSeleccionado(value)
+    }
+
+
+
+    const llamarClienteServicioWeb = async (telefono: string) => {
+        try {
+            startLoading();
+            await llamarCliente(userData.name, telefono);
+            const configAlert = {
+                title: "Correcto",
+                message: "Se realizo correctamente",
+                type: 'success',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } catch (error) {
+            const configAlert = {
+                title: "Correcto",
+                message: "Se presento el siguiente inconveniente: " + error.message,
+                type: 'error',
+                callBackFunction: false
+            };
+            showAlert(configAlert);
+        } finally {
+            stopLoading();
+        }
     }
 
     const seleccionarFiltrarActivos = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,10 +307,12 @@ const PhoneNumbersInput = ({ phones, setPhones, cedula }: phoneNumbersProps) => 
                                             <Checkbox checked={telefonoSeleccionado === num.telefono ? true : false}
                                                 onClick={() => llenarTelefonoSelecconado(num.telefono)} />
                                         </Grid>
-                                        <Grid size={{ lg: 3 }}>
-                                            {num.telefono}
+                                        <Grid size={{ lg: 4 }}>
+                                            <IconButton edge="end" onClick={() => llamarClienteServicioWeb(num.telefono)} color="success" sx={{ marginRight: 1 }}>
+                                                <PhoneForwardedIcon />
+                                            </IconButton>{num.telefono}
                                         </Grid>
-                                        <Grid size={{ lg: 3 }}>
+                                        <Grid size={{ lg: 2 }}>
                                             <strong>{num.propietario}</strong>
                                         </Grid>
                                         <Grid size={{ lg: 3 }}>

@@ -37,5 +37,6 @@ export interface DeudasInDTO {
   telefono?: string,
   correo?: string,
   nombreCompleto?: string
+  montoPonteAlDia?: string;
 }
 export default DeudasInDTO;
