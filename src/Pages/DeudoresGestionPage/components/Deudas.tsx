@@ -169,7 +169,7 @@ const Deudas = () => {
             </CustomModalTs>
 
             <CustomModalTs positionTop="48%" open={abrirModalInformacionDeuda} height={'90%'}
-                handleClose={() => setAbrirModalInformacionDeuda(!abrirModalInformacionDeuda)} width={800}>
+                handleClose={() => setAbrirModalInformacionDeuda(!abrirModalInformacionDeuda)} width={950}>
                 <TabInformacionDeuda></TabInformacionDeuda>
             </CustomModalTs>
         </>

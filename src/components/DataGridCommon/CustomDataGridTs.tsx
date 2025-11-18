@@ -243,7 +243,7 @@ const CustomDataGridTs = <T,>({
   };
 
   const ActionCell = (props: any) => {
-    const { column, row } = props;
+    const { column, row, value } = props;
 
     const columnDef = columnVisible.find(
       c => c.name === column.name
@@ -271,13 +271,14 @@ const CustomDataGridTs = <T,>({
       );
     }
 
-    // Verifica si el valor contiene etiquetas HTML
-    const value = row[column.name];
-    const containsHTML = typeof value === 'string' && /<[a-z][\s\S]*>/i.test(value);
+    // 👇 Usar el valor que viene de DevExpress (ya con getCellValue aplicado)
+    const cellValue = value ?? row[column.name];
+    const containsHTML =
+      typeof cellValue === 'string' && /<[a-z][\s\S]*>/i.test(cellValue);
 
     return (
       <Table.Cell {...props} style={commonStyle}>
-        {containsHTML ? <RenderHTML html={value} /> : value}
+        {containsHTML ? <RenderHTML html={cellValue} /> : cellValue}
       </Table.Cell>
     );
   };
