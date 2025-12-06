@@ -31,6 +31,7 @@ import SubirPorPartesCrecosIndex from "@/Pages/SubirPorPartesCrecos/SubirPorPart
 import SubirDeudasSinInactivar from "@/Pages/UploadPages/SubirDeudasSinInactivar";
 import AdministracionUsuarioIndex from "@/Pages/AdministracionUsuario/AdministracionUsuarioIndex";
 import InformacionCrecosIndex from "@/Pages/InformacionCrecos/InformacionCrecosIndex";
+import DescargarArchivosTrifocusIndex from "@/Pages/DescargarArchivosTrifocus/DescargarArchivosTrifocusIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -126,6 +127,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "superadmin"],
         route: "/crud/administracion-ususarios",
         component: <AdministracionUsuarioIndex />
+      },
+      {
+        name: "Descargar archivos trifocus",
+        roles: ["admin", "superadmin"],
+        route: "/descarga/archivos-trifocus",
+        component: <DescargarArchivosTrifocusIndex />
       }
     ],
   },
