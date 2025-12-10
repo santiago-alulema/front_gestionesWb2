@@ -32,6 +32,7 @@ import SubirDeudasSinInactivar from "@/Pages/UploadPages/SubirDeudasSinInactivar
 import AdministracionUsuarioIndex from "@/Pages/AdministracionUsuario/AdministracionUsuarioIndex";
 import InformacionCrecosIndex from "@/Pages/InformacionCrecos/InformacionCrecosIndex";
 import DescargarArchivosTrifocusIndex from "@/Pages/DescargarArchivosTrifocus/DescargarArchivosTrifocusIndex";
+import ReporteCarteraCrecosIndex from "@/Pages/ReporteCarteraAsignadaCrecos/ReporteCarteraCrecosIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -129,7 +130,7 @@ const Menus: MenuItem[] = [
         component: <AdministracionUsuarioIndex />
       },
       {
-        name: "Descargar archivos trifocus",
+        name: "Descargar archivos CRECOS",
         roles: ["admin", "superadmin"],
         route: "/descarga/archivos-trifocus",
         component: <DescargarArchivosTrifocusIndex />
@@ -227,6 +228,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "superadmin"],
         route: "/reporte/reporteria-deudas-subidas",
         component: <ReporteDeudasSubidas />
+      },
+      {
+        name: "Cartera Asignada Crecos",
+        roles: ["admin", "superadmin"],
+        route: "/reporte/crecos-cartera-asignada",
+        component: <ReporteCarteraCrecosIndex />
       }
     ]
   }

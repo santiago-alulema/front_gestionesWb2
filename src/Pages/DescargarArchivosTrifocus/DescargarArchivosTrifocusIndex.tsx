@@ -3,7 +3,7 @@ import DescargarArchivosTrifocus from "@/Pages/DescargarArchivosTrifocus/pages/D
 
 const DescargarArchivosTrifocusIndex = () => {
     return (
-        <BasePage title="DESCARGAR ARCHIVOS TRIFOCUS">
+        <BasePage title="DESCARGAR ARCHIVOS CRECOS">
             <DescargarArchivosTrifocus />
         </BasePage>
     )
