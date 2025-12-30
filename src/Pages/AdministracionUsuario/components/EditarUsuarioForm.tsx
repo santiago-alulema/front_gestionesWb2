@@ -98,6 +98,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                         fullWidth
                         size="small"
                         value={form.cedula}
+                        disabled={editar}
                         onChange={handleChange("cedula")}
                     />
                 </Grid>
