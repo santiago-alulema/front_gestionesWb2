@@ -8,7 +8,8 @@ import {
   Column,
   FilteringState,
   IntegratedPaging,
-  PagingState
+  PagingState,
+  CustomPaging, // ✅ NUEVO
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -34,6 +35,14 @@ interface StyledTableHeaderCellProps {
 interface ColumnExtended extends Column {
   fontSize?: string;
 }
+
+// ✅ NUEVO (Opcional)
+type PaginationInfo = {
+  totalItems: number;
+  pageNumber: number; // 1-based (API)
+  pageSize: number;
+};
+
 interface Props<T = any> {
   rows: T[];
   columns: Column[];
@@ -52,6 +61,10 @@ interface Props<T = any> {
   searchLabel?: String;
   widthNumeration?: string;
   maintainFilter?: boolean;
+
+  // ✅ NUEVO (Opcional): paginación remota
+  pagination?: PaginationInfo;
+  onPaginationChange?: (pageNumber: number, pageSize: number) => void;
 }
 
 const StyledTableHeaderCell = styled(
@@ -70,31 +83,6 @@ const StyledTableHeaderCell = styled(
   }
 }));
 
-const FilterCell = (props: any) => {
-  const { column } = props;
-  if (column?.hiddenFilterColumn) {
-    return (
-      <Table.Cell
-        value={null}
-        row={props.row}
-        column={props.column}
-        tableRow={props.tableRow}
-        tableColumn={props.tableColumn}
-        style={{ backgroundColor: 'white', borderBottom: '1px solid #ccc' }}
-      />
-    );
-  }
-
-  return (
-    <TableFilterRow.Cell
-      {...props}
-      style={{ backgroundColor: 'white', borderBottom: '1px solid #ccc' }}
-    >
-      <TextFieldCustomDataGrid {...props} />
-    </TableFilterRow.Cell>
-  );
-};
-
 const LoadingContainer = styled('div')({
   position: 'absolute',
   top: 0,
@@ -110,32 +98,29 @@ const LoadingContainer = styled('div')({
 
 const StyledHeaderCell = styled(TableHeaderRow.Cell)(({ theme, align }) => ({
   fontWeight: 'bold',
-  backgroundColor: theme.palette.grey[200], // Color de fondo sutil y profesional
+  backgroundColor: theme.palette.grey[200],
   borderBottom: `1px solid ${theme.palette.divider}`,
   padding: '12px 8px',
   textAlign: align,
 }));
 
 const StyledTableCell = styled(Table.Cell)(({ theme }) => ({
-  borderBottom: `1px solid ${theme.palette.divider}`, // Borde sutil entre filas
-  padding: '12px 8px', // Espaciado consistente
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  padding: '12px 8px',
   whiteSpace: 'normal',
   wordWrap: 'break-word',
   fontSize: '0.875rem',
 }));
 
 const StyledTableRow = styled(Table.Row)(({ theme }) => ({
-  // Efecto Zebra para mejor legibilidad
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // Efecto Hover para interactividad
   '&:hover': {
     backgroundColor: theme.palette.action.selected,
     cursor: 'pointer',
   },
 }));
-
 
 const CustomDataGridTs = <T,>({
   rows,
@@ -152,19 +137,42 @@ const CustomDataGridTs = <T,>({
   searchLabel = '',
   widthNumeration = '65px',
   maintainFilter = false,
-  gridId = ""
+  gridId = "",
+
+  // ✅ NUEVO
+  pagination,
+  onPaginationChange,
 }: Props<T>) => {
+
+  // ✅ remoto solo si vienen los 2
+  const isRemotePagination = !!pagination && typeof onPaginationChange === 'function';
+
   const [pageSizes] = useState([5, 10, 15]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0); // 0-based en UI
   const [pageSize, setPageSize] = useState(5);
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState<any[]>([]);
   const [filteredRowsNumber, setFilteredRowsNumber] = useState<any[]>([]);
+
+  // ✅ para evitar múltiples restores
+  const restoredOnceRef = useRef(false);
+
+  // ✅ Valores efectivos: si es remoto, manda el backend
+  const effectiveCurrentPage = isRemotePagination
+    ? Math.max((pagination?.pageNumber ?? 1) - 1, 0)
+    : currentPage;
+
+  const effectivePageSize = isRemotePagination
+    ? (pagination?.pageSize ?? 5)
+    : pageSize;
+
+  const totalCount = isRemotePagination
+    ? (pagination?.totalItems ?? 0)
+    : filteredRowsNumber.length;
 
   const columnVisible = useMemo(() => {
     const visible = columns.filter(col => !columsHide.includes(col.name));
-    if (!addNumeration) {
-      return visible;
-    }
+    if (!addNumeration) return visible;
+
     return [
       {
         name: 'rowNumber',
@@ -175,22 +183,23 @@ const CustomDataGridTs = <T,>({
       },
       ...visible
     ];
-  }, [columns, columsHide]);
+  }, [columns, columsHide, addNumeration, widthNumeration]);
 
   const updateFilteredRows = (rowsData: any[]) => {
-    let rowsNumbered = [];
+    rowsData = Array.isArray(rowsData) ? rowsData : [];
+
+    let rowsNumbered: any[] = [];
+
     if (filters.length === 0) {
-      rowsNumbered = rowsData.map((row, index) => {
-        const rowNumbered = { rowNumber: index + 1, ...row };
-        return rowNumbered;
-      });
+      rowsNumbered = rowsData.map((row, index) => ({ rowNumber: index + 1, ...row }));
     }
+
     if (filters.length > 0) {
       filters.forEach(filter => {
         rowsNumbered = rowsData.filter(row =>
           String(row[filter.columnName])
             .toLowerCase()
-            .includes(filter.value.toLowerCase())
+            .includes(String(filter.value ?? '').toLowerCase())
         );
         rowsData = rowsNumbered;
       });
@@ -198,10 +207,7 @@ const CustomDataGridTs = <T,>({
       rowsNumbered = rowsData;
     }
 
-    rowsNumbered = rowsNumbered.map((row, index) => {
-      return { rowNumber: index + 1, ...row };
-    });
-
+    rowsNumbered = rowsNumbered.map((row, index) => ({ rowNumber: index + 1, ...row }));
     setFilteredRowsNumber(rowsNumbered);
   };
 
@@ -220,8 +226,6 @@ const CustomDataGridTs = <T,>({
       };
     });
   }, [columnVisible]);
-
-
 
   const CustomHeaderCell = (props: any) => {
     const { column } = props;
@@ -258,9 +262,7 @@ const CustomDataGridTs = <T,>({
 
     if (column.name === 'actions') {
       const filteredActions = actions.filter(action => {
-        if (typeof action.hidden === 'function') {
-          return !action.hidden(row);
-        }
+        if (typeof action.hidden === 'function') return !action.hidden(row);
         return !action.hidden;
       });
 
@@ -271,7 +273,6 @@ const CustomDataGridTs = <T,>({
       );
     }
 
-    // 👇 Usar el valor que viene de DevExpress (ya con getCellValue aplicado)
     const cellValue = value ?? row[column.name];
     const containsHTML =
       typeof cellValue === 'string' && /<[a-z][\s\S]*>/i.test(cellValue);
@@ -325,8 +326,32 @@ const CustomDataGridTs = <T,>({
     }
   };
 
-
   const storageKey = useMemo(() => `${STORAGE_NAMESPACE}:${gridId}`, [gridId]);
+
+  // ✅ RESTORE: igual que tu lógica, pero si es remoto dispara fetch
+  useEffect(() => {
+    if (!maintainFilter) return;
+    if (!rows) return;
+    if (restoredOnceRef.current) return;
+    restoredOnceRef.current = true;
+
+    type Persisted = { filters?: any[]; pageSize?: number; currentPage?: number };
+    const restored = readStateFromStorage<Persisted>(storageKey);
+
+    const restoredPage = restored?.currentPage ?? 0;
+    const restoredFilters = restored?.filters ?? [];
+    const restoredPageSize = restored?.pageSize ?? 5;
+
+    setFilters(restoredFilters);
+
+    if (isRemotePagination) {
+      // remoto: pedir al backend lo restaurado
+      onPaginationChange?.(restoredPage + 1, restoredPageSize);
+    } else {
+      setCurrentPage(restoredPage);
+      setPageSize(restoredPageSize);
+    }
+  }, [maintainFilter, storageKey, isRemotePagination, onPaginationChange, rows]);
 
   const handleFilterChange = useCallback((values: any[]) => {
     const nextFilters = (values ?? []).filter(f => f && f.value != null && String(f.value).trim() !== "");
@@ -334,43 +359,56 @@ const CustomDataGridTs = <T,>({
 
     onChangeFilters?.(nextFilters);
     setFilters(nextFilters);
-    setCurrentPage(nextPage);
-    if (maintainFilter) {
-      writeStateToStorage(storageKey, { filters: nextFilters, pageSize, currentPage: nextPage });
-    }
-    updateFilteredRows(rows);
-  }, [pageSize, rows, storageKey, onChangeFilters]);
 
+    // ✅ guardar SIEMPRE (tu lógica pero ahora también remoto)
+    if (maintainFilter) {
+      writeStateToStorage(storageKey, { filters: nextFilters, pageSize: effectivePageSize, currentPage: nextPage });
+    }
+
+    // reset paginación
+    if (isRemotePagination) {
+      onPaginationChange?.(1, effectivePageSize);
+    } else {
+      setCurrentPage(nextPage);
+    }
+
+    updateFilteredRows(rows);
+  }, [rows, storageKey, onChangeFilters, maintainFilter, isRemotePagination, onPaginationChange, effectivePageSize]);
 
   const guardarPaginacion = useCallback((page: number) => {
+    // ✅ guardar SIEMPRE (local y remoto)
     if (maintainFilter) {
-      writeStateToStorage(storageKey, { filters, pageSize, currentPage: page });
+      writeStateToStorage(storageKey, { filters, pageSize: effectivePageSize, currentPage: page });
     }
+
+    if (isRemotePagination) {
+      onPaginationChange?.(page + 1, effectivePageSize);
+      return;
+    }
+
     setCurrentPage(page);
-  }, [filters, pageSize, storageKey]);
+  }, [filters, storageKey, maintainFilter, isRemotePagination, onPaginationChange, effectivePageSize]);
 
   const onPageSizeChange = useCallback((size: number) => {
-    setPageSize(size);
+    const nextPage = 0;
+
+    // ✅ guardar SIEMPRE (local y remoto)
     if (maintainFilter) {
-      writeStateToStorage(storageKey, { filters, pageSize: size, currentPage });
+      writeStateToStorage(storageKey, { filters, pageSize: size, currentPage: nextPage });
     }
-  }, [filters, currentPage, storageKey]);
 
-
-  useEffect(() => {
-    if (rows.length > 0 && maintainFilter) {
-      type Persisted = { filters?: any[]; pageSize?: number; currentPage?: number };
-      const restored = readStateFromStorage<Persisted>(storageKey);
-      setCurrentPage(restored?.currentPage ?? 0);
-      setFilters(restored?.filters ?? [])
-      setPageSize(restored?.pageSize ?? 5);
+    if (isRemotePagination) {
+      onPaginationChange?.(1, size);
+      return;
     }
-  }, [rows]);
 
+    setPageSize(size);
+    setCurrentPage(nextPage);
+  }, [filters, storageKey, maintainFilter, isRemotePagination, onPaginationChange]);
 
   const FilterCellComponent = useMemo(() => {
     return (props: any) => {
-      const { column, value, filter } = props;
+      const { column, filter } = props;
 
       if (column?.hiddenFilterColumn) {
         return (
@@ -396,8 +434,6 @@ const CustomDataGridTs = <T,>({
     };
   }, [searchLabel]);
 
-
-
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ padding: 0, width: '100%' }}>
@@ -416,13 +452,18 @@ const CustomDataGridTs = <T,>({
 
           {hasPagination && (
             <PagingState
-              currentPage={currentPage}
+              currentPage={effectiveCurrentPage}
               onCurrentPageChange={guardarPaginacion}
-              pageSize={pageSize}
+              pageSize={effectivePageSize}
               onPageSizeChange={onPageSizeChange}
             />
           )}
-          {hasPagination && <IntegratedPaging />}
+
+          {/* ✅ LOCAL: igual que antes */}
+          {hasPagination && !isRemotePagination && <IntegratedPaging />}
+
+          {/* ✅ REMOTO: usa totalCount */}
+          {hasPagination && isRemotePagination && <CustomPaging totalCount={totalCount} />}
 
           <Table
             cellComponent={ActionCell}
@@ -430,12 +471,14 @@ const CustomDataGridTs = <T,>({
             messages={{ noData: titleEmptyTable }}
           />
           <TableHeaderRow cellComponent={CustomHeaderCell} />
+
           {hasFilters && (
             <TableFilterRow
               iconComponent={SearchIcon}
               cellComponent={FilterCellComponent}
             />
           )}
+
           {hasPagination && (
             <PagingPanel pageSizes={pageSizes} messages={{ rowsPerPage: '' }} />
           )}

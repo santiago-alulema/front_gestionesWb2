@@ -1,3 +1,4 @@
+import { ClientesInfoPaginacion } from "@/model/Dtos/In/ClientesInfoPaginacion";
 import ClientInfo from "@/model/Dtos/In/ClientInfo";
 import { CompromisosPagoPorUsuarioInDTO } from "@/model/Dtos/In/CompromisosPagoPorUsuarioInDTO";
 import DebstByClientInfoInDTO from "@/model/Dtos/In/DeudasInDTO";
@@ -57,10 +58,10 @@ export const uploadDeudasServiceWeb = (dataDeudas: any, desactivarDeudas: boolea
     dataDeudas
   );
 
-export const allDeuodoresServiceWeb = (empresa: string, tipoFiltro: string) =>
-  request<ClientInfo[]>(
+export const allDeuodoresServiceWeb = (empresa: string, tipoFiltro: string, page: number = 1, cantidadItem: number = 50) =>
+  request<ClientesInfoPaginacion>(
     'get',
-    `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&tipoFiltro=${tipoFiltro}`,
+    `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&tipoFiltro=${tipoFiltro}&page=${page}&cantidadItem=${cantidadItem}`,
   );
 
 

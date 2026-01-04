@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, IconButton, Modal, Stack } from '@mui/material';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
@@ -5,40 +6,47 @@ interface Props {
     open: boolean;
     children: React.ReactNode;
     handleClose: () => void;
-    width?: number;
-    onSave?: () => void;
-    positionTop?: string;
-    positionLeft?: string;
-    height?: string;
+    width?: number | string;
+    height?: number | string;
 }
 
-const CustomModalTs = ({ open, children, handleClose, width = 600, positionTop = "50%", positionLeft = null, height = "900px" }: Props) => {
-    const style = {
-        position: 'absolute' as const,
-        top: positionTop,
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width,
-        maxHeight: height,
-        overflowY: 'auto',
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        p: 3,
-        borderRadius: 2
-    };
+const CustomModalTs = ({
+    open,
+    children,
+    handleClose,
+    width = 600,
+    height = '90vh',
+}: Props) => {
     return (
-        <>
-            <Modal open={open} onClose={handleClose}>
-                <Box sx={style} >
-                    <Stack spacing={2} direction="row" justifyContent="flex-end">
-                        <IconButton onClick={handleClose}>
-                            <DisabledByDefaultIcon color="error" />
-                        </IconButton>
-                    </Stack>
-                    {children}
-                </Box>
-            </Modal>
-        </>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <Box
+                sx={{
+                    width,
+                    maxHeight: height,
+                    overflowY: 'auto',
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 3,
+                    borderRadius: 2,
+                }}
+            >
+                <Stack direction="row" justifyContent="flex-end">
+                    <IconButton onClick={handleClose}>
+                        <DisabledByDefaultIcon color="error" />
+                    </IconButton>
+                </Stack>
+
+                {children}
+            </Box>
+        </Modal>
     );
 };
 

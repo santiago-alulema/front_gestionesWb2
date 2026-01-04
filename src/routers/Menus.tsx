@@ -1,15 +1,11 @@
 import MenuItem from "./MenuItem";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
-import Login from "@/components/Login";
 import UploadDeudores from "@/Pages/UploadPages/UploadDeudores";
 import { SvgIconProps } from '@mui/material';
 import UploadDeudasPage from "@/Pages/UploadPages/UploadDeudasPage";
-import ClientDebtPage from "@/Pages/ClientDebtPage";
 import UploadPhonesPage from "@/Pages/UploadPages/UploadPhonesPage";
-import ConsultaReportes from "@/Pages/Reportes/components/ConsultaReportes";
 import HomeIcon from '@mui/icons-material/Home';
-import GestionCompromisoPagosDeudores from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
 import PrincipalCompromisosPagos from "@/Pages/GestionarCompromisosPagos/PrincipalCompromisosPagos";
 import PrincipalReportes from "@/Pages/Reportes/PrincipalReportes";
 import Deudores from "@/Pages/DeudoresGestionPage/Index";
@@ -33,6 +29,7 @@ import AdministracionUsuarioIndex from "@/Pages/AdministracionUsuario/Administra
 import InformacionCrecosIndex from "@/Pages/InformacionCrecos/InformacionCrecosIndex";
 import DescargarArchivosTrifocusIndex from "@/Pages/DescargarArchivosTrifocus/DescargarArchivosTrifocusIndex";
 import ReporteCarteraCrecosIndex from "@/Pages/ReporteCarteraAsignadaCrecos/ReporteCarteraCrecosIndex";
+import HistorialGestionesClienteIndex from "@/Pages/HistorialGestionesCliente/HistorialGestionesClienteIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -184,6 +181,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "user", "superadmin"],
         route: "/gestion/ver-deudores",
         component: <Deudores />
+      },
+      {
+        name: "Historial gestiones cliente",
+        roles: ["admin"],
+        route: "/gestion/ver-historia-deudas",
+        component: <HistorialGestionesClienteIndex />
       },
       {
         name: "Ver Deudas por clientes",

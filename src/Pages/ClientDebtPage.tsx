@@ -3,6 +3,7 @@ import CustomModalTs from "@/components/CustomModalTs"
 import CustomDataGridTs from "@/components/DataGridCommon/CustomDataGridTs"
 import { IActionConfig } from "@/components/DataGridCommon/IActionConfig"
 import { useLoading } from "@/components/LoadingContext"
+import { ClientesInfoPaginacion } from "@/model/Dtos/In/ClientesInfoPaginacion"
 import ClientInfo from "@/model/Dtos/In/ClientInfo"
 import { DetalleDeudasClientes } from "@/Pages/componentsClientDebt/DetalleDeudasClientes"
 import { useConfigClientDebt } from "@/Pages/ConfigColums/useConfigClientDebt"
@@ -11,7 +12,7 @@ import { useEffect, useState } from "react"
 
 const ClientDebtPage = () => {
     const [open, setOpen] = useState(false)
-    const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
+    const [clientDebt, setClientDebt] = useState<ClientesInfoPaginacion>(null);
     const [clientSelected, setClientSelected] = useState<ClientInfo>(null);
     const { startLoading, stopLoading } = useLoading();
 
@@ -53,7 +54,7 @@ const ClientDebtPage = () => {
                 title="Lista de Deudores">
                 <div className="custom-data-grid-container">
                     <CustomDataGridTs
-                        rows={clientDebt}
+                        rows={clientDebt.items}
                         columns={useConfigClientDebt()}
                         gridId="gidChartOfAccounts"
                         columsHide={['id']}
@@ -61,6 +62,15 @@ const ClientDebtPage = () => {
                         actions={actionsConfig}
                         iconDirectionFilter="end"
                         searchLabel={"Buscar"}
+                        pagination={{
+                            totalItems: clientDebt.totalItems,
+                            pageNumber: clientDebt.pageNumber,
+                            pageSize: clientDebt.pageSize,
+                        }}
+                        onPaginationChange={(pageNumber, pageSize) => {
+                            // aquí llamas a tu API: ?page=pageNumber&cantidadItem=pageSize
+                            // fetchData(pageNumber, pageSize);
+                        }}
                     />
                 </div>
             </BasePage>
