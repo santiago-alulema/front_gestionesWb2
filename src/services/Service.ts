@@ -59,7 +59,7 @@ export const uploadDeudasServiceWeb = (dataDeudas: any, desactivarDeudas: boolea
   );
 
 export const allDeuodoresServiceWeb = (empresa: string, tipoFiltro: string, page: number = 1, cantidadItem: number = 50) =>
-  request<ClientesInfoPaginacion>(
+  request<ClientInfo[]>(
     'get',
     `${END_POINT.LISTAR_DEUDORES}?empresa=${empresa}&tipoFiltro=${tipoFiltro}&page=${page}&cantidadItem=${cantidadItem}`,
   );

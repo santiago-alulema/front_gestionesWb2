@@ -2,7 +2,6 @@ import CustomAutocompleteTs from '@/components/DataGridCommon/CustomAutocomplete
 import CustomDataGridTs from '@/components/DataGridCommon/CustomDataGridTs'
 import { IActionConfig } from '@/components/DataGridCommon/IActionConfig';
 import { useLoading } from '@/components/LoadingContext';
-import { ClientesInfoPaginacion } from '@/model/Dtos/In/ClientesInfoPaginacion';
 import ClientInfo from '@/model/Dtos/In/ClientInfo';
 import { ConfigurarColumnaDeudores } from '@/Pages/DeudoresGestionPage/config/ConfigurarColumnaDeudores';
 import { useGestionarDeudas } from '@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores';
@@ -11,11 +10,11 @@ import { empresasServicioWeb } from '@/Pages/DeudoresGestionPage/services/Gestio
 import { allDeuodoresServiceWeb } from '@/services/Service';
 import { readStateFromStorage, writeStateToStorage } from '@/utils/MetodosAuxiliares';
 import { Grid, Paper } from '@mui/material';
-import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Deudores = () => {
-    const [clientDebt, setClientDebt] = useState<ClientesInfoPaginacion>(null);
+    const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([{ id: "TODOS", nombre: "Todos" }]);
 
     const keyStorageEmpresa = "EmpresaDeudorFiltro";
@@ -41,23 +40,6 @@ const Deudores = () => {
         []
     );
 
-    const lastQueryRef = useRef<string>("");
-
-    // server-side (1-based)
-    const pageNumberRef = useRef<number>(1);
-    const pageSizeRef = useRef<number>(5);
-
-    const fetchDeudores = useCallback(async (empresa: string, gestion: string, pageNumber: number, pageSize: number) => {
-        startLoading();
-        try {
-            setClientDebt(null);
-            const resp = await allDeuodoresServiceWeb(empresa, gestion, pageNumber, pageSize);
-            setClientDebt(resp);
-        } finally {
-            stopLoading();
-        }
-    }, [startLoading, stopLoading]);
-
     useEffect(() => {
         let alive = true;
         (async () => {
@@ -68,39 +50,22 @@ const Deudores = () => {
 
                 const lista = [{ id: "TODOS", nombre: "Todos" }, ...listaEmpresaRespuesta.filter(e => e.id !== "TODOS")];
                 setEmpresas(lista);
-
                 const empresaInit = initialEmpresa || "TODOS";
                 const filtroInit = initialFiltro || "";
                 setEmpresaSeleccionada(empresaInit);
                 setOpcionGestion(filtroInit);
-
-                // ✅ RESTAURAR PAGINACIÓN DEL GRID (localStorage)
-                type Persisted = { filters?: any[]; pageSize?: number; currentPage?: number };
-                const restoredGrid = readStateFromStorage<Persisted>("custom-dx-grid:gidDeudoresPrincipal");
-
-                pageSizeRef.current = restoredGrid?.pageSize ?? 5;
-                pageNumberRef.current = (restoredGrid?.currentPage ?? 0) + 1; // currentPage 0-based -> API 1-based
-
-                setClientDebt(null);
-
-                const resp = await allDeuodoresServiceWeb(
-                    empresaInit,
-                    filtroInit,
-                    pageNumberRef.current,
-                    pageSizeRef.current
-                );
-
+                setClientDebt([]);
+                const resp = await allDeuodoresServiceWeb(empresaInit, filtroInit);
                 if (!alive) return;
                 setClientDebt(resp);
-
                 lastQueryRef.current = `${empresaInit}|||${filtroInit}`;
             } finally {
                 if (alive) stopLoading();
             }
         })();
-
         return () => { alive = false; };
     }, []);
+
 
     const viewDebtsClient = (row: ClientInfo) => {
         setDeudorSeleccionado(row);
@@ -109,15 +74,12 @@ const Deudores = () => {
 
     const actionsConfig: IActionConfig[] = [
         {
-            tooltip: "Ver",
-            onClick: viewDebtsClient,
-            hidden: false,
-            sizeIcon: 'small',
-            typeInput: 'button',
-            label: 'Ver',
+            tooltip: "Ver", onClick: viewDebtsClient, hidden: false, sizeIcon: 'small', typeInput: 'button', label: 'Ver',
             inputSize: 'clamp(20px, 0.264rem + 1.229vw, 1.75rem)'
         }
     ];
+
+    const lastQueryRef = useRef<string>("");
 
     useEffect(() => {
         const empresa = empresaSeleccionada || "TODOS";
@@ -134,18 +96,8 @@ const Deudores = () => {
         (async () => {
             startLoading();
             try {
-                // ✅ cuando cambia empresa/filtro, reset a página 1 (mantén size actual)
-                pageNumberRef.current = 1;
-
-                setClientDebt(null);
-
-                const resp = await allDeuodoresServiceWeb(
-                    empresa,
-                    gestion,
-                    pageNumberRef.current,
-                    pageSizeRef.current
-                );
-
+                setClientDebt([]);
+                const resp = await allDeuodoresServiceWeb(empresa, gestion /* , { signal: ac.signal } si tu servicio lo soporta */);
                 if (!alive || ac.signal.aborted) return;
                 setClientDebt(resp);
             } finally {
@@ -189,16 +141,6 @@ const Deudores = () => {
         [opcionesFiltro, opcionGestion]
     );
 
-    const handlePaginationChange = async (pageNumber: number, pageSize: number) => {
-        pageNumberRef.current = pageNumber; // 1-based
-        pageSizeRef.current = pageSize;
-
-        const empresa = empresaSeleccionada || "TODOS";
-        const gestion = opcionGestion || "";
-
-        await fetchDeudores(empresa, gestion, pageNumber, pageSize);
-    };
-
     return (
         <>
             <Grid container mb={2} spacing={2}>
@@ -225,8 +167,10 @@ const Deudores = () => {
 
             <Paper elevation={3}>
                 <CustomDataGridTs
-                    getRowId={(row) => (row as any).cedula}
-                    rows={clientDebt?.items ?? []}
+                    getRowId={(row) => row.cedula}
+                    /* quita este key para evitar remontar el grid */
+                    /* key={`grid-${empresaSeleccionada}`} */
+                    rows={clientDebt}
                     columns={ConfigurarColumnaDeudores()}
                     gridId="gidDeudoresPrincipal"
                     actions={actionsConfig}
@@ -234,12 +178,6 @@ const Deudores = () => {
                     searchLabel={"Buscar"}
                     titleEmptyTable='Tabla sin datos'
                     maintainFilter={true}
-                    pagination={{
-                        totalItems: clientDebt?.totalItems ?? 0,
-                        pageNumber: clientDebt?.pageNumber ?? pageNumberRef.current,
-                        pageSize: clientDebt?.pageSize ?? pageSizeRef.current,
-                    }}
-                    onPaginationChange={handlePaginationChange}
                 />
             </Paper>
         </>
