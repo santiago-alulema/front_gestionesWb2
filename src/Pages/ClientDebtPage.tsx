@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 
 const ClientDebtPage = () => {
     const [open, setOpen] = useState(false)
-    const [clientDebt, setClientDebt] = useState<ClientesInfoPaginacion>(null);
+    const [clientDebt, setClientDebt] = useState<ClientInfo[]>([]);
     const [clientSelected, setClientSelected] = useState<ClientInfo>(null);
     const { startLoading, stopLoading } = useLoading();
 
