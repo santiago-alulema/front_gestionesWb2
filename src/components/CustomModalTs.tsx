@@ -7,6 +7,8 @@ interface Props {
     children: React.ReactNode;
     handleClose: () => void;
     width?: number | string;
+    positionTop?: number | string;
+    positionLeft?: number | string;
     height?: number | string;
 }
 
@@ -15,6 +17,8 @@ const CustomModalTs = ({
     children,
     handleClose,
     width = 600,
+    positionTop = "",
+    positionLeft = "",
     height = '90vh',
 }: Props) => {
     return (
