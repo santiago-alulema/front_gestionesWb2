@@ -53,7 +53,7 @@ const ClientDebtPage = () => {
             <BasePage routers={routes}
                 title="Lista de Deudores">
                 <div className="custom-data-grid-container">
-                    <CustomDataGridTs
+                    {/* <CustomDataGridTs
                         rows={clientDebt.items}
                         columns={useConfigClientDebt()}
                         gridId="gidChartOfAccounts"
@@ -71,7 +71,7 @@ const ClientDebtPage = () => {
                             // aquí llamas a tu API: ?page=pageNumber&cantidadItem=pageSize
                             // fetchData(pageNumber, pageSize);
                         }}
-                    />
+                    /> */}
                 </div>
             </BasePage>
             <CustomModalTs open={open} positionLeft="23%" width={1060} handleClose={() => setOpen(false)}>
