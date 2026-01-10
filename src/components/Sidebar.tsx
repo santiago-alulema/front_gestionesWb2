@@ -46,21 +46,26 @@ const Sidebar = ({ userRole }: SidebarProps) => {
           const isActiveSubmenu = item.children.some(
             (child) => child.route === location.pathname
           );
-          const isOpen = openSubmenus[item.name] || isActiveSubmenu;
+
+          const hasState = Object.prototype.hasOwnProperty.call(openSubmenus, item.name);
+          const isOpen = hasState ? openSubmenus[item.name] : isActiveSubmenu;
 
           return (
             <React.Fragment key={`${depth}-${item.name}`}>
               <ListItemButton
                 onClick={() => handleToggle(item.name)}
-                sx={{ pl: paddingLeft, py: 0.8, }}
+                sx={{ pl: paddingLeft, py: 0.8 }}
               >
-                {item.icon && <ListItemIcon sx={{ minWidth: 32, }}>{item.icon}</ListItemIcon>}
+                {item.icon && (
+                  <ListItemIcon sx={{ minWidth: 32 }}>{item.icon}</ListItemIcon>
+                )}
                 {hovered && <ListItemText sx={{ ml: 0, my: 0 }} primary={item.name} />}
                 {hovered && (isOpen ? <ExpandLess /> : <ExpandMore />)}
               </ListItemButton>
+
               {hovered && (
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding >
+                  <List component="div" disablePadding>
                     {renderMenuItems(item.children, depth + 1)}
                   </List>
                 </Collapse>
@@ -68,6 +73,7 @@ const Sidebar = ({ userRole }: SidebarProps) => {
             </React.Fragment>
           );
         }
+
 
         return (
           <ListItemButton
