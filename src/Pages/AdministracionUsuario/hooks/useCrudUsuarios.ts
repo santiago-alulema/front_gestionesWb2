@@ -64,7 +64,7 @@ export const useCrudUsuarios = () => {
                 const configAlertConfirmacion = {
                     title: "Advertencia",
                     message: "Esta seguro que desea actualizar?.",
-                    type: 'warnign',
+                    type: 'warning',
                     callBackFunction: false
                 };
                 const confirmar = await showAlertConfirm(configAlertConfirmacion);
@@ -141,7 +141,8 @@ export const useCrudUsuarios = () => {
         actualizarUsuario,
         inactivarUsuario,
         esEditar,
-        setEsEditar
+        setEsEditar,
+        cargarUsuarios
     };
 };
 

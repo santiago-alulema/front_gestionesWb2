@@ -12,6 +12,7 @@ import { crearUsuarioServiceWeb } from "@/Pages/AdministracionUsuario/services/S
 import SaveIcon from '@mui/icons-material/Save';
 import { useLoading } from "@/components/LoadingContext";
 import { showAlert } from "@/utils/modalAlerts";
+import { Button, Grid } from "@mui/material";
 const CrudUsuarios = () => {
     const {
         rows,
@@ -19,7 +20,8 @@ const CrudUsuarios = () => {
         actualizarUsuario,
         inactivarUsuario,
         esEditar,
-        setEsEditar
+        setEsEditar,
+        cargarUsuarios
     } = useCrudUsuarios();
     const { startLoading, stopLoading } = useLoading();
 
@@ -32,7 +34,7 @@ const CrudUsuarios = () => {
         setEsEditar(true)
     };
 
-    const handleAbrirModalCrear = (row: UsuarioDto) => {
+    const handleAbrirModalCrear = () => {
         const usuarioVacio: UsuarioDto = {
             idUsuario: "",
             nombreUsuario: "",
@@ -69,7 +71,8 @@ const CrudUsuarios = () => {
             title: "Correcto",
             message: "Se registro correctamente.",
             type: 'success',
-            callBackFunction: false
+            callBackFunction: true,
+            onCloseFunction: cargarUsuarios
         };
         showAlert(configAlert);
     };
@@ -84,12 +87,6 @@ const CrudUsuarios = () => {
             sizeIcon: "large"
         },
         {
-            icon: <SaveIcon />,
-            tooltip: "Nuevo usuario",
-            onClick: handleAbrirModalCrear,
-            sizeIcon: "large"
-        },
-        {
             icon: <DeleteIcon />,
             tooltip: "Inactivar usuario",
             onClick: inactivarUsuario,
@@ -98,8 +95,14 @@ const CrudUsuarios = () => {
         }
     ];
 
+
     return (
         <>
+            <Grid container spacing={3} justifySelf={'end'}>
+                <Grid size={{ lg: 12 }} mb={2}>
+                    <Button variant="contained" sx={{ borderRadius: 5 }} onClick={handleAbrirModalCrear}>+ Agregar usuario</Button>
+                </Grid>
+            </Grid>
             <CustomDataGridTs
                 gridId="CrudUsuarioTabla"
                 rows={rows}

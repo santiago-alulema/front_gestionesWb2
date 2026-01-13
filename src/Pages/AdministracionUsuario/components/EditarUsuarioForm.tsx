@@ -85,6 +85,19 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
         await onSubmit(payload);
     };
 
+    const textFieldStyles = {
+        "& .MuiOutlinedInput-root": {
+            minHeight: 48,
+        },
+        "& .MuiOutlinedInput-input": {
+            padding: "12px 14px",
+        },
+        "& .MuiInputLabel-shrink": {
+            fontSize: "0.8rem",
+            margin: '0.9px'
+        },
+    };
+
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
             <Typography variant="h6" mb={2}>
@@ -96,6 +109,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                     <TextField
                         label="cedula"
                         fullWidth
+                        sx={textFieldStyles}
                         size="small"
                         value={form.cedula}
                         disabled={editar}
@@ -105,6 +119,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                 <Grid size={{ lg: 6, sm: 6 }}>
                     <TextField
                         label="Nombre de usuario"
+                        sx={textFieldStyles}
                         fullWidth
                         size="small"
                         value={form.nombreUsuario}
@@ -116,6 +131,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                     <TextField
                         label="Rol"
                         fullWidth
+                        sx={textFieldStyles}
                         size="small"
                         select
                         value={form.rol}
@@ -133,6 +149,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                     <TextField
                         label="Contraseña"
                         fullWidth
+                        sx={textFieldStyles}
                         size="small"
                         value={form.contrasena}
                         onChange={handleChange("contrasena")}
@@ -144,6 +161,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                         label="Email"
                         fullWidth
                         size="small"
+                        sx={textFieldStyles}
                         value={form.email}
                         onChange={handleChange("email")}
                     />
@@ -153,6 +171,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                     <TextField
                         label="Teléfono"
                         fullWidth
+                        sx={textFieldStyles}
                         size="small"
                         value={form.telefono}
                         onChange={handleChange("telefono")}
@@ -163,6 +182,7 @@ const EditarUsuarioForm: React.FC<EditarUsuarioFormProps> = ({
                     <TextField
                         label="Nombre completo"
                         fullWidth
+                        sx={textFieldStyles}
                         size="small"
                         value={form.nombreCompleto}
                         onChange={handleChange("nombreCompleto")}

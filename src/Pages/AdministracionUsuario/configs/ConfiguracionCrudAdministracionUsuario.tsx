@@ -7,7 +7,7 @@ export const ConfiguracionCrudAdministracionUsuario = () => {
         () => [
             {
                 name: 'nombreUsuario',
-                title: 'Numero Factura',
+                title: 'Nombre usuario',
                 width: '13%',
                 align: 'center'
             },
