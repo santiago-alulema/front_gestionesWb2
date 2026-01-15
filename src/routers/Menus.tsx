@@ -211,7 +211,7 @@ const Menus: MenuItem[] = [
     children: [
       {
         name: "Reporte inconsistencias CRECOS",
-        roles: ["admin", "user", "superadmin"],
+        roles: ["admin", "superadmin"],
         route: "/reporte/reporte-inconsistencias-crecos",
         component: <DescargarReporteInconsistenciasCrecosIndex />
       },
