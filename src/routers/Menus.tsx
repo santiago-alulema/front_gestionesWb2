@@ -30,6 +30,7 @@ import InformacionCrecosIndex from "@/Pages/InformacionCrecos/InformacionCrecosI
 import DescargarArchivosTrifocusIndex from "@/Pages/DescargarArchivosTrifocus/DescargarArchivosTrifocusIndex";
 import ReporteCarteraCrecosIndex from "@/Pages/ReporteCarteraAsignadaCrecos/ReporteCarteraCrecosIndex";
 import HistorialGestionesClienteIndex from "@/Pages/HistorialGestionesCliente/HistorialGestionesClienteIndex";
+import DescargarReporteInconsistenciasCrecosIndex from "@/Pages/DescargarReporteInconsistenciasCrecos/DescargarReporteInconsistenciasCrecosIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -208,6 +209,12 @@ const Menus: MenuItem[] = [
     roles: ["admin", "user", "superadmin"],
     icon: WhiteIcon(SummarizeIcon),
     children: [
+      {
+        name: "Reporte inconsistencias CRECOS",
+        roles: ["admin", "user", "superadmin"],
+        route: "/reporte/reporte-inconsistencias-crecos",
+        component: <DescargarReporteInconsistenciasCrecosIndex />
+      },
       {
         name: "Reporte General",
         roles: ["admin", "user", "superadmin"],

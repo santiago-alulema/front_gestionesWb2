@@ -20,6 +20,7 @@ const END_POINT = {
     GRABAR_COMPROMISO_PAGO: 'Gestiones/grabar-compromiso-pago',
     GRABAR_PAGO: 'Gestiones/grabar-pago',
     GRABAR_IMAGEN_PAGO: 'Images/upload',
+    CANTIDAD_DE_INCONSISTENCIAS_CRECOS: 'CrecosMetodos/cantidad-inconsistencia-cartera-saldo',
 
     GRABAR_GESTION: 'Gestiones/grabar-gestion',
     GESTIONES_REPORTE: 'Gestiones/gestiones-reporte',

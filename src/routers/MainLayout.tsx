@@ -4,7 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import AppRoutes from "./AppRoutes";
 import Navbar from "@/components/Navbar";
 import { Alert, Button, Stack } from "@mui/material";
-import { compromisoPagoServiceWeb } from "@/services/Service";
+import { compromisoPagoServiceWeb, inconsistenciasCarteraCrecosServicioWeb } from "@/services/Service";
 import DebstByClientInfoInDTO from '@/model/Dtos/In/DeudasInDTO';
 import { useNavigate } from "react-router";
 import { useGestionarDeudas } from "@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores";
@@ -12,6 +12,8 @@ import { useGestionarDeudas } from "@/Pages/DeudoresGestionPage/context/Gestiona
 const MainLayout = () => {
     const { userData, logout } = useLogin();
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [cantidadInconsistencias, setCantidadInconsistencias] = useState<number>(0);
+
     const { tareasPendientes, setTareasPendientes } = useGestionarDeudas();
     const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         buscarTareasPendientes();
+        buscarInconsistenciasCrecos();
     }, [])
 
     const buscarTareasPendientes = async () => {
@@ -28,9 +31,19 @@ const MainLayout = () => {
         setTareasPendientes(respuesta)
     }
 
+    const buscarInconsistenciasCrecos = async () => {
+        const respuesta = await inconsistenciasCarteraCrecosServicioWeb()
+        setCantidadInconsistencias(respuesta)
+    }
+
     const irTareasPendientes = () => {
         navigate("/gestion/compromisos-pagos")
     }
+
+    const irReporteInconsistenciasCrecos = () => {
+        navigate("/reporte/reporte-inconsistencias-crecos")
+    }
+
 
     if (!userData) return null;
 
@@ -47,6 +60,11 @@ const MainLayout = () => {
                     {!!tareasPendientes.length && (<Stack sx={{ width: '100%' }} spacing={2} mb={2}>
                         <Alert severity="info">Tiene {tareasPendientes.length} tareas pendientes. <Button onClick={irTareasPendientes}> presione aqui para atender</Button></Alert>
                     </Stack>)}
+                    {(!!cantidadInconsistencias && userData.role == "admin") && (<Stack sx={{ width: '100%' }} spacing={2} mb={2}>
+                        <Alert severity="error">Tiene {cantidadInconsistencias} inconsistencias entre <strong>CARTERA_ASIGNADA y SALDO_CLIENTECRECOS</strong>.
+                            <Button onClick={irReporteInconsistenciasCrecos}> VER REPORTE</Button></Alert>
+                    </Stack>)}
+
                     <AppRoutes />
                 </div>
             </div>

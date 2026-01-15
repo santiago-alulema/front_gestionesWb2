@@ -210,6 +210,13 @@ export const compromisoPagoServiceWeb = (esHoy: boolean = false) =>
     `${END_POINT.COMPROMISO_PAGO}/${esHoy}`,
   );
 
+export const inconsistenciasCarteraCrecosServicioWeb = () =>
+  request<number>(
+    'get',
+    `${END_POINT.CANTIDAD_DE_INCONSISTENCIAS_CRECOS}`,
+  );
+
+
 // export const tareasHoy = (esHoy: boolean = false) =>
 // request<DebstByClientInfoInDTO[]>(
 //   'get',
