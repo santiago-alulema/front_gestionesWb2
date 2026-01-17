@@ -29,6 +29,8 @@ import ListasGenericas from "@/Pages/ActualizarGestorPorDeuda/models/ListasGener
 import { useGestionarDeudas } from "@/Pages/DeudoresGestionPage/context/GestionarDeudasDeudores";
 import CustomModalTs from "@/components/CustomModalTs";
 import MovimientosDeuda from "@/Pages/DeudoresGestionPage/components/MovimientosDeuda";
+import { HistorialGestionesConfigColums } from "@/Pages/HistorialGestionesCliente/configs/HistorialGestionesConfigColums";
+import { DetailItem } from "@/components/DataGridCommon/DetailItem";
 
 const HistorialGestionesPorCliente = () => {
     const [empresas, setEmpresas] = useState<ListaEmpresasInDto[]>([]);
@@ -36,7 +38,7 @@ const HistorialGestionesPorCliente = () => {
     const [clienteBusqueda, setClienteBusqueda] = useState<string>("");
 
 
-    const { setDeudaSeleccionada, abrirModalInformacionDeuda, setAbrirModalInformacionDeuda } = useGestionarDeudas();
+    const { setDeudaSeleccionada, abrirModalInformacionDeuda, setAbrirModalInformacionDeuda, deudaSeleccionada } = useGestionarDeudas();
 
     const [empresaSeleccionada, setEmpresaSeleccionada] = useState<string>("");
     const { startLoading, stopLoading } = useLoading();
@@ -145,7 +147,7 @@ const HistorialGestionesPorCliente = () => {
                             <CustomDataGridTs
                                 getRowId={(row: any) => row.numeroFactura}
                                 rows={deudasDeudor}
-                                columns={ConfigColumnasCambioGestorDeuda()}
+                                columns={HistorialGestionesConfigColums()}
                                 gridId="gidChartOfAccounts"
                                 columsHide={["id"]}
                                 hiddenFilterColumn={["actions"]}
@@ -161,6 +163,7 @@ const HistorialGestionesPorCliente = () => {
                 handleClose={() => setAbrirModalInformacionDeuda(false)}
                 width={"80%"}
             >
+                <DetailItem title="Producto" value={deudaSeleccionada.productoDescripcion} />
                 <MovimientosDeuda />
             </CustomModalTs>
         </Box>
