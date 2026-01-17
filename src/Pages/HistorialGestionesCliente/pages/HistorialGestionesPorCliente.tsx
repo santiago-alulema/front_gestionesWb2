@@ -163,7 +163,7 @@ const HistorialGestionesPorCliente = () => {
                 handleClose={() => setAbrirModalInformacionDeuda(false)}
                 width={"80%"}
             >
-                <DetailItem title="Producto" value={deudaSeleccionada.productoDescripcion ?? "SIN DESCRIPCION"} />
+                <DetailItem title="Producto" value={deudaSeleccionada?.productoDescripcion ?? "SIN DESCRIPCION"} />
                 <MovimientosDeuda />
             </CustomModalTs>
         </Box>
