@@ -11,7 +11,7 @@ const SubirDeudasMasivoCrecosManual = () => {
         <UploadExcel
             legend="Subir deudas de clientes mensual en formato Excel"
             requiredColumns={{
-                'IdDeudor': 'string',
+                'idDeudor': 'string',
                 'saldoDeuda?': 'number',
                 'diasMora?': 'number',
                 'tramo?': 'string',
