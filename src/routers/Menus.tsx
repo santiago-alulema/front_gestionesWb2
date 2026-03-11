@@ -31,6 +31,7 @@ import DescargarArchivosTrifocusIndex from "@/Pages/DescargarArchivosTrifocus/De
 import ReporteCarteraCrecosIndex from "@/Pages/ReporteCarteraAsignadaCrecos/ReporteCarteraCrecosIndex";
 import HistorialGestionesClienteIndex from "@/Pages/HistorialGestionesCliente/HistorialGestionesClienteIndex";
 import DescargarReporteInconsistenciasCrecosIndex from "@/Pages/DescargarReporteInconsistenciasCrecos/DescargarReporteInconsistenciasCrecosIndex";
+import SubirDeudasCrecosMasivoManualIndex from "@/Pages/SubirDeudasCrecosMasivoManual/SubirDeudasCrecosMasivoManualIndex";
 
 const WhiteIcon = (Icon: React.ComponentType<SvgIconProps>) => {
   return <Icon sx={{ color: 'white' }} />;
@@ -114,6 +115,12 @@ const Menus: MenuItem[] = [
         roles: ["admin", "user", "superadmin"],
         route: "/mantenimiento/editar-gestiones",
         component: <EditarGestionesIndex />
+      },
+      {
+        name: "Subir deudas crecos manual",
+        roles: ["admin"],
+        route: "/administracion/subir-deudas-crecos-manual-bloque",
+        component: <SubirDeudasCrecosMasivoManualIndex />
       },
       {
         name: "Cambiar el gestor por deuda",
